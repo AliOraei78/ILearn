@@ -5,7 +5,7 @@ public sealed class Progress
     public long Revision { get; set; }
     public Dictionary<string, int> Positions { get; set; } = [];
     public int Version { get; set; } = 1;
-    public string Lesson { get; set; } = "S05";
+    public string Lesson { get; set; } = "S01";
     public int Position { get; set; }
     public Dictionary<string, Entry> Entries { get; set; } = [];
     public HashSet<string> IntroductionsRead { get; set; } = [];

@@ -1,15 +1,15 @@
 {
   "S05/predict": {
-    "Prompt": "این کد چه عددی چاپ می‌کنه؟ متد Add با ref می‌تونه خودِ متغیر n رو تغییر بده.",
+    "Prompt": "این کد چه عددی چاپ می‌کند؟ به تفاوت فرستادن کپی و دسترسی با ref فکر کن.",
     "Solution": "جواب ۷ است. اول n برابر ۴ است. Add سه واحد به همون متغیر اضافه می‌کنه؛ پس مقدارش ۷ می‌شه."
   },
   "S05/keys": {
-    "Prompt": "متد باید یک عدد تازه داخل result بذاره. برای این کار از out استفاده می‌کنیم. جای A و B چه کلمه‌ای میاد؟",
+    "Prompt": "متد باید یک عدد تازه داخل result بگذارد؛ answer از قبل مقدار ندارد. جای A و B چه کلمه‌ای می‌آید؟",
     "Solution": "هر دو جای خالی out هستند. متد، result رو مقداردهی می‌کنه و موقع صدا زدن هم out می‌نویسیم.",
     "SolutionCode": "bool TryGet(out int result) { result = 42; return true; }\nTryGet(out int answer);"
   },
   "S05/pairs": {
-    "Prompt": "هر توضیح رو به کلمهٔ مناسب وصل کن: ref برای خواندن و تغییر، out برای خروجی تازه، in برای خواندن و params برای چند ورودی است.",
+    "Prompt": "هر قرارداد را به کلیدواژهٔ مناسب وصل کن. فرق مقدار اولیه، خروجی الزامی و مسیر فقط‌خواندنی را بررسی کن.",
     "Solution": "ref: متغیر از قبل مقدار داره و متد می‌تونه تغییرش بده. out: متد باید مقدار خروجی رو تعیین کنه. in: از این مسیر نمی‌تونی مقدار رو عوض کنی. params: چند ورودی رو یک‌جا می‌گیره."
   },
   "S05/order": {
@@ -25,8 +25,9 @@
     "Solution": "برای ref باید متغیر رو از قبل مقداردهی کنیم؛ مثلاً متد مقدار یک شمارنده رو زیاد می‌کنه. برای out مقدار قبلی لازم نیست؛ مثلاً TryParse نتیجهٔ تبدیل متن به عدد رو تحویل می‌ده. متد باید پارامتر out رو پیش از برگشت عادی مقداردهی کنه."
   },
   "S05/explain2": {
-    "Prompt": "دو متد هم‌نام می‌تونن ورودی‌های متفاوت داشته باشند؛ به این کار overload می‌گیم. آیا فقط عوض کردن نوع خروجی کافیه؟ یک تابع داخل متد چه فرقی با متد جدا داره؟",
-    "Solution": "نه، فقط نوع خروجی کافی نیست؛ ورودی‌های دو متد باید از نظر تعداد، نوع یا قواعد مجاز امضا متفاوت باشند. تابع محلی داخل یک متد تعریف می‌شه و می‌تونه از متغیرهای همون متد استفاده کنه. متد جدا عضو نوع است و به متغیرهای محلی متد دیگر دسترسی مستقیم نداره."
+    "Prompt": "کد یک مجموعهٔ params در C# 13 و تابع محلی دارد. چرا AddBonus می‌تواند bonus را بخواند؟ برای overload کردن یک متد آیا فقط تغییر نوع خروجی کافی است؟ تفاوت overload و تابع محلی را بگو.",
+    "Solution": "params IEnumerable<int> در C# 13 چند عدد را در یک مجموعهٔ قابل پیمایش می‌گیرد؛ اینجا Sum جمع ۲ و ۳، یعنی ۵ را می‌دهد. AddBonus داخل Example تعریف شده و bonus همان محدوده را می‌خواند؛ نتیجه ۸ است. overload چند متد هم‌نام با امضای پارامتر متفاوت است؛ فقط تغییر خروجی یا فقط تفاوت ref و out کافی نیست. تابع محلی دربارهٔ محل تعریف است و داخل متد دیگری زندگی می‌کند.",
+    "SolutionCode": "Console.WriteLine(Example());\nConsole.WriteLine(Labels.Show(4));\nConsole.WriteLine(Labels.Show(\"Key\"));\n\nstatic int Example()\n{\n    int bonus = 3;\n    int AddBonus(int amount) => amount + bonus;\n    return AddBonus(Sum(2, 3));\n}\nstatic int Sum(params IEnumerable<int> values)\n{\n    int total = 0;\n    foreach (int value in values) total += value;\n    return total;\n}\nstatic class Labels\n{\n    public static string Show(int value) => value.ToString();\n    public static string Show(string value) => value;\n}"
   },
   "S05/workshop": {
     "Prompt": "یک متد به نام TryCalculateTotal بنویس که قیمت price و تعداد quantity رو بگیره. اگر قیمت منفی یا تعداد صفر و منفی بود، total رو صفر کن و false بده. در بقیهٔ حالت‌ها حاصل‌ضرب رو در total بذار و true بده. قیمت صفر مجازه. فرض کن حاصل‌ضرب در decimal جا می‌شه.",
@@ -60,7 +61,8 @@
   },
   "S06/explain2": {
     "Prompt": "سازنده موقع ساختن شیء اجرا می‌شه. چطور کمک می‌کنه شیء از همون اول وضعیت درستی داشته باشه؟ آیا ورودیِ سازندهٔ اصلی کلاس خودبه‌خود یک property عمومی می‌شه؟",
-    "Solution": "سازنده می‌تونه ورودی‌هایی مثل نام و مبلغ رو بررسی کنه و اگر نام خالی یا مبلغ منفی بود، ساختن شیء رو رد کنه. پارامتر سازندهٔ اصلی در class خودبه‌خود property عمومی نمی‌شه؛ اگر لازم داریم باید خودمون property تعریف کنیم."
+    "Solution": "سازنده ورودی نامعتبر را همان اول رد می‌کند تا شیء ناقص ساخته نشود. پارامتر سازندهٔ اصلی در class خودبه‌خود property عمومی نمی‌شود؛ Name را خودمان تعریف کرده‌ایم. در مثال، null یا نام خالی خطا می‌دهد. این شکل از C# 12 در دسترس است؛ در record موقعیتی، تولید property قاعدهٔ دیگری دارد که در S10 می‌بینیم.",
+    "SolutionCode": "Console.WriteLine(new Player(\"A\").Name);\n\npublic class Player(string name)\n{\n    public string Name { get; } = string.IsNullOrEmpty(name)\n        ? throw new ArgumentException(nameof(name))\n        : name;\n}"
   },
   "S06/workshop": {
     "Prompt": "یک کلاس Order بساز. سازنده نام غیرخالی بگیره. Total از بیرون فقط خواندنی باشه. متد AddItem قیمت و تعداد بگیره؛ قیمت منفی و تعداد صفر یا منفی رو با استثنا رد کنه. بقیهٔ مبلغ‌ها رو به Total اضافه کنه. قیمت صفر مجازه و فرض کن حاصل‌ضرب در decimal جا می‌شه.",
@@ -88,12 +90,13 @@
     "Solution": "فراخوانی‌هایی که با مرجع Policy انجام می‌شن تغییر می‌کنند؛ چون بعد از new عضو پایه رو انتخاب می‌کنند. فراخوانی از مرجع Vip همچنان عضو فرزند رو می‌گیره."
   },
   "S07/explain1": {
-    "Prompt": "override رفتار قابل‌تغییرِ کلاس پایه رو بازنویسی می‌کنه؛ new عضو هم‌نام رو پنهان می‌کنه. با زبان خودت بگو نوع متغیر و نوع واقعی شیء در هر حالت چه نقشی دارند.",
-    "Solution": "با override، متد virtual یا abstract پایه برای نوع فرزند پیاده‌سازی می‌شه و نوع واقعی شیء تعیین می‌کنه کدوم رفتار اجرا بشه. با new فقط یک عضو هم‌نام رو پنهان می‌کنیم؛ نوع مرجعی که باهاش صدا می‌زنیم در انتخاب عضو اثر داره. خود شیء با این کلمه‌ها تغییر نوع نمی‌ده."
+    "Prompt": "با زبان خودت نقش نوع متغیر و نوع واقعی شیء را در override و new مقایسه کن. VTable را مثل یک فهرست رفتار توضیح بده؛ آیا باید فرض کنیم JIT همیشه همان شکل فراخوانی را نگه می‌دارد؟",
+    "Solution": "در فراخوانی مجازیِ override، نوع واقعی شیء تعیین می‌کند کدام رفتار اجرا شود. new در مثال این فصل فقط عضو هم‌نام تازه‌ای می‌سازد و نوع مرجع در انتخاب آن مهم است. VTable تصویر ساده‌ای از نگاشت عضو مجازی به پیاده‌سازی هر نوع است. CLR اطلاعات نوع واقعی را دارد؛ JIT می‌تواند فراخوانی را مستقیم یا درون‌گذاری کند، پس رفتار زبان ثابت است ولی جزئیات اجرای آن الزاماً یکسان نیست."
   },
   "S07/explain2": {
-    "Prompt": "abstract یعنی کلاس هنوز برای ساخته شدن کامل نیست؛ sealed یعنی ارث‌بری از کلاس بسته است. برای هرکدوم یک کاربرد بگو. sealed override جلوی چه کاری رو می‌گیره؟",
-    "Solution": "abstract برای پایه‌ای خوبه که رفتار مشترک داره، ولی بعضی جزئیات رو باید فرزند بنویسه؛ مثل سیاست تخفیف. sealed وقتی خوبه که نمی‌خوایم کلاس فرزند داشته باشه. sealed override جلوی بازنویسی دوبارهٔ همون متد در فرزند بعدی رو می‌گیره؛ خود کلاس لازم نیست sealed باشه."
+    "Prompt": "چرا از abstract مستقیم شیء نمی‌سازیم و sealed چه چیزی را می‌بندد؟ در پاسخ مرجع، فرزند با base.Name() رفتار پایه را گسترش می‌دهد. sealed override چه فرقی با sealed class دارد؟",
+    "Solution": "abstract یک پایهٔ غیرقابل‌ساختِ مستقیم است؛ فرزند قابل‌ساخت باید عضوهای abstract را تکمیل کند. sealed class جلوی ارث‌بری از کل کلاس را می‌گیرد. sealed override فقط بازنویسی دوبارهٔ همان عضو را می‌بندد؛ کلاس می‌تواند هنوز فرزند داشته باشد. base.Name() مستقیماً پیاده‌سازی پایه را می‌گیرد. مثال Base+Vip چاپ می‌کند؛ رفتار پایه حذف نشده، گسترش یافته است.",
+    "SolutionCode": "Policy policy = new Vip();\nConsole.WriteLine(policy.Name());\n\nabstract class Policy\n{\n    public virtual string Name() => \"Base\";\n}\nclass Vip : Policy\n{\n    public sealed override string Name() => base.Name() + \"+Vip\";\n}\nsealed class FinalVip : Vip { }"
   },
   "S07/workshop": {
     "Prompt": "یک پایهٔ abstract به نام DiscountPolicy با متد decimal Apply(decimal amount) بساز. RegularDiscount همون مبلغ رو بده؛ VipDiscount ده درصد تخفیف بده. هر دو مبلغ منفی رو با استثنا رد کنند. دو نمونه رو با متغیر از نوع پایه صدا بزن.",
@@ -123,7 +126,7 @@
   "S08/assessment": {
     "Prompt": "برای هر ادعا، تأیید یا اصلاح درست را انتخاب کن.",
     "Solution": "ادعاهای اول تا سوم نیازمند اصلاح‌اند؛ interface قابل new کردن نیست، struct هم قرارداد پیاده می‌کند و عضو صریح از مسیر interface فراخوانی می‌شود. ادعای چهارم درست است.",
-    "SolutionCode": ""
+    "SolutionCode": "Token token = Make<Token>();\nConsole.WriteLine(token.Id);\n\nstatic T Make<T>() where T : IFactory<T> => T.Create();\n\ninterface IFactory<T>\n{\n    static abstract T Create();\n}\nsealed class Token : IFactory<Token>\n{\n    public int Id => 7;\n    public static Token Create() => new();\n}"
   },
   "S08/deduction": {
     "Prompt": "Store دو متد صریح Run برای IReader و IWriter دارد و Run عمومی ندارد. هر مرجع را به نتیجه وصل کن.",

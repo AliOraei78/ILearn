@@ -32,8 +32,7 @@ services:
       EmailSettings__Password: "${SMTP_PASSWORD:-}"
       EmailSettings__FromEmail: "${SMTP_FROM_EMAIL:-}"
       ConnectionStrings__ILearn: "Host=postgres;Database=ilearn;Username=ilearn;Password=${ILEARN_DB_PASSWORD};GssEncryptionMode=Disable"
-      Ollama__Url: "${OLLAMA_URL:-http://host.docker.internal:11434/api/chat}"
-      Ollama__Model: "${OLLAMA_MODEL:-qwen2.5-coder:3b}"
+      OpenRouter__ApiKey: "${OPENROUTER_API_KEY:-}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:

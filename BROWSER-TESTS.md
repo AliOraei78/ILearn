@@ -1,5 +1,7 @@
 # Browser verification and anti-slop gate
 
+Current curriculum (S01 through S10): [coverage and verification](verification/chapters01-10-delivery.md). The curriculum run passed 84 .NET tests, 41 authored-code compilation/execution checks and 82 Chrome browser groups with 368 layout checks at 320/390/768/1366px. All 80 challenges, references, hints, chapter introductions, completion, reload and 1000 XP were verified. The older reports below retain their original scope and results; `ui-audit.cjs` explicitly retains its four-chapter regression scope, and `curriculum-flow.cjs` covers all ten chapters.
+
 Final UI/UX audit (2026-11-02): [findings, fixes, responsive matrix, evidence and reproduction](verification/ux-audit-2026-11-02.md). Release/Production passed 80 .NET tests. Chrome and Edge each passed 51 browser groups and 3,024 layout/state/viewport checks across all 32 activities and 46 base viewport sizes, with zero measured layout findings or browser errors. The running Docker app on port 5081 was rebuilt and passed 10 smoke groups and 46 viewport checks. These results supersede the earlier reports below. Safari, Firefox and physical devices were not tested.
 
 First audit: [18 initial findings and fixes](verification/full-audit-2026-11-02.md), retained as historical evidence.

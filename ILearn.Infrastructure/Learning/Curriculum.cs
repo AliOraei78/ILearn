@@ -9,11 +9,13 @@ public sealed class Curriculum(IWebHostEnvironment env) : ICurriculum
         var lessons = JsonSerializer.Deserialize<List<Lesson>>(File.ReadAllText(Path.Combine(env.ContentRootPath, "Content", "lessons.json")))!;
         var revisions = JsonSerializer.Deserialize<Dictionary<string, Activity>>(File.ReadAllText(Path.Combine(env.ContentRootPath, "Content", "revisions.json")))!;
         var introductions = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(env.ContentRootPath, "Content", "introductions.json")))!;
-        foreach (var lesson in lessons) lesson.Summary = introductions[lesson.Id];
+        foreach (var lesson in lessons) if (introductions.TryGetValue(lesson.Id, out var introduction)) lesson.Summary = introduction;
         foreach (var lesson in lessons) foreach (var activity in lesson.Activities)
         {
-            var revision = revisions[lesson.Id + "/" + activity.Id];
-            activity.Prompt = revision.Prompt; activity.Solution = revision.Solution; activity.SolutionCode = revision.SolutionCode;
+            if (revisions.TryGetValue(lesson.Id + "/" + activity.Id, out var revision))
+            {
+                activity.Prompt = revision.Prompt; activity.Solution = revision.Solution; activity.SolutionCode = revision.SolutionCode;
+            }
             if (!activity.IsAi && activity.Game is null) activity.Solution += "\nانتخاب‌های درست:\n" + string.Join("\n", activity.Answers.Select(key =>
             {
                 var parts = key.Split(':');

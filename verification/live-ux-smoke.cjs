@@ -4,7 +4,7 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
 
 (async () => {
     const account = JSON.parse(fs.readFileSync('ILearn/App_Data/test-account.json', 'utf8'));
-    const lessons = JSON.parse(fs.readFileSync('ILearn/Content/lessons.json', 'utf8'));
+    const lesson = JSON.parse(fs.readFileSync('ILearn/Content/lessons.json', 'utf8')).find(l => l.Id === 'S05');
     const sizes = JSON.parse(fs.readFileSync('verification/ui-audit-after-chrome.json', 'utf8')).viewports;
     const browser = await chromium.launch({ headless: true, channel: 'chrome' });
     const context=await browser.newContext({viewport:{width:1440,height:900}});
@@ -22,6 +22,9 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
         await expect(page.locator('.player-bar-progress')).toBeVisible();
         const xp = await page.locator('.player-bar-progress label').innerText();
         checks.push('anonymous route and QA account login');
+        await page.getByRole('button', { name: /C# جامع/ }).click();
+        await expect(page.locator('.chapters > li')).toHaveCount(10);
+        checks.push('published lobby contains S01 through S10');
         await page.goto(base + '/');
         await expect(page.locator('a[href="/login"],a[href="/register"]')).toHaveCount(0);
         await expect(page.getByRole('link', { name: 'برگشت به لابی', exact: true })).toBeVisible();
@@ -41,14 +44,14 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
         await page.goto(base + '/lobby?lesson=S05&activity=0');
         await expect(page.locator('#activity-title').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
         if (await page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }).count()) await click('شروع چالش‌ها');
-        await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
-        await click('چالش بعد'); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title); await expect(page.locator('#activity-title')).toBeFocused();
-        await click('چالش قبل'); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
+        await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[0].Title);
+        await click('چالش بعد'); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[1].Title); await expect(page.locator('#activity-title')).toBeFocused();
+        await click('چالش قبل'); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[0].Title);
         await page.locator('nav button').nth(1).click();
-        await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
-        await page.goBack(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
-        await page.goForward(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
-        await page.reload(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
+        await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[1].Title);
+        await page.goBack(); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[0].Title);
+        await page.goForward(); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[1].Title);
+        await page.reload(); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[1].Title);
         checks.push('Back/Forward and reload on live Blazor circuit');
         await click('پاسخ کامل'); await expect(page.getByRole('heading', { name: 'پاسخ مرجع درس', exact: true })).toBeVisible();
         await expect(page.getByRole('button', { name: 'لغو توضیح مدل', exact: true })).toHaveCount(0);

@@ -1,4 +1,4 @@
-// Run against an isolated database and the local SMTP/Ollama fixtures on ports 2528/11435.
+// Run against an isolated database and the local SMTP/OpenRouter fixtures on ports 2528/11435.
 const fs = require('node:fs');
 const http = require('node:http');
 const assert = require('node:assert/strict');
@@ -8,7 +8,8 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
 const { server: smtp, messages } = require('./test-smtp.cjs')();
 const base = process.env.ILEARN_AUDIT_URL || 'http://127.0.0.1:5084';
 const baseline = process.argv.includes('--baseline');
-const lessons = JSON.parse(fs.readFileSync(path.join(__dirname, '../ILearn/Content/lessons.json'), 'utf8'));
+// Retain the original four-chapter account/UI regression; curriculum-flow.cjs covers all ten chapters.
+const lessons = JSON.parse(fs.readFileSync(path.join(__dirname, '../ILearn/Content/lessons.json'), 'utf8')).filter(l => ['S05', 'S06', 'S07', 'S08'].includes(l.Id));
 const widths = [280, 320, 360, 390, 480, 481, 600, 601, 760, 761, 768, 900, 901, 1024, 1280, 1366, 1440, 1920];
 const standardSizes = [[320,568],[360,640],[375,667],[390,844],[393,852],[412,915],[414,896],[430,932],[480,800],[640,360],[768,1024],[800,1280],[820,1180],[1024,768],[1280,720],[1366,768],[1440,900],[1536,864],[1600,900],[1920,1080],[2560,1440]];
 standardSizes.push([1280,1024],[2002,1222],[3440,1440],[3840,2160]);
@@ -24,9 +25,9 @@ const model = http.createServer(async (request, response) => {
     if (modelMode === 'slow') await new Promise(resolve => { const timer=setTimeout(resolve,10000); response.once('close',()=>{clearTimeout(timer);resolve();}); });
     if (modelMode === 'error') { response.writeHead(503).end(); return; }
     const payload = JSON.parse(body);
-    const content = payload.format ? JSON.stringify({ score: modelMode === 'insufficient' ? 69 : 100, summary: 'پاسخ با معیار تمرین بررسی شد.', issues: [], nextHint: 'تمرین بعد را انجام بده.' }) : 'این توضیح آزمایشی از پاسخ مرجع درس استفاده می‌کند.';
+    const content = payload.response_format ? JSON.stringify({ score: modelMode === 'insufficient' ? 69 : 100, summary: 'پاسخ با معیار تمرین بررسی شد.', issues: [], nextHint: 'تمرین بعد را انجام بده.' }) : 'این توضیح آزمایشی از پاسخ مرجع درس استفاده می‌کند.';
     response.setHeader('Content-Type', 'application/json');
-    response.end(JSON.stringify({ message: { content } }));
+    response.end(JSON.stringify({ choices: [{ message: { content } }] }));
 });
 smtp.on('connection', socket => socket.on('error', error => { if (error.code !== 'ECONNRESET') errors.push(error.message); }));
 
@@ -277,7 +278,7 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
                 await click('پاسخ کامل');
                 await expect(page.getByRole('heading', { name: 'پاسخ مرجع درس', exact: true })).toBeVisible();
                 assert.equal(modelRequests,requestsBeforeReference,'reference answer must not contact AI');
-                await click('توضیح ساده‌تر با Ollama');
+                await click('توضیح ساده‌تر با هوش مصنوعی');
                 await expect(page.locator('aside [role=status]')).toContainText('توضیح مدل:');
                 if (!['explain', 'workshop'].includes(activity.Kind)) { await click('یک راهنمایی'); await click('بستن راهنمایی'); }
                 await measure(`${lesson.Id}/${activity.Id}/completed-reference`, [{ width: 280, height: 653 }, { width: 390, height: 844 }, { width: 1366, height: 900 }]);
@@ -294,29 +295,29 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         assert.ok(await page.evaluate(() => document.activeElement.id !== 'draft'));
         record('editor indentation and Escape/Tab keyboard exit');
         modelMode = 'error';
-        await click('بررسی پاسخ با Ollama');
-        await expect(page.locator('.work .feedback[role=status]')).toContainText('Ollama در دسترس نیست');
+        await click('بررسی پاسخ با هوش مصنوعی');
+        await expect(page.locator('.work .feedback[role=status]')).toContainText('مدل در دسترس نیست');
         await expect(page.locator('.work .feedback[role=status]')).toHaveClass(/error/);
         await expect(page.locator('.work .feedback[role=status]')).not.toContainText('Response status code');
         await expect(page.locator('#draft')).not.toHaveValue('');
         await measure('AI service failure');
         modelMode = 'slow';
-        await click('بررسی پاسخ با Ollama');
+        await click('بررسی پاسخ با هوش مصنوعی');
         await measure('AI review pending');
         await click('لغو بررسی');
-        await expect(page.getByRole('button', { name: 'بررسی پاسخ با Ollama', exact: true })).toBeEnabled();
+        await expect(page.getByRole('button', { name: 'بررسی پاسخ با هوش مصنوعی', exact: true })).toBeEnabled();
         modelMode = 'insufficient';
-        await click('بررسی پاسخ با Ollama');
+        await click('بررسی پاسخ با هوش مصنوعی');
         await expect(page.locator('.work .feedback[role=status]')).toContainText('69');
         await expect(page.locator('.work .feedback[role=status]')).toHaveClass(/error/);
         await measure('AI insufficient grade');
         modelMode = 'success';
-        await click('بررسی پاسخ با Ollama');
+        await click('بررسی پاسخ با هوش مصنوعی');
         await expect(page.locator('.work .feedback[role=status]')).toContainText('100');
         await expect(page.locator('.work .feedback[role=status]')).not.toHaveClass(/error/);
         await page.locator('#draft').fill('interface IAudit { string Read(); }\n// پاسخ ویرایش شد');
         await expect(page.locator('.work .feedback[role=status]')).toHaveCount(0);
-        modelMode='slow';await click('بررسی پاسخ با Ollama');await click('پاسخ کامل');
+        modelMode='slow';await click('بررسی پاسخ با هوش مصنوعی');await click('پاسخ کامل');
         await expect(page.getByRole('button',{name:'لغو بررسی',exact:true})).toBeVisible();
         await expect(page.getByRole('button',{name:'لغو توضیح مدل',exact:true})).toHaveCount(0);
         await click('بستن پاسخ کامل');await click('لغو بررسی');modelMode='success';await click('ثبت شخصی تکمیل');

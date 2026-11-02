@@ -48,7 +48,7 @@ public sealed class LearningTests
     {
         var activity = new Activity { Id = "sample", Title = "عنوان", Kind = "workshop", Prompt = "صورت کامل سؤال", Code = "int x = 0;", Explanation = "معیار دقیق" };
         var handler = new CaptureHandler();
-        await new Reviewer(new HttpClient(handler), new ConfigurationBuilder().Build()).Get(activity, "پاسخ کامل", CancellationToken.None, new Lesson { Id = "S05", Title = "متدها" });
+        await new Reviewer(new HttpClient(handler), ReviewerConfig).Get(activity, "پاسخ کامل", CancellationToken.None, new Lesson { Id = "S05", Title = "متدها" });
         using var body = JsonDocument.Parse(handler.Body);
         using var context = JsonDocument.Parse(body.RootElement.GetProperty("messages")[1].GetProperty("content").GetString()!);
         Assert.Equal(activity.Prompt, context.RootElement.GetProperty("question").GetString());
@@ -65,26 +65,94 @@ public sealed class LearningTests
     public async Task InvalidGradeIsRetriedAndRejected(string content)
     {
         var handler = new CaptureHandler(content);
-        await Assert.ThrowsAsync<InvalidDataException>(() => new Reviewer(new HttpClient(handler), new ConfigurationBuilder().Build()).Get(new Activity(), "text", CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidDataException>(() => new Reviewer(new HttpClient(handler), ReviewerConfig).Get(new Activity(), "text", CancellationToken.None));
         Assert.Equal(2, handler.Calls);
     }
     sealed class CaptureHandler(string? content = null) : HttpMessageHandler
     {
-        public string Body = ""; public int Calls;
+        public string Body = ""; public int Calls; public Uri? Url; public string? Authorization;
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token)
         {
-            Calls++; Body = await request.Content!.ReadAsStringAsync(token);
-            return new(HttpStatusCode.OK) { Content = new StringContent(JsonSerializer.Serialize(new { message = new { content = content ?? JsonSerializer.Serialize(new Review(100, "درست است", [], "ادامه")) } }), Encoding.UTF8, "application/json") };
+            Calls++; Body = await request.Content!.ReadAsStringAsync(token); Url = request.RequestUri; Authorization = request.Headers.Authorization?.ToString();
+            return new(HttpStatusCode.OK) { Content = new StringContent(JsonSerializer.Serialize(new { choices = new[] { new { message = new { content = content ?? JsonSerializer.Serialize(new Review(100, "درست است", [], "ادامه")) } } } }), Encoding.UTF8, "application/json") };
         }
+    }
+    static readonly IConfiguration ReviewerConfig = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+    {
+        ["OpenRouter:ApiKey"] = "fixture-review-key",
+        ["OpenRouter:Model"] = "unexpected-model"
+    }).Build();
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task BothModelActionsUseOnlyTheFixedFreeModel(bool explain)
+    {
+        var handler = new CaptureHandler(explain ? "این توضیح پاسخ مرجع است." : null);
+        var reviewer = new Reviewer(new HttpClient(handler), ReviewerConfig);
+        var activity = new Activity { Prompt = "سؤال", Solution = "پاسخ مرجع", SolutionCode = "int x = 0;" };
+        if (explain) Assert.Equal("این توضیح پاسخ مرجع است.", await reviewer.Answer(activity, CancellationToken.None));
+        else Assert.Equal(100, (await reviewer.Get(activity, "پاسخ", CancellationToken.None)).score);
+        Assert.Equal(1, handler.Calls);
+        Assert.Equal("https://openrouter.ai/api/v1/chat/completions", handler.Url?.ToString());
+        Assert.Equal("Bearer fixture-review-key", handler.Authorization);
+        Assert.DoesNotContain("fixture-review-key", handler.Body);
+        using var body = JsonDocument.Parse(handler.Body);
+        var payload = body.RootElement;
+        Assert.Equal("nvidia/nemotron-3.5-super-vl:free", payload.GetProperty("model").GetString());
+        Assert.False(payload.TryGetProperty("models", out _));
+        Assert.False(payload.TryGetProperty("route", out _));
+        Assert.False(payload.GetProperty("provider").GetProperty("allow_fallbacks").GetBoolean());
+        foreach (var price in payload.GetProperty("provider").GetProperty("max_price").EnumerateObject()) Assert.Equal(0, price.Value.GetInt32());
+        Assert.False(payload.GetProperty("reasoning").GetProperty("enabled").GetBoolean());
+        if (explain)
+        {
+            Assert.False(payload.TryGetProperty("response_format", out _));
+            using var context = JsonDocument.Parse(payload.GetProperty("messages")[1].GetProperty("content").GetString()!);
+            Assert.Equal(activity.Solution, context.RootElement.GetProperty("answer").GetString());
+            Assert.Equal(activity.SolutionCode, context.RootElement.GetProperty("code").GetString());
+        }
+        else
+        {
+            var format = payload.GetProperty("response_format");
+            Assert.Equal("json_schema", format.GetProperty("type").GetString());
+            Assert.True(format.GetProperty("json_schema").GetProperty("strict").GetBoolean());
+            Assert.False(format.GetProperty("json_schema").GetProperty("schema").GetProperty("additionalProperties").GetBoolean());
+        }
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task MissingApiKeyNeverSendsAModelRequest(bool explain)
+    {
+        var handler = new CaptureHandler();
+        var reviewer = new Reviewer(new HttpClient(handler), new ConfigurationBuilder().Build());
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        {
+            if (explain) await reviewer.Answer(new Activity(), CancellationToken.None);
+            else await reviewer.Get(new Activity(), "پاسخ", CancellationToken.None);
+        });
+        Assert.Equal(0, handler.Calls);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("English only")]
+    public async Task ExplanationRejectsEmptyOrNonPersianReplies(string content)
+    {
+        var handler = new CaptureHandler(content);
+        await Assert.ThrowsAsync<InvalidDataException>(() => new Reviewer(new HttpClient(handler), ReviewerConfig).Answer(new Activity(), CancellationToken.None));
+        Assert.Equal(1, handler.Calls);
     }
     static string Root => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn"));
     static List<Lesson> Lessons => JsonSerializer.Deserialize<List<Lesson>>(File.ReadAllText(Path.Combine(Root, "Content", "lessons.json")))!;
 
     [Fact]
-    public void CurriculumHasFifteenDistinctGamesAndThreeCompleteSessions()
+    public void CurriculumHasTenCompleteSessions()
     {
         Assert.Equal(44, File.ReadAllLines(Path.Combine(Root, "Content", "catalog.txt")).Length);
-        Assert.Equal(15, Lessons.Where(l => l.Id != "S08").SelectMany(l => l.Activities.Take(5)).Select(a => a.Id).Distinct().Count());
+        Assert.Equal(Enumerable.Range(1, 10).Select(n => $"S{n:00}"), Lessons.Select(l => l.Id));
         foreach (var lesson in Lessons)
         {
             Assert.Equal(8, lesson.Activities.Count);
@@ -108,7 +176,7 @@ public sealed class LearningTests
     [Fact]
     public void MultiSelectRequiresExactSetAndIgnoresSelectionOrder()
     {
-        var game = Lessons[2].Activities[4];
+        var game = Lessons.Single(l => l.Id == "S07").Activities.Single(a => a.Id == "domino");
         Assert.True(game.Check(["2", "0"]));
         Assert.False(game.Check(["0"]));
         Assert.False(game.Check(["0", "1", "2"]));
@@ -136,7 +204,7 @@ public sealed class LearningTests
     public async Task ReviewerParsesResponseAndRetriesMalformedJson(bool retry)
     {
         var handler = new ReplyHandler(retry);
-        var reviewer = new Reviewer(new HttpClient(handler), new ConfigurationBuilder().Build());
+        var reviewer = new Reviewer(new HttpClient(handler), ReviewerConfig);
         var result = await reviewer.Get(Lessons[0].Activities[5], "answer", CancellationToken.None);
         Assert.True(result.sufficient);
         Assert.Equal(retry ? 2 : 1, handler.Calls);
@@ -145,7 +213,7 @@ public sealed class LearningTests
     public async Task ReviewerHonorsCancellation()
     {
         using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => new Reviewer(new HttpClient(new ReplyHandler(false)), new ConfigurationBuilder().Build()).Get(Lessons[0].Activities[5], "text", cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => new Reviewer(new HttpClient(new ReplyHandler(false)), ReviewerConfig).Get(Lessons[0].Activities[5], "text", cancellation.Token));
     }
     sealed class ReplyHandler(bool malformedFirst) : HttpMessageHandler
     {
@@ -154,7 +222,7 @@ public sealed class LearningTests
         {
             cancellationToken.ThrowIfCancellationRequested(); Calls++;
             var content = malformedFirst && Calls == 1 ? "broken" : JsonSerializer.Serialize(new Review(100, "خوب بود", [], "ادامه بده"));
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonSerializer.Serialize(new { message = new { content } }), Encoding.UTF8, "application/json") });
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonSerializer.Serialize(new { choices = new[] { new { message = new { content } } } }), Encoding.UTF8, "application/json") });
         }
     }
     [Theory]
@@ -164,15 +232,21 @@ public sealed class LearningTests
     public async Task ReviewerRejectsMissingOrNonPersianSummary(string? summary)
     {
         var handler = new FixedReplyHandler(summary, HttpStatusCode.OK);
-        var reviewer = new Reviewer(new HttpClient(handler), new ConfigurationBuilder().Build());
+        var reviewer = new Reviewer(new HttpClient(handler), ReviewerConfig);
         await Assert.ThrowsAsync<InvalidDataException>(() => reviewer.Get(Lessons[0].Activities[5], "text", CancellationToken.None));
         Assert.Equal(2, handler.Calls);
     }
-    [Fact]
-    public async Task ReviewerSurfacesServiceFailure()
+    [Theory]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.PaymentRequired)]
+    [InlineData(HttpStatusCode.TooManyRequests)]
+    [InlineData(HttpStatusCode.ServiceUnavailable)]
+    public async Task ReviewerSurfacesServiceFailureWithoutFallback(HttpStatusCode status)
     {
-        var reviewer = new Reviewer(new HttpClient(new FixedReplyHandler("متن", HttpStatusCode.ServiceUnavailable)), new ConfigurationBuilder().Build());
+        var handler = new FixedReplyHandler("متن", status);
+        var reviewer = new Reviewer(new HttpClient(handler), ReviewerConfig);
         await Assert.ThrowsAsync<HttpRequestException>(() => reviewer.Get(Lessons[0].Activities[5], "text", CancellationToken.None));
+        Assert.Equal(1, handler.Calls);
     }
     sealed class FixedReplyHandler(string? summary, HttpStatusCode status) : HttpMessageHandler
     {
@@ -181,7 +255,7 @@ public sealed class LearningTests
         {
             Calls++;
             var content = JsonSerializer.Serialize(new { score = 100, summary, issues = Array.Empty<string>(), nextHint = "ادامه" });
-            return Task.FromResult(new HttpResponseMessage(status) { Content = new StringContent(JsonSerializer.Serialize(new { message = new { content } }), Encoding.UTF8, "application/json") });
+            return Task.FromResult(new HttpResponseMessage(status) { Content = new StringContent(JsonSerializer.Serialize(new { choices = new[] { new { message = new { content } } } }), Encoding.UTF8, "application/json") });
         }
     }
     sealed class TestEnvironment : IWebHostEnvironment

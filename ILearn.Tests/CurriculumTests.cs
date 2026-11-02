@@ -1,16 +1,140 @@
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Hosting;
+using ILearn.Application.Learning;
+using System.Text.Json;
 namespace ILearn.Tests;
 
 public class CurriculumTests
 {
+    static Curriculum Load() => new(new Environment { ContentRootPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn")) });
+
     [Fact]
     public void EveryPlayableActivityHasCompleteReference()
     {
-        var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn"));
-        var curriculum = new Curriculum(new Environment { ContentRootPath = root });
-        Assert.Equal(32, curriculum.Lessons.Sum(l => l.Activities.Count));
-        foreach (var lesson in curriculum.Lessons) { Assert.NotEmpty(lesson.Summary); foreach (var activity in lesson.Activities) { Assert.NotEmpty(activity.Solution); Assert.NotEmpty(activity.Prompt); if (activity.Kind == "workshop") Assert.NotEmpty(activity.SolutionCode); } }
+        var curriculum = Load();
+        Assert.Equal(curriculum.Catalog.Take(10).Select(line => line.Split(' ')[0]), curriculum.Lessons.Select(l => l.Id));
+        Assert.Equal(80, curriculum.Lessons.Sum(l => l.Activities.Count));
+        foreach (var lesson in curriculum.Lessons)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(lesson.Summary));
+            Assert.True(lesson.Activities.Count(a => !a.IsAi) >= 5);
+            Assert.Single(lesson.Activities, a => a.Kind == "workshop");
+            foreach (var activity in lesson.Activities)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(activity.Prompt), lesson.Id + "/" + activity.Id);
+                Assert.False(string.IsNullOrWhiteSpace(activity.Solution), lesson.Id + "/" + activity.Id);
+                Assert.False(string.IsNullOrWhiteSpace(activity.Hint), lesson.Id + "/" + activity.Id);
+                Assert.False(string.IsNullOrWhiteSpace(activity.Explanation), lesson.Id + "/" + activity.Id);
+                if (activity.Kind == "workshop") Assert.NotEmpty(activity.SolutionCode);
+                Assert.Contains(activity.Kind, new[] { "choice", "slots", "order", "trace", "detective", "explain", "workshop", "concept", "experiment", "budget", "mission", "assessment", "deduction" });
+                if (activity.Kind == "detective") Assert.True(activity.Clues.Length >= 2);
+            }
+        }
+    }
+
+    [Fact]
+    public void AllAnswerKeysFitTheirControls()
+    {
+        foreach (var activity in Load().Lessons.SelectMany(l => l.Activities).Where(a => !a.IsAi && a.Kind != "mission"))
+        {
+            Assert.NotEmpty(activity.Answers);
+            Assert.Equal(activity.Answers.Length, activity.Answers.Distinct().Count());
+            foreach (var key in activity.Answers)
+            {
+                var parts = key.Split(':');
+                Assert.InRange(int.Parse(parts[^1]), 0, activity.Options.Length - 1);
+                if (parts.Length == 2) Assert.InRange(int.Parse(parts[0]), 0, activity.Rows.Length - 1);
+            }
+            if (activity.Kind is "slots" or "trace" or "assessment" or "deduction")
+                Assert.Equal(Enumerable.Range(0, activity.Rows.Length), activity.Answers.Select(k => int.Parse(k.Split(':')[0])).Order());
+            if (activity.Kind == "order") Assert.Equal(Enumerable.Range(0, activity.Options.Length), activity.Answers.Select(int.Parse).Order());
+            if (activity.Kind == "choice" && !activity.Multiple) Assert.Single(activity.Answers);
+            if (activity.Kind == "experiment")
+            {
+                Assert.NotEmpty(activity.Game!.Results);
+                Assert.InRange(activity.Game.Limit, 1, activity.Game.Results.Length);
+            }
+        }
+    }
+
+    [Fact]
+    public void EveryChapterCanBeCompletedAndReplayedWithoutExtraXp()
+    {
+        var curriculum = Load();
+        var progress = new Progress();
+        foreach (var lesson in curriculum.Lessons)
+        {
+            LearningService.Start(progress, lesson.Id);
+            foreach (var activity in lesson.Activities)
+            {
+                var entry = new Entry { Draft = activity.SolutionCode.Length > 0 ? activity.SolutionCode : activity.Solution };
+                progress.Entries[$"csharp/{lesson.Id}/{activity.Id}"] = entry;
+                if (activity.IsAi) LearningService.Complete(entry);
+                else
+                {
+                    PrepareGame(activity, entry);
+                    LearningService.Check(activity, entry, activity.Answers, activity.Clues.Length);
+                    LearningService.Check(activity, entry, activity.Answers, activity.Clues.Length);
+                }
+                Assert.True(entry.Complete, lesson.Id + "/" + activity.Id + ": " + entry.Feedback);
+                Assert.False(entry.NeedsReview);
+            }
+        }
+        Assert.Equal(1000, LearningService.Xp(curriculum.Lessons, progress));
+        var restored = JsonSerializer.Deserialize<Progress>(JsonSerializer.Serialize(progress))!;
+        Assert.Equal(1000, LearningService.Xp(curriculum.Lessons, restored));
+        Assert.All(curriculum.Lessons, l => Assert.True(restored.HasStarted(l.Id)));
+    }
+
+    [Fact]
+    public void WrongOrIncompletePuzzleAnswersNeverComplete()
+    {
+        foreach (var activity in Load().Lessons.SelectMany(l => l.Activities).Where(a => !a.IsAi))
+        {
+            var entry = new Entry();
+            if (activity.Kind == "concept") MiniGames.Record(activity, entry.GameState, Enumerable.Range(0, activity.Options.Length).First(i => !activity.Answers.Contains(i.ToString())));
+            if (activity.Kind == "experiment") MiniGames.Record(activity, entry.GameState, 0);
+            var incorrect = activity.Kind == "order" ? activity.Answers.Reverse().ToArray() : new[] { "invalid" };
+            LearningService.Check(activity, entry, incorrect, activity.Clues.Length);
+            Assert.False(entry.Complete, activity.Id);
+        }
+    }
+
+    [Fact]
+    public void FreshProgressStartsAtOneAndExistingProgressRetainsItsChapter()
+    {
+        Assert.Equal("S01", new Progress().Lesson);
+        var old = JsonSerializer.Deserialize<Progress>("""{"Lesson":"S08","Position":4,"Entries":{"csharp/S08/assessment":{"Complete":true}},"IntroductionsRead":["csharp/S05"]}""")!;
+        Assert.Equal("S08", old.Lesson);
+        Assert.Equal(4, old.Position);
+        Assert.True(old.HasStarted("S08"));
+        Assert.True(old.HasStarted("S05"));
+        Assert.Equal(10, LearningService.Xp(Load().Lessons, old));
+    }
+
+    static void PrepareGame(Activity activity, Entry entry)
+    {
+        if (activity.Kind == "concept") MiniGames.Record(activity, entry.GameState, int.Parse(activity.Answers[0]));
+        if (activity.Kind == "experiment") MiniGames.Record(activity, entry.GameState, 0);
+        if (activity.Kind == "deduction") foreach (var answer in activity.Answers) entry.GameState.Marks[answer] = 1;
+        if (activity.Kind == "mission")
+        {
+            var path = FindSuccess(activity.Game!, 0, activity.Game!.Limit);
+            Assert.NotNull(path);
+            foreach (var choice in path) Assert.True(MiniGames.Record(activity, entry.GameState, choice));
+        }
+    }
+
+    static List<int>? FindSuccess(MiniGame game, int node, int remaining)
+    {
+        if (game.Nodes[node].Success) return [];
+        if (remaining == 0) return null;
+        for (int i = 0; i < game.Nodes[node].Next.Length; i++)
+        {
+            var tail = FindSuccess(game, game.Nodes[node].Next[i], remaining - 1);
+            if (tail is not null) return [i, .. tail];
+        }
+        return null;
     }
     sealed class Environment : IWebHostEnvironment
     {

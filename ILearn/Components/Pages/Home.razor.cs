@@ -72,7 +72,7 @@ public partial class Home
         } catch (Exception ex) {
             if (!cancellation.IsCancellationRequested) {
                 Logger.LogWarning(ex,"Optional answer review failed");target.FeedbackError = true;
-                target.Feedback = "Ollama در دسترس نیست یا پاسخ معتبر نداد. متن تو محفوظ است. دوباره تلاش کن یا تکمیل را شخصی ثبت کن.";
+                target.Feedback = "مدل در دسترس نیست یا پاسخ معتبر نداد. متن تو محفوظ است. دوباره تلاش کن یا تکمیل را شخصی ثبت کن.";
             }
         } finally { if (reviewCancellation == cancellation) busy = false; await Save(); }
     }

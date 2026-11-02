@@ -28,7 +28,7 @@ ENERGY 1 / RHYTHM 1 / MOTION 1.
 - The progress bar uses the existing dimensions and square ends to match the pixel motif; radio buttons, checkboxes and dropdowns remain native controls.
 - Disabled buttons use readable ink and dashed borders instead of faded text, keeping contrast and dimensions intact.
 - The user requested RightPixel's pixel avatars. Reuse its Canvas rectangles at 64px with smoothing disabled; the avatar identifies the active save. No new logo is generated.
-- A topic lobby leads to four playable chapters. Unavailable roadmap chapters live in a native disclosure to keep the first choice short.
+- A topic lobby leads to ten playable chapters, S01 through S10. The remaining 34 roadmap sessions live in the existing native disclosure. Chapter counts derive from the loaded curriculum so introduction and lobby stay consistent. New chapters reuse the numbered workspace, native controls, palette, spacing and 1/1/1 dials; no visual assets or motion are added.
 - The header shows Level and title; its single progress bar measures the 200 XP to the defined promotion and stays full afterward. Total lifetime XP remains visible.
 - Player identity and progression live in a separate full-width top band, above page titles and chapter navigation. A slightly darker existing surface and one bottom border separate account state from learning content; the same component is used on the profile page. Responsive rows keep the avatar, name and actions readable without fixing the band over the exercise.
 - The introduction occupies the same work surface before challenges, keeping prerequisite reading separate without a new route.

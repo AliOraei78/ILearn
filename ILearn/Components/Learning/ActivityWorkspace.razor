@@ -2,7 +2,7 @@
  <p class="muted">چالش @(Position+1) از @Count · @Activity.Xp امتیاز تجربه · @(Activity.IsAi?"بررسی اختیاری با هوش مصنوعی":"بررسی با پاسخ‌نامهٔ درس")</p>
  <h2 id="activity-title" tabindex="-1" @ref="title">@Activity.Title</h2><p>@Activity.Prompt</p>
  <button aria-expanded="@(AnswerOpen?"true":"false")" aria-controls="reference-answer" @onclick="Answer">@(AnswerOpen?"بستن پاسخ کامل":"پاسخ کامل")</button>
- @if(AnswerOpen){<aside id="reference-answer" class="feedback"><h3>پاسخ مرجع درس</h3><p>@Activity.Solution</p>@if(Activity.SolutionCode.Length>0){<pre tabindex="0">@Activity.SolutionCode</pre>}<p role="status">@AnswerText</p>@if(Explaining){<button @onclick="Cancel">لغو توضیح مدل</button>}else if(!HasModelAnswer){<button disabled="@Busy" @onclick="Explain">توضیح ساده‌تر با Ollama</button>}</aside>}
+ @if(AnswerOpen){<aside id="reference-answer" class="feedback"><h3>پاسخ مرجع درس</h3><p>@Activity.Solution</p>@if(Activity.SolutionCode.Length>0){<pre tabindex="0">@Activity.SolutionCode</pre>}<p role="status">@AnswerText</p>@if(Explaining){<button @onclick="Cancel">لغو توضیح مدل</button>}else if(!HasModelAnswer){<button disabled="@Busy" @onclick="Explain">توضیح ساده‌تر با هوش مصنوعی</button>}</aside>}
  @if(!string.IsNullOrWhiteSpace(Activity.Code)){<pre tabindex="0">@Activity.Code</pre>}
 @ChildContent
 </section>
