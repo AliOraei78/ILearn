@@ -1,0 +1,32 @@
+@page "/login"
+@page "/register"
+@inject NavigationManager Navigation
+<PageTitle>حساب بازیکن | ILearn</PageTitle>
+<header><Brand /><h1>بیا با هم کد یاد بگیریم</h1></header>
+<main class="work account-panel">
+<h2>@(Register ? "ساخت حساب" : "ورود به بازی")</h2>
+@if (Error is not null) { <p role="alert" class="feedback error">@Message</p> }
+@if (!string.IsNullOrWhiteSpace(Detail)) { <p role="alert" class="feedback error">@Detail</p> }
+@if(Reset){<p role="status" class="feedback">رمز تازه ذخیره شد. حالا با همون رمز وارد شو.</p>}
+@if(Wait>0){<p role="alert" class="feedback error">تلاش‌ها زیاد شده؛ @Wait ثانیه دیگه امتحان کن.</p>}
+<form method="post" action="@(Register ? "/auth/register" : "/auth/login")" data-enhance="false">
+<AntiforgeryToken />
+@if(Register){<label for="name">@("نام بازیکن")</label><input id="name" name="name" required maxlength="50" autocomplete="@("nickname")" />}
+@if(true){<label for="email">ایمیل</label><input id="email" name="email" type="email" required maxlength="254" autocomplete="@(Register?"email":"username")" />}
+@if(Register){<p class="muted">اول ایمیلت رو تأیید می‌کنی، بعد رمزت رو می‌سازی. هر ایمیل یک حساب داره.</p>}
+else{<label for="password">رمز عبور</label><input id="password" name="password" type="password" required maxlength="256" autocomplete="current-password" /><label class="remember-choice"><input type="checkbox" name="remember" value="true" /><span>مرا به خاطر بسپار<small>روی دستگاه خودت، تا ۷ روز وارد بمون؛ بعد از ۲۴ ساعت بی‌فعالیتی باید دوباره وارد شی.</small></span></label>}
+<button class="primary" type="submit">@(Register ? "ارسال کد تأیید" : "وارد بازی شو")</button>
+</form>
+<div class="account-actions">
+<a class="account-action" href="@(Register ? "/login" : "/register")" data-enhance-nav="false"><PixelIcon /><span>@(Register ? "حساب دارم" : "حساب تازه می‌سازم")<small>@(Register ? "برگشت به صفحهٔ ورود" : "یک کاراکتر، یک سیو برای خودت")</small></span></a>
+@if(!Register){<a class="account-action" href="/forgot-password" data-enhance-nav="false"><PixelIcon Kind="key" /><span>رمزم یادم نیست<small>با ایمیلت یک رمز تازه بساز</small></span></a>}
+</div>
+</main><footer>هر حساب، سیو جداگانهٔ خودش رو داره.</footer>
+@code {
+ bool Register => new Uri(Navigation.Uri).AbsolutePath == "/register";
+ [SupplyParameterFromQuery(Name="error")] public string? Error {get;set;}
+ [SupplyParameterFromQuery(Name="message")] public string? Detail {get;set;}
+ [SupplyParameterFromQuery(Name="reset")] public bool Reset {get;set;}
+ [SupplyParameterFromQuery(Name="wait")] public int? Wait {get;set;}
+ string Message => Error switch { "database" => "اتصال به دیتابیس برقرار نشد. کمی بعد دوباره امتحان کن.", _ => "ایمیل یا رمز درست نیست. اگر هنوز رمز نداری، بازیابی یا تکمیل حساب رو انتخاب کن." };
+}

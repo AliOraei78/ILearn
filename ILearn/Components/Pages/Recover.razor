@@ -1,0 +1,14 @@
+@page "/forgot-password"
+@page "/reset-password"
+@inject IConfiguration Configuration
+<PageTitle>بازیابی یا تکمیل حساب | ILearn</PageTitle>
+<header><Brand /><h1>برگرد به بازی</h1></header>
+<main class="work account-panel"><h2>بازیابی یا تکمیل حساب</h2><p>ایمیل حسابت رو وارد کن. با کد تأیید می‌تونی رمز تازه‌ای بسازی یا ساخت حسابت رو تکمیل کنی.</p>
+@if(Detail is not null||Error is not null){<p role="alert" class="feedback error">@(Detail??"ارسال انجام نشد؛ دوباره امتحان کن.")</p>}
+@if(string.IsNullOrWhiteSpace(Configuration["EmailSettings:Host"])){<p role="status" class="muted">ارسال ایمیل هنوز تنظیم نشده.</p>}
+<form method="post" action="/auth/forgot" data-enhance="false"><AntiforgeryToken /><label for="recovery-email">ایمیل حساب</label><input id="recovery-email" name="email" type="email" required maxlength="254" autocomplete="email" /><button class="primary">ارسال کد تأیید</button></form>
+<div class="account-actions"><a class="account-action" href="/login" data-enhance-nav="false"><PixelIcon Kind="back" /><span>بازگشت به ورود</span></a></div></main><footer>کد یک‌بارمصرف تا دو دقیقه معتبره؛ کدت رو به کسی نده.</footer>
+@code{
+ [SupplyParameterFromQuery(Name="message")]public string? Detail{get;set;}
+ [SupplyParameterFromQuery(Name="error")]public string? Error{get;set;}
+}

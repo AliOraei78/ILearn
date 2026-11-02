@@ -1,0 +1,4 @@
+
+ @for(int i=0;i<Order.Count;i++){var row=i;<div class="order-row"><span class="code">@(i+1). @Activity.Options[Order[i]]</span><button aria-label="@($"بالا بردن قطعه {i+1}")" disabled="@(i==0)" @onclick="()=>Moved.InvokeAsync((row,-1))">بالا</button><button aria-label="@($"پایین بردن قطعه {i+1}")" disabled="@(i==Order.Count-1)" @onclick="()=>Moved.InvokeAsync((row,1))">پایین</button></div>}
+
+@code {[Parameter,EditorRequired] public Activity Activity {get;set;}=null!;[Parameter,EditorRequired] public List<int> Order {get;set;}=[]; [Parameter] public EventCallback<(int Row,int Delta)> Moved {get;set;}}

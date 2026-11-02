@@ -1,0 +1,4 @@
+
+ @for(int i=0;i<Activity.Rows.Length;i++){var row=i;<div class="slot"><label for="@($"slot-{i}")">@Activity.Rows[i]</label><select id="@($"slot-{i}")" value="@Value(i)" @onchange="e=>Changed.InvokeAsync((row,e.Value?.ToString()??string.Empty))"><option value="">انتخاب کن</option>@for(int j=0;j<Activity.Options.Length;j++){<option value="@j">@Activity.Options[j]</option>}</select></div>}
+
+@code {[Parameter,EditorRequired] public Activity Activity {get;set;}=null!;[Parameter,EditorRequired] public Func<int,string> Value {get;set;}=null!; [Parameter] public EventCallback<(int Row,string Value)> Changed {get;set;}}

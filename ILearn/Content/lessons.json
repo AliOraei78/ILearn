@@ -1,0 +1,428 @@
+[
+  {
+    "Id": "S05",
+    "Title": "متدها و پارامترها",
+    "Summary": "پیش‌نیاز: متغیر یک نام برای نگهداری مقدار است. شرط if مسیر اجرا را انتخاب می‌کند؛ return از متد بیرون می‌رود.\nمتد مثل یک ابزار است: ورودی می‌گیرد، کاری می‌کند و شاید خروجی بدهد.\nحالت معمولی: کپی مقدار را می‌فرستی. ref: خود متغیر را می‌فرستی و باید از قبل مقدار داشته باشد. out: متد موظف است پیش از خروج عادی مقدار بدهد. in: پارامتر از این مسیر فقط خوانده می‌شود.\nparams چند ورودی را در یک مجموعه می‌گیرد. در C# 13 انواع مجموعه بیشتری برای params مجازند؛ تمرین این جلسه از آرایه استفاده می‌کند.\nOverload یعنی چند متد هم‌نام با پارامترهای متفاوت؛ نوع خروجی به‌تنهایی کافی نیست. Local function متدی داخل یک متد است و می‌تواند به متغیرهای محلی دسترسی داشته باشد.",
+    "Activities": [
+      {
+        "Id": "predict",
+        "Title": "پیشگوی خروجی",
+        "Kind": "choice",
+        "Prompt": "چه چیزی چاپ می‌شود؟",
+        "Code": "int n = 4;\nAdd(ref n);\nConsole.WriteLine(n);\nvoid Add(ref int x) { x += 3; }",
+        "Options": [
+          "4",
+          "7",
+          "خطای کامپایل"
+        ],
+        "Answers": [
+          "1"
+        ],
+        "Explanation": "ref اجازه می‌دهد متد همان متغیر فراخواننده را تغییر دهد.",
+        "Hint": "x و n در این فراخوانی به یک محل اشاره دارند."
+      },
+      {
+        "Id": "keys",
+        "Title": "کلید گمشده",
+        "Kind": "slots",
+        "Prompt": "دو جای خالی را پر کن. متد باید خروجی تازه‌ای در result بگذارد.",
+        "Code": "bool TryGet([A] int result) {\n    result = 42;\n    return true;\n}\nTryGet([B] int answer);",
+        "Options": [
+          "in",
+          "out",
+          "ref"
+        ],
+        "Answers": [
+          "0:1",
+          "1:1"
+        ],
+        "Explanation": "out در تعریف و فراخوانی نوشته می‌شود و مقدار اولیه لازم ندارد.",
+        "Hint": "answer پیش از فراخوانی مقداری ندارد.",
+        "Rows": [
+          "A: تعریف پارامتر",
+          "B: فراخوانی"
+        ]
+      },
+      {
+        "Id": "pairs",
+        "Title": "جفت‌یاب",
+        "Kind": "slots",
+        "Prompt": "هر قرارداد را به کلیدواژه مناسب وصل کن.",
+        "Code": "",
+        "Options": [
+          "ref",
+          "out",
+          "in",
+          "params"
+        ],
+        "Answers": [
+          "0:0",
+          "1:1",
+          "2:2",
+          "3:3"
+        ],
+        "Explanation": "ref ورودی/خروجی، out خروجی، in دسترسی فقط‌خواندنی و params ورودی‌های متغیر است.",
+        "Hint": "تفاوت اصلی ref و out، نیاز به مقدار اولیه است.",
+        "Rows": [
+          "متغیر مقدار دارد و متد می‌تواند آن را عوض کند",
+          "متد باید پیش از بازگشت عادی مقدار تعیین کند",
+          "پارامتر از این مسیر قابل انتساب نیست",
+          "تعداد متغیر آرگومان"
+        ]
+      },
+      {
+        "Id": "order",
+        "Title": "کد درهم",
+        "Kind": "order",
+        "Prompt": "با بالا و پایین، چهار خط را مرتب کن. هر نام باید پیش از استفاده تعریف شود.",
+        "Code": "",
+        "Options": [
+          "int quantity = 2;",
+          "int total = quantity * 10;",
+          "string text = total.ToString();",
+          "Console.WriteLine(text);"
+        ],
+        "Answers": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "Explanation": "وابستگی quantity، total و text تنها ترتیب معتبر این مسئله را مشخص می‌کند.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "counter",
+        "Title": "ضدنمونه",
+        "Kind": "choice",
+        "Prompt": "قرارداد می‌گوید quantity باید مثبت باشد. کدام ورودی نشان می‌دهد این پیاده‌سازی قرارداد را نقض می‌کند؟",
+        "Code": "bool Valid(int quantity) => quantity >= 0;",
+        "Options": [
+          "quantity = 1",
+          "quantity = -1",
+          "quantity = 0"
+        ],
+        "Answers": [
+          "2"
+        ],
+        "Explanation": "صفر مثبت نیست، ولی شرط >= 0 آن را قبول می‌کند.",
+        "Hint": "مرز بین مقدار مجاز و غیرمجاز را بررسی کن."
+      },
+      {
+        "Id": "explain1",
+        "Title": "توضیح: ref و out",
+        "Kind": "explain",
+        "Prompt": "تفاوت ref و out را در ۲ تا ۴ جمله بگو و برای هرکدام یک کاربرد پیشنهاد بده.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "ref نیازمند مقدار اولیه و مناسب ورودی/خروجی است؛ out مقدار اولیه لازم ندارد و باید پیش از خروج عادی تعیین شود. پاسخ باید مثال معنادار داشته باشد.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "explain2",
+        "Title": "توضیح: overload و تابع محلی",
+        "Kind": "explain",
+        "Prompt": "آیا فقط با تغییر نوع خروجی می‌توان overload ساخت؟ تابع محلی چه فرقی با متد جدا دارد؟",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "نوع خروجی تنها برای overload کافی نیست؛ امضای پارامترها باید متمایز باشد. تابع محلی در محدوده متد است و می‌تواند به متغیرهای محلی دسترسی داشته باشد. توضیح static local الزامی نیست.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "workshop",
+        "Title": "کارگاه: مبلغ سفارش",
+        "Kind": "workshop",
+        "Prompt": "متد bool TryCalculateTotal(decimal price, int quantity, out decimal total) را بنویس. قیمت منفی یا تعداد صفر/منفی: false و total برابر صفر. در غیر این صورت حاصل‌ضرب و true. فرض کن حاصل‌ضرب در محدوده decimal است.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "اعتبارسنجی price<0 و quantity<=0، مقداردهی out در همه مسیرهای بازگشت عادی، false با total=0 در نامعتبر، ضرب و true در معتبر. آزمون ضروری: price=0 و quantity=1 باید true و total=0 بدهد. اگر این ورودی false شود پاسخ کامل درست نیست. حاصلضرب در محدوده decimal فرض شده و کنترل overflow لازم نیست.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      }
+    ]
+  },
+  {
+    "Id": "S06",
+    "Title": "کلاس و کپسوله‌سازی",
+    "Summary": "پیش‌نیاز: متد، پارامتر و شرط را می‌شناسی. کلاس داده و رفتار مربوط به یک چیز را کنار هم قرار می‌دهد.\nکپسوله‌سازی یعنی تغییر داده از مسیرهای کنترل‌شده انجام شود. مثلاً موجودی نباید با یک انتساب بیرونی منفی شود.\nprivate فقط داخل نوع مربوط، public برای استفاده‌کننده بیرونی و protected برای نوع و انواع مشتق‌شده است.\nسازنده وضعیت اولیه معتبر می‌سازد. property می‌تواند خواندن عمومی و نوشتن خصوصی داشته باشد.\nPrimary constructor از C# 12 پارامترها را در سربرگ کلاس می‌آورد؛ پارامتر آن خودکار به property عمومی تبدیل نمی‌شود.\nabstract مستقیماً ساخته نمی‌شود؛ sealed اجازه ارث‌بری نمی‌دهد. در این جلسه به کاربرد مقدماتی این انواع می‌رسیم.",
+    "Activities": [
+      {
+        "Id": "compiler",
+        "Title": "قاضی کامپایلر",
+        "Kind": "choice",
+        "Prompt": "کد بیرون از کلاس می‌خواهد Price را بخواند. نتیجه چیست؟",
+        "Code": "class Order {\n    private decimal Price = 10;\n}\n// In another class:\n// var amount = new Order().Price;",
+        "Options": [
+          "دسترسی مجاز است",
+          "دسترسی به عضو private از کلاس دیگر خطای کامپایل است",
+          "مقدار صفر می‌شود"
+        ],
+        "Answers": [
+          "1"
+        ],
+        "Explanation": "private به استفاده‌کننده بیرون کلاس دسترسی نمی‌دهد.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "bug",
+        "Title": "شکار باگ",
+        "Kind": "choice",
+        "Prompt": "قرارداد: بیرون از کلاس نباید بتواند Total را مستقیماً عوض کند. کدام خط مشکل دارد؟",
+        "Code": "1: class Order {\n2:   public decimal Total { get; set; }\n3:   public void Add(decimal price) {\n4:     if (price > 0) Total += price;\n5:   }\n6: }",
+        "Options": [
+          "خط ۲",
+          "خط ۳",
+          "خط ۴"
+        ],
+        "Answers": [
+          "0"
+        ],
+        "Explanation": "setter عمومی اجازه می‌دهد اعتبارسنجی Add دور زده شود.",
+        "Hint": "به مسیر تغییر داده از بیرون نگاه کن."
+      },
+      {
+        "Id": "sort",
+        "Title": "سبدبندی",
+        "Kind": "slots",
+        "Prompt": "هر عضو را در دسته مرتبط با همین قرارداد قرار بده.",
+        "Code": "class Order {\n  private decimal total;\n  public decimal Total => total;\n  public void Add(decimal price) { /* validation */ }\n}",
+        "Options": [
+          "داده داخلی",
+          "خواندن عمومی",
+          "رفتار تغییر وضعیت"
+        ],
+        "Answers": [
+          "0:0",
+          "1:1",
+          "2:2"
+        ],
+        "Explanation": "فیلد داده را نگه می‌دارد، property خواندن را فراهم می‌کند و متد مسیر کنترل‌شده تغییر است.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن.",
+        "Rows": [
+          "total",
+          "Total",
+          "Add"
+        ]
+      },
+      {
+        "Id": "surgery",
+        "Title": "جراحی یک‌حرکتی",
+        "Kind": "choice",
+        "Prompt": "فقط یک تغییر مجاز است: خواندن Total عمومی بماند، نوشتن مستقیم بیرونی ممنوع شود.",
+        "Code": "public decimal Total { get; set; }",
+        "Options": [
+          "public را private کن",
+          "set را private set کن",
+          "get را حذف کن"
+        ],
+        "Answers": [
+          "1"
+        ],
+        "Explanation": "private set خواندن عمومی را نگه می‌دارد و انتساب را به داخل نوع محدود می‌کند.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "tests",
+        "Title": "تست‌چین",
+        "Kind": "choice",
+        "Prompt": "قرارداد سازنده: نام نباید خالی باشد و مبلغ نباید منفی باشد. هر تست فقط یک مورد نامعتبر را هدف بگیرد. کوچک‌ترین مجموعه‌ای را انتخاب کن که هر دو ردشدن و پذیرش مبلغ صفر را بررسی کند.",
+        "Code": "",
+        "Options": [
+          "نام خالی و مبلغ ۱۰: رد",
+          "نام A و مبلغ منفی ۱: رد",
+          "نام A و مبلغ صفر: قبول",
+          "نام A و مبلغ ۱۰: قبول"
+        ],
+        "Answers": [
+          "0",
+          "1",
+          "2"
+        ],
+        "Explanation": "سه تست لازم است. صفر مرز معتبر مبلغ است؛ دو تست دیگر هرکدام یک شرط نامعتبر را جدا بررسی می‌کنند.",
+        "Hint": "دو حالت نامعتبر مستقل و پذیرش مبلغ صفر را پوشش بده.",
+        "Multiple": true
+      },
+      {
+        "Id": "explain1",
+        "Title": "توضیح: کپسوله‌سازی",
+        "Kind": "explain",
+        "Prompt": "چرا یک property با setter عمومی ممکن است قانون معتبر بودن شیء را خراب کند؟ یک مثال بزن.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "تشخیص دور زدن validation و حفظ invariant؛ مثال مبلغ یا موجودی منفی؛ پیشنهاد setter خصوصی و متد کنترل‌شده.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "explain2",
+        "Title": "توضیح: سازنده",
+        "Kind": "explain",
+        "Prompt": "سازنده چه کمکی به معتبر بودن شیء می‌کند؟ آیا پارامتر primary constructor کلاس خودکار property عمومی است؟",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "سازنده باید وضعیت اولیه معتبر برقرار کند؛ در class پارامتر primary constructor خودکار property عمومی نیست. مقایسه با record الزامی نیست.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "workshop",
+        "Title": "کارگاه: سفارش معتبر",
+        "Kind": "workshop",
+        "Prompt": "کلاس Order را بساز: سازنده نام غیرخالی بگیرد؛ Total فقط از بیرون خوانده شود؛ AddItem(decimal price, int quantity) قیمت منفی و تعداد غیرمثبت را رد کند، و در غیر این صورت مبلغ را اضافه کند. قیمت صفر مجاز است. برای رد ورودی از استثنا استفاده کن؛ حاصل‌ضرب را در محدوده decimal فرض کن.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "نام null یا خالی رد شود. Total getter عمومی و setter غیرعمومی یا backing field خصوصی داشته باشد. سازنده وضعیت معتبر بسازد. AddItem price<0 و quantity<=0 را پیش از تغییر رد کند؛ حالت مجاز جمع شود. قیمت صفر مجاز است و کنترل overflow خواسته نشده.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      }
+    ]
+  },
+  {
+    "Id": "S07",
+    "Title": "وراثت و چندریختی",
+    "Summary": "کلاس داده‌ها و کارهای مربوط به یک چیز رو کنار هم نگه می‌داره. سازنده هم کمک می‌کنه اون چیز رو درست بسازیم.\nارث‌بری یعنی یک کلاس از کلاس دیگه ویژگی و رفتار بگیره؛ مثلاً مشتری ویژه، نوعی مشتریه.\nمتد virtual اجازه می‌ده فرزند رفتارش رو با override عوض کنه. وقتی صداش می‌زنیم، رفتار نوع واقعی شیء اجرا می‌شه.\nکلمهٔ new فقط عضو هم‌نام رو پنهان می‌کنه. اینجا نوع متغیری که باهاش صدا می‌زنیم مهمه.\nاز کلاس abstract مستقیم شیء نمی‌سازیم؛ بعضی بخش‌ها رو فرزند تکمیل می‌کنه. از کلاس sealed نمی‌شه ارث برد. sealed override هم بازنویسی دوبارهٔ همون متد رو می‌بنده.\nکلمهٔ base کمک می‌کنه رفتار کلاس پایه رو صدا بزنیم. توی این فصل با مثال‌های کوچیک تفاوت این حالت‌ها رو تمرین می‌کنیم.",
+    "Activities": [
+      {
+        "Id": "trace",
+        "Title": "ردپای اجرا",
+        "Kind": "trace",
+        "Prompt": "هر فراخوانی کدام متن را برمی‌گرداند؟",
+        "Code": "Policy a = new Vip();\nPolicy b = new Policy();\nclass Policy { public virtual string Name() => \"Base\"; }\nclass Vip : Policy { public override string Name() => \"Vip\"; }",
+        "Options": [
+          "Base",
+          "Vip"
+        ],
+        "Answers": [
+          "0:1",
+          "1:0",
+          "2:1"
+        ],
+        "Explanation": "فراخوانی virtual بر اساس نوع واقعی شیء dispatch می‌شود.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن.",
+        "Rows": [
+          "a.Name()",
+          "b.Name()",
+          "((Policy)new Vip()).Name()"
+        ]
+      },
+      {
+        "Id": "detective",
+        "Title": "کارآگاه کد",
+        "Kind": "detective",
+        "Prompt": "یک متد هم‌نام در کلاس فرزند تعریف شده ولی نتیجه فراخوانی‌ها متفاوت است. با دو سرنخ علت را تشخیص بده.",
+        "Code": "Policy a = new Vip();\nVip b = new Vip();",
+        "Options": [
+          "فرزند از new برای پنهان‌سازی استفاده کرده",
+          "فرزند override کرده و هر دو فراخوانی مجازی‌اند",
+          "تغییر نوع مرجع، خود شیء را کپی کرده"
+        ],
+        "Answers": [
+          "0"
+        ],
+        "Explanation": "در پنهان‌سازی، نوع مرجع در انتخاب عضو اثر دارد. cast شیء تازه نمی‌سازد.",
+        "Hint": "به تفاوت پنهان‌سازی و override فکر کن.",
+        "Clues": [
+          "a.Name() متن Base می‌دهد؛ b.Name() متن Vip می‌دهد.",
+          "عضو پایه virtual است، ولی عضو فرزند override نیست.",
+          "در فرزند کامپایلر پنهان‌سازی عمدی عضو را پذیرفته است."
+        ]
+      },
+      {
+        "Id": "reverse",
+        "Title": "مهندسی معکوس",
+        "Kind": "choice",
+        "Prompt": "می‌خواهیم a.Name() متن Vip بدهد. کدام تعریف فرزند این رفتار را فراهم می‌کند؟",
+        "Code": "Policy a = new Vip();\nclass Policy { public virtual string Name() => \"Base\"; }\n// Choose the method inside class Vip : Policy",
+        "Options": [
+          "public new string Name() => \"Vip\";",
+          "public override string Name() => \"Vip\";",
+          "public string OtherName() => \"Vip\";"
+        ],
+        "Answers": [
+          "1"
+        ],
+        "Explanation": "override در dispatch مجازی شرکت می‌کند.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "contract",
+        "Title": "قراردادساز",
+        "Kind": "slots",
+        "Prompt": "پایه قابل ساختن نباشد؛ فرزند مجبور به پیاده‌سازی Rate باشد؛ پیاده‌سازی فرزند هم انجام شود.",
+        "Code": "public [A] class Policy {\n  public [B] decimal Rate();\n}\npublic class Vip : Policy {\n  public [C] decimal Rate() => 0.1m;\n}",
+        "Options": [
+          "abstract",
+          "virtual",
+          "override",
+          "sealed"
+        ],
+        "Answers": [
+          "0:0",
+          "1:0",
+          "2:2"
+        ],
+        "Explanation": "کلاس و عضو abstract قرارداد ناقص را مشخص می‌کنند؛ عضو override پیاده‌سازی فرزند است.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن.",
+        "Rows": [
+          "A: نوع کلاس",
+          "B: قرارداد متد بدون بدنه",
+          "C: پیاده‌سازی فرزند"
+        ]
+      },
+      {
+        "Id": "domino",
+        "Title": "اثر دومینو",
+        "Kind": "choice",
+        "Prompt": "اگر فقط override در Vip به new تغییر کند، خروجی کدام فراخوانی‌ها تغییر می‌کند؟ همه را انتخاب کن.",
+        "Code": "Policy a = new Vip();\nVip b = new Vip();\nclass Policy { public virtual string Name() => \"Base\"; }\nclass Vip : Policy { public override string Name() => \"Vip\"; }",
+        "Options": [
+          "a.Name()",
+          "b.Name()",
+          "((Policy)b).Name()"
+        ],
+        "Answers": [
+          "0",
+          "2"
+        ],
+        "Explanation": "فراخوانی از مرجع Policy پس از پنهان‌سازی عضو پایه را می‌گیرد؛ مرجع Vip عضو فرزند را انتخاب می‌کند.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن.",
+        "Multiple": true
+      },
+      {
+        "Id": "explain1",
+        "Title": "توضیح: override و new",
+        "Kind": "explain",
+        "Prompt": "تفاوت override و new را با تأکید بر نوع مرجع و نوع واقعی شیء توضیح بده.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "override برای عضو virtual/abstract، dispatch مجازی بر اساس نوع واقعی؛ new پنهان‌سازی و انتخاب عضو بر اساس نوع مرجع. توضیح cast الزامی نیست. override نوع واقعی شیء را تغییر نمی‌دهد.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "explain2",
+        "Title": "توضیح: abstract و sealed",
+        "Kind": "explain",
+        "Prompt": "چه زمانی از abstract class و چه زمانی از sealed class استفاده می‌کنی؟ sealed override چه چیزی را محدود می‌کند؟",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "abstract برای پایه ناقص و قرارداد؛ sealed class ممنوعیت ارث‌بری؛ sealed override از override بعدی همان عضو جلوگیری می‌کند ولی خود کلاس الزاماً sealed نیست.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      },
+      {
+        "Id": "workshop",
+        "Title": "کارگاه: سیاست تخفیف",
+        "Kind": "workshop",
+        "Prompt": "یک کلاس abstract به نام DiscountPolicy با متد abstract decimal Apply(decimal amount) بساز. RegularDiscount مبلغ را بدون تغییر و VipDiscount مبلغ را با ۱۰ درصد تخفیف برگرداند. مبلغ منفی را در هر دو رد کن. دو فراخوانی از طریق مرجع پایه نشان بده.",
+        "Code": "",
+        "Options": [],
+        "Answers": [],
+        "Explanation": "abstract base و override صحیح، Regular amount، Vip amount*0.9m، رد amount<0، صفر معتبر، استفاده از مرجع DiscountPolicy برای نشان دادن چندریختی. نیازی به اجرای کد نیست.",
+        "Hint": "شرط مسئله را با کد، قدم‌به‌قدم مقایسه کن."
+      }
+    ]
+  }
+]

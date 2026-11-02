@@ -1,0 +1,2 @@
+<section class="work"><h2>کدوم فصل رو بازی کنیم؟</h2><ul class="chapters">@foreach(var ready in Content.Lessons){<li><button @onclick="()=>Selected.InvokeAsync(ready)">@ready.Id · @ready.Title</button></li>}</ul><details><summary>فصل‌های بعدی، هنوز آماده نشده</summary><ul>@foreach(var line in Content.Catalog.Where(line=>!Content.Lessons.Any(l=>line.StartsWith(l.Id+" ")))){<li>@line</li>}</ul></details></section>
+@code { [Parameter,EditorRequired] public ICurriculum Content {get;set;}=null!; [Parameter] public EventCallback<Lesson> Selected {get;set;} }

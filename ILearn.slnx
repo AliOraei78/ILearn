@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ILearn/ILearn.csproj" />
+  <Project Path="ILearn.Tests/ILearn.Tests.csproj" />
+<Project Path="ILearn.Domain/ILearn.Domain.csproj" />
+<Project Path="ILearn.Application/ILearn.Application.csproj" />
+<Project Path="ILearn.Infrastructure/ILearn.Infrastructure.csproj" />
+</Solution>

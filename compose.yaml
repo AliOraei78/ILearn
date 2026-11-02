@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ilearn
+      POSTGRES_USER: ilearn
+      POSTGRES_PASSWORD: "${ILEARN_DB_PASSWORD:?Set ILEARN_DB_PASSWORD}"
+    ports:
+      - "127.0.0.1:${ILEARN_DB_PORT:-5441}:5432"
+    volumes:
+      - ilearn-postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ilearn -d ilearn"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+  ilearn:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    build: .
+    image: ilearn:local
+    ports:
+      - "127.0.0.1:${ILEARN_PORT:-5081}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Auth__CodeKey: "${AUTH_CODE_KEY:?Set AUTH_CODE_KEY}"
+      EmailSettings__Host: "${SMTP_HOST:-}"
+      EmailSettings__Port: "${SMTP_PORT:-587}"
+      EmailSettings__UserName: "${SMTP_USERNAME:-}"
+      EmailSettings__Password: "${SMTP_PASSWORD:-}"
+      EmailSettings__FromEmail: "${SMTP_FROM_EMAIL:-}"
+      ConnectionStrings__ILearn: "Host=postgres;Database=ilearn;Username=ilearn;Password=${ILEARN_DB_PASSWORD};GssEncryptionMode=Disable"
+      Ollama__Url: "${OLLAMA_URL:-http://host.docker.internal:11434/api/chat}"
+      Ollama__Model: "${OLLAMA_MODEL:-qwen2.5-coder:3b}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./ILearn/App_Data:/app/App_Data
+      # Windows DPAPI keys cannot be reused inside the Linux container.
+      - docker-keys:/app/App_Data/keys
+    restart: unless-stopped
+
+volumes:
+  ilearn-postgres:
+  docker-keys:

@@ -1,0 +1,2 @@
+ <section class="work"><h2 tabindex="-1">آماده‌سازی جلسه @Lesson.Id</h2><div class="summary">@Lesson.Summary</div><button class="primary" @onclick="Start">@(Started?"ادامه چالش‌ها":"شروع چالش‌ها")</button></section>
+@code { [Parameter,EditorRequired] public Lesson Lesson {get;set;}=null!; [Parameter] public bool Started {get;set;} [Parameter] public EventCallback Start {get;set;} }

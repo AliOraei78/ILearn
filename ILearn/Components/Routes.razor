@@ -1,0 +1,13 @@
+﻿<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <Microsoft.AspNetCore.Components.Authorization.AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"><NotAuthorized><p>برای ادامه <a href="/login" data-enhance-nav="false">وارد حسابت شو</a>.</p></NotAuthorized></Microsoft.AspNetCore.Components.Authorization.AuthorizeRouteView>
+        @if (routeData.PageType != typeof(Pages.Login)
+            && routeData.PageType != typeof(Pages.Introduction)
+            && routeData.PageType != typeof(Pages.Verify)
+            && routeData.PageType != typeof(Pages.Recover)
+            && routeData.PageType != typeof(Pages.SetPassword))
+        {
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        }
+    </Found>
+</Router>

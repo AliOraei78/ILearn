@@ -1,0 +1,44 @@
+S01 · اکوسیستم .NET و معماری اجرای کد
+S02 · سیستم انواع داده و حافظه اولیه
+S03 · تبدیل انواع، عملیات و Boxing/Unboxing
+S04 · جریان کنترل و ساختارهای تصمیم مدرن
+S05 · متدها، پارامترها و قواعد فراخوانی
+S06 · مبانی شیءگرایی: کپسوله‌سازی و انواع کلاس
+S07 · وراثت و چندریختی (Inheritance & Polymorphism)
+S08 · اینترفیس‌ها و قراردادهای نرم‌افزاری
+S09 · استراکت‌ها و مقایسه بنیادین با کلاس
+S10 · رکوردها و برابری بر پایه مقادیر
+S11 · ژنریک‌ها (Generics) و محدودیت‌ها (Constraints)
+S12 · واریانس در ژنریک‌ها: Covariance و Contravariance
+S13 · کار با مقدار خالی و NRT (Nullable Reference Types)
+S14 · الگوخوانی مدرن (Deep Pattern Matching)
+S15 · دلیگیت‌ها، لامبدا و برنامه‌نویسی تابعی
+S16 · رویدادها (Events) و الگوی Publisher-Subscriber
+S17 · کالکشن‌های پایه و تحلیل زمانی O(n)
+S18 · ساختمان داده‌های پیشرفته و تخصص‌یافته
+S19 · کالکشن‌های تغییرناپذیر و فقط‌خواندنی
+S20 · پرس‌وجو با LINQ (Language Integrated Query) و اشتباه‌های رایج سرعت
+S21 · تمرین‌های بیشتر LINQ (Language Integrated Query) و درخت عبارت
+S22 · مدیریت استثناها و فیلترهای خطا
+S23 · لاگینگ، ردیابی و Observability مدرن
+S24 · حافظه در CLR (Common Language Runtime) و عمر شیءها
+S25 · زباله‌روب عمیق (.NET Garbage Collector)
+S26 · الگوی آزادسازی منابع غیرمدیریت‌شده (IDisposable)
+S27 · برنامه‌نویسی High-Performance با Span و Memory
+S28 · بهینه‌سازی پیشرفته حافظه و Ref Structs
+S29 · برنامه‌نویسی ناامن (Unsafe & Native Interop)
+S30 · مبانی تردها، ThreadPool و Synchronization
+S31 · سینکرونایزیشن مدرن و قفل‌های بهینه
+S32 · برنامه‌نویسی بدون قفل (Lock-Free) و اتمیک
+S33 · کارهای منتظرشونده با TAP (Task-based Asynchronous Pattern) و async/await
+S34 · کانتکست‌ها و بهینه‌سازی Task در سرور و کلاینت
+S35 · همزمانی پیشرفته: Channels و Reactive Patterns
+S36 · ویژگی‌ها (Attributes) و Reflection عمیق
+S37 · ساخت خودکار کد با Roslyn و AOT (Ahead-of-Time compilation)
+S38 · استریم‌ها، فایل‌ها و Pipelines با کارایی بالا
+S39 · تبدیل داده به JSON (JavaScript Object Notation) و کار با شبکه
+S40 · پنج اصل SOLID (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion) با مثال C#
+S41 · الگوهای طراحی سازنده و ساختاری (Creational & Structural)
+S42 · الگوهای طراحی رفتاری (Behavioral Patterns)
+S43 · تزریق وابستگی عمیق (Dependency Injection)
+S44 · معماری تمیز، الگوهای Enterprise و آماده‌سازی مصاحبه معمار نرم‌افزار

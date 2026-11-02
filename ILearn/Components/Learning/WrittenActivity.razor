@@ -1,0 +1,7 @@
+ <label for="draft">@(Activity.Kind=="workshop"?"کد تو (اجرا نمی‌شود)":"پاسخ تو")</label>
+ <textarea id="draft" aria-describedby="keyboard-help" class="@(Activity.Kind=="workshop"?"code":"")" dir="@(Activity.Kind=="workshop"?"ltr":"rtl")" spellcheck="false" maxlength="16000" value="@Entry.Draft" @oninput="Changed"></textarea>
+ <p id="keyboard-help" class="muted">Tab: چهار فاصله؛ Shift+Tab: کاهش تورفتگی؛ برای خروج از کادر Escape و سپس Tab را بزن.</p>
+ <p class="muted">مدل ممکنه اشتباه کنه. کدت اینجا اجرا نمی‌شه؛ اگر خودت بررسیش کردی می‌تونی تکمیل رو ثبت کنی.</p>
+ <details><summary>معیار ثابت بررسی این تمرین</summary><p>@Activity.Explanation</p></details>
+ <div class="toolbar"><button class="primary" disabled="@(Busy||string.IsNullOrWhiteSpace(Entry.Draft))" @onclick="Review">بررسی پاسخ با Ollama</button><button disabled="@string.IsNullOrWhiteSpace(Entry.Draft)" @onclick="Complete">ثبت شخصی تکمیل</button>@if(Busy){<button @onclick="Cancel">لغو بررسی</button><span role="status">در حال بررسی…</span>}</div>
+@code { [Parameter,EditorRequired] public Activity Activity {get;set;}=null!; [Parameter,EditorRequired] public Entry Entry {get;set;}=null!; [Parameter] public bool Busy {get;set;} [Parameter] public EventCallback<ChangeEventArgs> Changed {get;set;} [Parameter] public EventCallback Review {get;set;} [Parameter] public EventCallback Complete {get;set;} [Parameter] public EventCallback Cancel {get;set;} }

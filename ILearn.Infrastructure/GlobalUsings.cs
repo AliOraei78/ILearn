@@ -1,0 +1,11 @@
+global using ILearn.Domain.Accounts;
+global using ILearn.Domain.Learning;
+global using ILearn.Domain.Progress;
+global using ILearn.Domain.Reviewing;
+global using ILearn.Application.Accounts;
+global using ILearn.Application.Learning;
+global using ILearn.Application.Reviewing;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.Extensions.Configuration;
+global using ILearn.Infrastructure.Accounts;
+global using static ILearn.Infrastructure.Accounts.AccountTransaction;

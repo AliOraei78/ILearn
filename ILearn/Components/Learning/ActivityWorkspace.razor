@@ -1,0 +1,19 @@
+ <section class="work" aria-labelledby="activity-title" >
+ <p class="muted">چالش @(Position+1) از ۸ · @Activity.Xp امتیاز تجربه · @(Activity.IsAi?"بررسی اختیاری با هوش مصنوعی":"بررسی با پاسخ‌نامهٔ درس")</p>
+ <h2 id="activity-title">@Activity.Title</h2><p>@Activity.Prompt</p>
+ <button disabled="@Busy" @onclick="Answer">پاسخ کامل</button>
+ @if(AnswerOpen){<aside class="feedback"><h3>پاسخ مرجع درس</h3><p>@Activity.Solution</p>@if(Activity.SolutionCode.Length>0){<pre>@Activity.SolutionCode</pre>}<p role="status">@AnswerText</p>@if(Busy){<button @onclick="Cancel">لغو توضیح مدل</button>}</aside>}
+ @if(!string.IsNullOrWhiteSpace(Activity.Code)){<pre tabindex="0">@Activity.Code</pre>}
+@ChildContent
+</section>
+
+@code {
+ [Parameter,EditorRequired] public Activity Activity {get;set;}=null!;
+ [Parameter] public int Position {get;set;}
+ [Parameter] public bool Busy {get;set;}
+ [Parameter] public bool AnswerOpen {get;set;}
+ [Parameter] public string AnswerText {get;set;}="";
+ [Parameter] public EventCallback Answer {get;set;}
+ [Parameter] public EventCallback Cancel {get;set;}
+ [Parameter] public RenderFragment? ChildContent {get;set;}
+}
