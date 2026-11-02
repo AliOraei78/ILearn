@@ -1,26 +1,143 @@
 {
- "S05/predict":{"Prompt":"این کد چه عددی چاپ می‌کنه؟ متد Add با ref می‌تونه خودِ متغیر n رو تغییر بده.","Solution":"جواب ۷ است. اول n برابر ۴ است. Add سه واحد به همون متغیر اضافه می‌کنه؛ پس مقدارش ۷ می‌شه."},
- "S05/keys":{"Prompt":"متد باید یک عدد تازه داخل result بذاره. برای این کار از out استفاده می‌کنیم. جای A و B چه کلمه‌ای میاد؟","Solution":"هر دو جای خالی out هستند. متد، result رو مقداردهی می‌کنه و موقع صدا زدن هم out می‌نویسیم.","SolutionCode":"bool TryGet(out int result) { result = 42; return true; }\nTryGet(out int answer);"},
- "S05/pairs":{"Prompt":"هر توضیح رو به کلمهٔ مناسب وصل کن: ref برای خواندن و تغییر، out برای خروجی تازه، in برای خواندن و params برای چند ورودی است.","Solution":"ref: متغیر از قبل مقدار داره و متد می‌تونه تغییرش بده. out: متد باید مقدار خروجی رو تعیین کنه. in: از این مسیر نمی‌تونی مقدار رو عوض کنی. params: چند ورودی رو یک‌جا می‌گیره."},
- "S05/order":{"Prompt":"خط‌ها رو با دکمه‌های بالا و پایین مرتب کن. اول هر متغیر رو بساز، بعد ازش استفاده کن.","Solution":"اول quantity رو تعریف کن، بعد total رو با استفاده از quantity حساب کن. بعد text رو از total بساز و در آخر text رو چاپ کن."},
- "S05/counter":{"Prompt":"تعداد کالا باید بیشتر از صفر باشه. کد زیر صفر رو هم قبول می‌کنه. کدوم ورودی این اشتباه رو نشون می‌ده؟","Solution":"ورودی صفر اشتباه رو نشون می‌ده. شرط quantity >= 0 صفر رو قبول می‌کنه، ولی تعداد باید مثبت باشه. شرط درست quantity > 0 است."},
- "S05/explain1":{"Prompt":"ref متغیری رو می‌گیره که از قبل مقدار داره. out برای تحویل دادن یک مقدار تازه است. تفاوتشون رو با زبان خودت و یک مثال برای هرکدوم بگو.","Solution":"برای ref باید متغیر رو از قبل مقداردهی کنیم؛ مثلاً متد مقدار یک شمارنده رو زیاد می‌کنه. برای out مقدار قبلی لازم نیست؛ مثلاً TryParse نتیجهٔ تبدیل متن به عدد رو تحویل می‌ده. متد باید پارامتر out رو پیش از برگشت عادی مقداردهی کنه."},
- "S05/explain2":{"Prompt":"دو متد هم‌نام می‌تونن ورودی‌های متفاوت داشته باشند؛ به این کار overload می‌گیم. آیا فقط عوض کردن نوع خروجی کافیه؟ یک تابع داخل متد چه فرقی با متد جدا داره؟","Solution":"نه، فقط نوع خروجی کافی نیست؛ ورودی‌های دو متد باید از نظر تعداد، نوع یا قواعد مجاز امضا متفاوت باشند. تابع محلی داخل یک متد تعریف می‌شه و می‌تونه از متغیرهای همون متد استفاده کنه. متد جدا عضو نوع است و به متغیرهای محلی متد دیگر دسترسی مستقیم نداره."},
- "S05/workshop":{"Prompt":"یک متد به نام TryCalculateTotal بنویس که قیمت price و تعداد quantity رو بگیره. اگر قیمت منفی یا تعداد صفر و منفی بود، total رو صفر کن و false بده. در بقیهٔ حالت‌ها حاصل‌ضرب رو در total بذار و true بده. قیمت صفر مجازه. فرض کن حاصل‌ضرب در decimal جا می‌شه.","Solution":"اول ورودی‌های نامعتبر رو رد می‌کنیم. دقت کن قیمت صفر مجازه، پس شرط قیمت باید price < 0 باشه. پارامتر out در هر مسیر مقدار می‌گیره.","SolutionCode":"bool TryCalculateTotal(decimal price, int quantity, out decimal total)\n{\n    total = 0;\n    if (price < 0 || quantity <= 0) return false;\n    total = price * quantity;\n    return true;\n}"},
- "S06/compiler":{"Prompt":"Price داخل کلاس private است؛ یعنی فقط داخل همون کلاس قابل استفاده است. اگر بیرون کلاس بخوایم بخونیمش، چه اتفاقی می‌افته؟","Solution":"کد کامپایل نمی‌شه. private اجازهٔ دسترسی مستقیم از بیرون کلاس رو نمی‌ده."},
- "S06/bug":{"Prompt":"می‌خوایم Total فقط با متد Add عوض بشه. کدوم خط اجازه می‌ده بیرون کلاس هم مستقیم تغییرش بدیم؟","Solution":"خط دوم، یعنی property دارای set عمومی، مشکل داره. هر کسی می‌تونه Total رو مستقیم عوض کنه و قانون متد Add رو دور بزنه."},
- "S06/sort":{"Prompt":"هر عضو کلاس چه کاری می‌کنه؟ فیلد داده رو نگه می‌داره، property راه خواندن داده است و متد می‌تونه تغییرش بده. عضوها رو دسته‌بندی کن.","Solution":"فیلد خصوصی محل نگهداری داده است. property برای خوندن مقدار استفاده می‌شه. متد، تغییر داده رو با بررسی شرط‌های لازم انجام می‌ده."},
- "S06/surgery":{"Prompt":"می‌خوایم همه بتونند Total رو بخونند، ولی فقط داخل کلاس بشه تغییرش داد. کدوم تغییر این کار رو انجام می‌ده؟","Solution":"از private set استفاده کن. get عمومی باقی می‌مونه، ولی set فقط داخل کلاس در دسترسه.","SolutionCode":"public decimal Total { get; private set; }"},
- "S06/tests":{"Prompt":"نام خالی و مبلغ منفی باید رد بشن؛ مبلغ صفر باید قبول بشه. کوچک‌ترین مجموعهٔ تست رو انتخاب کن که هر سه حالت رو جدا بررسی کنه.","Solution":"سه تست انتخاب کن: نام خالی با مبلغ معتبر، مبلغ منفی با نام معتبر، و مبلغ صفر با نام معتبر. هر تست فقط یک قانون رو بررسی می‌کنه."},
- "S06/explain1":{"Prompt":"فرض کن موجودی نباید منفی بشه. اگر همه بتونند property موجودی رو مستقیم تغییر بدن، چه مشکلی پیش میاد؟ راه بهتر چیه؟","Solution":"با set عمومی، بیرون کلاس می‌تونیم موجودی رو منفی کنیم و بررسی‌های کلاس دور زده می‌شن. بهتره set خصوصی باشه و تغییر از متدی مثل برداشت انجام بشه. اون متد اول مبلغ و موجودی رو بررسی می‌کنه، بعد مقدار رو تغییر می‌ده."},
- "S06/explain2":{"Prompt":"سازنده موقع ساختن شیء اجرا می‌شه. چطور کمک می‌کنه شیء از همون اول وضعیت درستی داشته باشه؟ آیا ورودیِ سازندهٔ اصلی کلاس خودبه‌خود یک property عمومی می‌شه؟","Solution":"سازنده می‌تونه ورودی‌هایی مثل نام و مبلغ رو بررسی کنه و اگر نام خالی یا مبلغ منفی بود، ساختن شیء رو رد کنه. پارامتر سازندهٔ اصلی در class خودبه‌خود property عمومی نمی‌شه؛ اگر لازم داریم باید خودمون property تعریف کنیم."},
- "S06/workshop":{"Prompt":"یک کلاس Order بساز. سازنده نام غیرخالی بگیره. Total از بیرون فقط خواندنی باشه. متد AddItem قیمت و تعداد بگیره؛ قیمت منفی و تعداد صفر یا منفی رو با استثنا رد کنه. بقیهٔ مبلغ‌ها رو به Total اضافه کنه. قیمت صفر مجازه و فرض کن حاصل‌ضرب در decimal جا می‌شه.","Solution":"نام رو در سازنده بررسی می‌کنیم. نوشتن Total خصوصی است. AddItem قبل از تغییر مبلغ، ورودی‌ها رو بررسی می‌کنه.","SolutionCode":"public class Order\n{\n    public string Name { get; }\n    public decimal Total { get; private set; }\n    public Order(string name)\n    {\n        if (string.IsNullOrEmpty(name)) throw new ArgumentException(nameof(name));\n        Name = name;\n    }\n    public void AddItem(decimal price, int quantity)\n    {\n        if (price < 0) throw new ArgumentOutOfRangeException(nameof(price));\n        if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));\n        Total += price * quantity;\n    }\n}"},
- "S07/trace":{"Prompt":"هر فراخوانی چه متنی برمی‌گردونه؟ برای متد virtual که با override بازنویسی شده، نوع واقعی شیء رو نگاه کن.","Solution":"به‌ترتیب Vip، Base و Vip. override رفتار نوع واقعی شیء رو اجرا می‌کنه. وقتی عضو با new پنهان شده، نوع متغیری که باهاش صدا می‌زنیم مهم می‌شه."},
- "S07/detective":{"Prompt":"در کلاس فرزند یک متد هم‌نام داریم، ولی جواب فراخوانی‌ها فرق داره. دو سرنخ رو باز کن و علت رو پیدا کن.","Solution":"متد فرزند با new عضو پایه رو پنهان کرده. با متغیر از نوع پایه، عضو پایه انتخاب می‌شه و با متغیر از نوع فرزند، عضو فرزند. تبدیل نوع، شیء تازه‌ای نمی‌سازه."},
- "S07/reverse":{"Prompt":"می‌خوایم a.Name() جواب Vip بده، حتی وقتی a از نوع پایه تعریف شده. کدوم تعریف در کلاس فرزند درسته؟","Solution":"متد فرزند باید override باشه. در این حالت، فراخوانی از نوع پایه هم رفتار شیء واقعی Vip رو اجرا می‌کنه."},
- "S07/contract":{"Prompt":"می‌خوایم از کلاس پایه مستقیم شیء نسازیم و فرزند مجبور باشه Rate رو بنویسه. جای خالی‌های کلاس پایه، متد پایه و متد فرزند رو پر کن.","Solution":"به‌ترتیب abstract، abstract و override. کلاس abstract مستقیم ساخته نمی‌شه. متد abstract بدنه نداره و کلاس فرزندِ قابل ساخت باید اون رو پیاده‌سازی کنه."},
- "S07/domino":{"Prompt":"اگر در Vip به‌جای override بنویسیم new، نتیجهٔ کدوم فراخوانی‌ها عوض می‌شه؟ همهٔ موارد درست رو انتخاب کن.","Solution":"فراخوانی‌هایی که با مرجع Policy انجام می‌شن تغییر می‌کنند؛ چون بعد از new عضو پایه رو انتخاب می‌کنند. فراخوانی از مرجع Vip همچنان عضو فرزند رو می‌گیره."},
- "S07/explain1":{"Prompt":"override رفتار قابل‌تغییرِ کلاس پایه رو بازنویسی می‌کنه؛ new عضو هم‌نام رو پنهان می‌کنه. با زبان خودت بگو نوع متغیر و نوع واقعی شیء در هر حالت چه نقشی دارند.","Solution":"با override، متد virtual یا abstract پایه برای نوع فرزند پیاده‌سازی می‌شه و نوع واقعی شیء تعیین می‌کنه کدوم رفتار اجرا بشه. با new فقط یک عضو هم‌نام رو پنهان می‌کنیم؛ نوع مرجعی که باهاش صدا می‌زنیم در انتخاب عضو اثر داره. خود شیء با این کلمه‌ها تغییر نوع نمی‌ده."},
- "S07/explain2":{"Prompt":"abstract یعنی کلاس هنوز برای ساخته شدن کامل نیست؛ sealed یعنی ارث‌بری از کلاس بسته است. برای هرکدوم یک کاربرد بگو. sealed override جلوی چه کاری رو می‌گیره؟","Solution":"abstract برای پایه‌ای خوبه که رفتار مشترک داره، ولی بعضی جزئیات رو باید فرزند بنویسه؛ مثل سیاست تخفیف. sealed وقتی خوبه که نمی‌خوایم کلاس فرزند داشته باشه. sealed override جلوی بازنویسی دوبارهٔ همون متد در فرزند بعدی رو می‌گیره؛ خود کلاس لازم نیست sealed باشه."},
- "S07/workshop":{"Prompt":"یک پایهٔ abstract به نام DiscountPolicy با متد decimal Apply(decimal amount) بساز. RegularDiscount همون مبلغ رو بده؛ VipDiscount ده درصد تخفیف بده. هر دو مبلغ منفی رو با استثنا رد کنند. دو نمونه رو با متغیر از نوع پایه صدا بزن.","Solution":"پایه فقط قرارداد Apply رو مشخص می‌کنه. هر فرزند رفتار خودش رو با override می‌نویسه. صفر معتبره و مبلغ منفی رد می‌شه.","SolutionCode":"public abstract class DiscountPolicy\n{\n    public abstract decimal Apply(decimal amount);\n}\npublic class RegularDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount;\n    }\n}\npublic class VipDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount * 0.9m;\n    }\n}\n// در یک متد:\n// DiscountPolicy regular = new RegularDiscount();\n// DiscountPolicy vip = new VipDiscount();\n// Console.WriteLine(regular.Apply(100m));\n// Console.WriteLine(vip.Apply(100m));"}
+  "S05/predict": {
+    "Prompt": "این کد چه عددی چاپ می‌کنه؟ متد Add با ref می‌تونه خودِ متغیر n رو تغییر بده.",
+    "Solution": "جواب ۷ است. اول n برابر ۴ است. Add سه واحد به همون متغیر اضافه می‌کنه؛ پس مقدارش ۷ می‌شه."
+  },
+  "S05/keys": {
+    "Prompt": "متد باید یک عدد تازه داخل result بذاره. برای این کار از out استفاده می‌کنیم. جای A و B چه کلمه‌ای میاد؟",
+    "Solution": "هر دو جای خالی out هستند. متد، result رو مقداردهی می‌کنه و موقع صدا زدن هم out می‌نویسیم.",
+    "SolutionCode": "bool TryGet(out int result) { result = 42; return true; }\nTryGet(out int answer);"
+  },
+  "S05/pairs": {
+    "Prompt": "هر توضیح رو به کلمهٔ مناسب وصل کن: ref برای خواندن و تغییر، out برای خروجی تازه، in برای خواندن و params برای چند ورودی است.",
+    "Solution": "ref: متغیر از قبل مقدار داره و متد می‌تونه تغییرش بده. out: متد باید مقدار خروجی رو تعیین کنه. in: از این مسیر نمی‌تونی مقدار رو عوض کنی. params: چند ورودی رو یک‌جا می‌گیره."
+  },
+  "S05/order": {
+    "Prompt": "خط‌ها رو با دکمه‌های بالا و پایین مرتب کن. اول هر متغیر رو بساز، بعد ازش استفاده کن.",
+    "Solution": "اول quantity رو تعریف کن، بعد total رو با استفاده از quantity حساب کن. بعد text رو از total بساز و در آخر text رو چاپ کن."
+  },
+  "S05/counter": {
+    "Prompt": "تعداد کالا باید بیشتر از صفر باشه. کد زیر صفر رو هم قبول می‌کنه. کدوم ورودی این اشتباه رو نشون می‌ده؟",
+    "Solution": "ورودی صفر اشتباه رو نشون می‌ده. شرط quantity >= 0 صفر رو قبول می‌کنه، ولی تعداد باید مثبت باشه. شرط درست quantity > 0 است."
+  },
+  "S05/explain1": {
+    "Prompt": "ref متغیری رو می‌گیره که از قبل مقدار داره. out برای تحویل دادن یک مقدار تازه است. تفاوتشون رو با زبان خودت و یک مثال برای هرکدوم بگو.",
+    "Solution": "برای ref باید متغیر رو از قبل مقداردهی کنیم؛ مثلاً متد مقدار یک شمارنده رو زیاد می‌کنه. برای out مقدار قبلی لازم نیست؛ مثلاً TryParse نتیجهٔ تبدیل متن به عدد رو تحویل می‌ده. متد باید پارامتر out رو پیش از برگشت عادی مقداردهی کنه."
+  },
+  "S05/explain2": {
+    "Prompt": "دو متد هم‌نام می‌تونن ورودی‌های متفاوت داشته باشند؛ به این کار overload می‌گیم. آیا فقط عوض کردن نوع خروجی کافیه؟ یک تابع داخل متد چه فرقی با متد جدا داره؟",
+    "Solution": "نه، فقط نوع خروجی کافی نیست؛ ورودی‌های دو متد باید از نظر تعداد، نوع یا قواعد مجاز امضا متفاوت باشند. تابع محلی داخل یک متد تعریف می‌شه و می‌تونه از متغیرهای همون متد استفاده کنه. متد جدا عضو نوع است و به متغیرهای محلی متد دیگر دسترسی مستقیم نداره."
+  },
+  "S05/workshop": {
+    "Prompt": "یک متد به نام TryCalculateTotal بنویس که قیمت price و تعداد quantity رو بگیره. اگر قیمت منفی یا تعداد صفر و منفی بود، total رو صفر کن و false بده. در بقیهٔ حالت‌ها حاصل‌ضرب رو در total بذار و true بده. قیمت صفر مجازه. فرض کن حاصل‌ضرب در decimal جا می‌شه.",
+    "Solution": "اول ورودی‌های نامعتبر رو رد می‌کنیم. دقت کن قیمت صفر مجازه، پس شرط قیمت باید price < 0 باشه. پارامتر out در هر مسیر مقدار می‌گیره.",
+    "SolutionCode": "bool TryCalculateTotal(decimal price, int quantity, out decimal total)\n{\n    total = 0;\n    if (price < 0 || quantity <= 0) return false;\n    total = price * quantity;\n    return true;\n}"
+  },
+  "S06/compiler": {
+    "Prompt": "Price داخل کلاس private است؛ یعنی فقط داخل همون کلاس قابل استفاده است. اگر بیرون کلاس بخوایم بخونیمش، چه اتفاقی می‌افته؟",
+    "Solution": "کد کامپایل نمی‌شه. private اجازهٔ دسترسی مستقیم از بیرون کلاس رو نمی‌ده."
+  },
+  "S06/bug": {
+    "Prompt": "می‌خوایم Total فقط با متد Add عوض بشه. کدوم خط اجازه می‌ده بیرون کلاس هم مستقیم تغییرش بدیم؟",
+    "Solution": "خط دوم، یعنی property دارای set عمومی، مشکل داره. هر کسی می‌تونه Total رو مستقیم عوض کنه و قانون متد Add رو دور بزنه."
+  },
+  "S06/sort": {
+    "Prompt": "هر عضو کلاس چه کاری می‌کنه؟ فیلد داده رو نگه می‌داره، property راه خواندن داده است و متد می‌تونه تغییرش بده. عضوها رو دسته‌بندی کن.",
+    "Solution": "فیلد خصوصی محل نگهداری داده است. property برای خوندن مقدار استفاده می‌شه. متد، تغییر داده رو با بررسی شرط‌های لازم انجام می‌ده."
+  },
+  "S06/surgery": {
+    "Prompt": "می‌خوایم همه بتونند Total رو بخونند، ولی فقط داخل کلاس بشه تغییرش داد. کدوم تغییر این کار رو انجام می‌ده؟",
+    "Solution": "از private set استفاده کن. get عمومی باقی می‌مونه، ولی set فقط داخل کلاس در دسترسه.",
+    "SolutionCode": "public decimal Total { get; private set; }"
+  },
+  "S06/tests": {
+    "Prompt": "نام خالی و مبلغ منفی باید رد بشن؛ مبلغ صفر باید قبول بشه. کوچک‌ترین مجموعهٔ تست رو انتخاب کن که هر سه حالت رو جدا بررسی کنه.",
+    "Solution": "سه تست انتخاب کن: نام خالی با مبلغ معتبر، مبلغ منفی با نام معتبر، و مبلغ صفر با نام معتبر. هر تست فقط یک قانون رو بررسی می‌کنه."
+  },
+  "S06/explain1": {
+    "Prompt": "فرض کن موجودی نباید منفی بشه. اگر همه بتونند property موجودی رو مستقیم تغییر بدن، چه مشکلی پیش میاد؟ راه بهتر چیه؟",
+    "Solution": "با set عمومی، بیرون کلاس می‌تونیم موجودی رو منفی کنیم و بررسی‌های کلاس دور زده می‌شن. بهتره set خصوصی باشه و تغییر از متدی مثل برداشت انجام بشه. اون متد اول مبلغ و موجودی رو بررسی می‌کنه، بعد مقدار رو تغییر می‌ده."
+  },
+  "S06/explain2": {
+    "Prompt": "سازنده موقع ساختن شیء اجرا می‌شه. چطور کمک می‌کنه شیء از همون اول وضعیت درستی داشته باشه؟ آیا ورودیِ سازندهٔ اصلی کلاس خودبه‌خود یک property عمومی می‌شه؟",
+    "Solution": "سازنده می‌تونه ورودی‌هایی مثل نام و مبلغ رو بررسی کنه و اگر نام خالی یا مبلغ منفی بود، ساختن شیء رو رد کنه. پارامتر سازندهٔ اصلی در class خودبه‌خود property عمومی نمی‌شه؛ اگر لازم داریم باید خودمون property تعریف کنیم."
+  },
+  "S06/workshop": {
+    "Prompt": "یک کلاس Order بساز. سازنده نام غیرخالی بگیره. Total از بیرون فقط خواندنی باشه. متد AddItem قیمت و تعداد بگیره؛ قیمت منفی و تعداد صفر یا منفی رو با استثنا رد کنه. بقیهٔ مبلغ‌ها رو به Total اضافه کنه. قیمت صفر مجازه و فرض کن حاصل‌ضرب در decimal جا می‌شه.",
+    "Solution": "نام رو در سازنده بررسی می‌کنیم. نوشتن Total خصوصی است. AddItem قبل از تغییر مبلغ، ورودی‌ها رو بررسی می‌کنه.",
+    "SolutionCode": "public class Order\n{\n    public string Name { get; }\n    public decimal Total { get; private set; }\n    public Order(string name)\n    {\n        if (string.IsNullOrEmpty(name)) throw new ArgumentException(nameof(name));\n        Name = name;\n    }\n    public void AddItem(decimal price, int quantity)\n    {\n        if (price < 0) throw new ArgumentOutOfRangeException(nameof(price));\n        if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));\n        Total += price * quantity;\n    }\n}"
+  },
+  "S07/trace": {
+    "Prompt": "هر فراخوانی چه متنی برمی‌گردونه؟ برای متد virtual که با override بازنویسی شده، نوع واقعی شیء رو نگاه کن.",
+    "Solution": "به‌ترتیب Vip، Base و Vip. override رفتار نوع واقعی شیء رو اجرا می‌کنه. وقتی عضو با new پنهان شده، نوع متغیری که باهاش صدا می‌زنیم مهم می‌شه."
+  },
+  "S07/detective": {
+    "Prompt": "در کلاس فرزند یک متد هم‌نام داریم، ولی جواب فراخوانی‌ها فرق داره. دو سرنخ رو باز کن و علت رو پیدا کن.",
+    "Solution": "متد فرزند با new عضو پایه رو پنهان کرده. با متغیر از نوع پایه، عضو پایه انتخاب می‌شه و با متغیر از نوع فرزند، عضو فرزند. تبدیل نوع، شیء تازه‌ای نمی‌سازه."
+  },
+  "S07/reverse": {
+    "Prompt": "می‌خوایم a.Name() جواب Vip بده، حتی وقتی a از نوع پایه تعریف شده. کدوم تعریف در کلاس فرزند درسته؟",
+    "Solution": "متد فرزند باید override باشه. در این حالت، فراخوانی از نوع پایه هم رفتار شیء واقعی Vip رو اجرا می‌کنه."
+  },
+  "S07/contract": {
+    "Prompt": "می‌خوایم از کلاس پایه مستقیم شیء نسازیم و فرزند مجبور باشه Rate رو بنویسه. جای خالی‌های کلاس پایه، متد پایه و متد فرزند رو پر کن.",
+    "Solution": "به‌ترتیب abstract، abstract و override. کلاس abstract مستقیم ساخته نمی‌شه. متد abstract بدنه نداره و کلاس فرزندِ قابل ساخت باید اون رو پیاده‌سازی کنه."
+  },
+  "S07/domino": {
+    "Prompt": "اگر در Vip به‌جای override بنویسیم new، نتیجهٔ کدوم فراخوانی‌ها عوض می‌شه؟ همهٔ موارد درست رو انتخاب کن.",
+    "Solution": "فراخوانی‌هایی که با مرجع Policy انجام می‌شن تغییر می‌کنند؛ چون بعد از new عضو پایه رو انتخاب می‌کنند. فراخوانی از مرجع Vip همچنان عضو فرزند رو می‌گیره."
+  },
+  "S07/explain1": {
+    "Prompt": "override رفتار قابل‌تغییرِ کلاس پایه رو بازنویسی می‌کنه؛ new عضو هم‌نام رو پنهان می‌کنه. با زبان خودت بگو نوع متغیر و نوع واقعی شیء در هر حالت چه نقشی دارند.",
+    "Solution": "با override، متد virtual یا abstract پایه برای نوع فرزند پیاده‌سازی می‌شه و نوع واقعی شیء تعیین می‌کنه کدوم رفتار اجرا بشه. با new فقط یک عضو هم‌نام رو پنهان می‌کنیم؛ نوع مرجعی که باهاش صدا می‌زنیم در انتخاب عضو اثر داره. خود شیء با این کلمه‌ها تغییر نوع نمی‌ده."
+  },
+  "S07/explain2": {
+    "Prompt": "abstract یعنی کلاس هنوز برای ساخته شدن کامل نیست؛ sealed یعنی ارث‌بری از کلاس بسته است. برای هرکدوم یک کاربرد بگو. sealed override جلوی چه کاری رو می‌گیره؟",
+    "Solution": "abstract برای پایه‌ای خوبه که رفتار مشترک داره، ولی بعضی جزئیات رو باید فرزند بنویسه؛ مثل سیاست تخفیف. sealed وقتی خوبه که نمی‌خوایم کلاس فرزند داشته باشه. sealed override جلوی بازنویسی دوبارهٔ همون متد در فرزند بعدی رو می‌گیره؛ خود کلاس لازم نیست sealed باشه."
+  },
+  "S07/workshop": {
+    "Prompt": "یک پایهٔ abstract به نام DiscountPolicy با متد decimal Apply(decimal amount) بساز. RegularDiscount همون مبلغ رو بده؛ VipDiscount ده درصد تخفیف بده. هر دو مبلغ منفی رو با استثنا رد کنند. دو نمونه رو با متغیر از نوع پایه صدا بزن.",
+    "Solution": "پایه فقط قرارداد Apply رو مشخص می‌کنه. هر فرزند رفتار خودش رو با override می‌نویسه. صفر معتبره و مبلغ منفی رد می‌شه.",
+    "SolutionCode": "public abstract class DiscountPolicy\n{\n    public abstract decimal Apply(decimal amount);\n}\npublic class RegularDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount;\n    }\n}\npublic class VipDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount * 0.9m;\n    }\n}\n// در یک متد:\n// DiscountPolicy regular = new RegularDiscount();\n// DiscountPolicy vip = new VipDiscount();\n// Console.WriteLine(regular.Apply(100m));\n// Console.WriteLine(vip.Apply(100m));"
+  },
+  "S08/concept": {
+    "Prompt": "مفهوم پنهان را با حداکثر چهار حدس پیدا کن. ویژگی‌های هر حدس با پاسخ مقایسه می‌شوند.",
+    "Solution": "پاسخ پیاده‌سازی صریح است؛ در کلاس بدنه دارد و نام عضو با نام interface مشخص می‌شود.",
+    "SolutionCode": ""
+  },
+  "S08/experiment": {
+    "Prompt": "فرض کن IPrinter یک متد پیش‌فرض Print دارد و Printer : IPrinter هیچ متد Print تعریف نکرده است. تا سه آزمایش باز کن و قانون را انتخاب کن.",
+    "Solution": "گزینه دوم درست است. متد پیش‌فرض interface خودبه‌خود به عضو قابل فراخوانی روی مرجع کلاس تبدیل نمی‌شود.",
+    "SolutionCode": ""
+  },
+  "S08/budget": {
+    "Prompt": "دو قابلیت خواندن و نوشتن را پوشش بده. هزینه‌ها امتیاز فرضی تغییر هستند، نه زمان یا مصرف واقعی. سقف بودجه ۴ است.",
+    "Solution": "ترکیب IReader و IWriter با هزینه ۴ معتبر است. IReadWrite به‌تنهایی با هزینه ۳ نیز هر دو نیاز را پوشش می‌دهد. ترکیب آن با کارت حذف نیز در بودجه است.",
+    "SolutionCode": ""
+  },
+  "S08/mission": {
+    "Prompt": "سرویس گزارش‌گیری باید منبع دادهٔ قابل تعویض داشته باشد و مصرف‌کننده فقط خواندن بخواهد. تصمیم‌ها را بگیر و سپس جواب را ثبت کن.",
+    "Solution": "سه انتخاب اول در هر مرحله مسیر موفق را می‌سازند: قرارداد خواندن، پیاده‌سازی قرارداد و تزریق منبع از مسیر همان قرارداد.",
+    "SolutionCode": ""
+  },
+  "S08/assessment": {
+    "Prompt": "برای هر ادعا، تأیید یا اصلاح درست را انتخاب کن.",
+    "Solution": "ادعاهای اول تا سوم نیازمند اصلاح‌اند؛ interface قابل new کردن نیست، struct هم قرارداد پیاده می‌کند و عضو صریح از مسیر interface فراخوانی می‌شود. ادعای چهارم درست است.",
+    "SolutionCode": ""
+  },
+  "S08/deduction": {
+    "Prompt": "Store دو متد صریح Run برای IReader و IWriter دارد و Run عمومی ندارد. هر مرجع را به نتیجه وصل کن.",
+    "Solution": "Store به خطای کامپایل، IReader به Read و IWriter به Write وصل می‌شود.",
+    "SolutionCode": ""
+  },
+  "S08/explain": {
+    "Prompt": "چرا مصرف‌کننده‌ای که فقط می‌خواند بهتر است IReader دریافت کند؟ ارتباط آن را با جداسازی قراردادها در ۳ تا ۵ جمله توضیح بده.",
+    "Solution": "قرارداد کوچک وابستگی مصرف‌کننده را به نیاز واقعی محدود می‌کند. پیاده‌سازی‌های متفاوت می‌توانند جایگزین شوند و عضو نامرتبط به مصرف‌کننده تحمیل نمی‌شود.",
+    "SolutionCode": ""
+  },
+  "S08/workshop": {
+    "Prompt": "IReader با string Read() و IWriter با void Write(string text) تعریف کن. MemoryStore هر دو را صریح پیاده کند، متن را در فیلد خصوصی با مقدار اولیه رشته خالی نگه دارد. ورودی Write را غیر null فرض کن. یک مصرف‌کننده بنویس که فقط IReader دریافت کند و نمونهٔ استفاده از هر دو قرارداد را نشان بده.",
+    "Solution": "دو interface مستقل و دو پیاده‌سازی صریح لازم‌اند. مصرف‌کننده فقط IReader می‌شناسد.",
+    "SolutionCode": "public interface IReader { string Read(); }\npublic interface IWriter { void Write(string text); }\npublic sealed class MemoryStore : IReader, IWriter\n{\n    private string value = \"\";\n    string IReader.Read() => value;\n    void IWriter.Write(string text) => value = text;\n}\npublic static class Reports\n{\n    public static string ReadReport(IReader source) => source.Read();\n    public static string Example()\n    {\n        var store = new MemoryStore();\n        ((IWriter)store).Write(\"report\");\n        return ReadReport((IReader)store);\n    }\n}"
+  }
 }

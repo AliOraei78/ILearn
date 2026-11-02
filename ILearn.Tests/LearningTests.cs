@@ -33,6 +33,17 @@ public sealed class LearningTests
         Assert.True(progress.HasStarted("S06"));
     }
     [Fact]
+    public void MiniGameHistoryAndMarksCountAsStartedWork()
+    {
+        var progress = new Progress();
+        progress.Entries["csharp/S08/concept"] = new Entry { GameState = new MiniGameState { History = [0] } };
+        Assert.True(progress.HasStarted("S08"));
+        Assert.False(progress.HasStarted("S07"));
+        progress.Entries.Clear();
+        progress.Entries["csharp/S08/deduction"] = new Entry { GameState = new MiniGameState { Marks = new() { ["0:0"] = 1 } } };
+        Assert.True(progress.HasStarted("S08"));
+    }
+    [Fact]
     public async Task ReviewerSendsFullContext()
     {
         var activity = new Activity { Id = "sample", Title = "عنوان", Kind = "workshop", Prompt = "صورت کامل سؤال", Code = "int x = 0;", Explanation = "معیار دقیق" };
@@ -73,14 +84,14 @@ public sealed class LearningTests
     public void CurriculumHasFifteenDistinctGamesAndThreeCompleteSessions()
     {
         Assert.Equal(44, File.ReadAllLines(Path.Combine(Root, "Content", "catalog.txt")).Length);
-        Assert.Equal(15, Lessons.SelectMany(l => l.Activities.Take(5)).Select(a => a.Id).Distinct().Count());
+        Assert.Equal(15, Lessons.Where(l => l.Id != "S08").SelectMany(l => l.Activities.Take(5)).Select(a => a.Id).Distinct().Count());
         foreach (var lesson in Lessons)
         {
             Assert.Equal(8, lesson.Activities.Count);
             Assert.Equal(100, lesson.Activities.Sum(a => a.Xp));
             Assert.Equal(lesson.Activities.Count, lesson.Activities.Select(a => a.Id).Distinct().Count());
             Assert.All(lesson.Activities, a => Assert.False(string.IsNullOrWhiteSpace(a.Explanation)));
-            foreach (var game in lesson.Activities.Where(a => !a.IsAi))
+            foreach (var game in lesson.Activities.Where(a => !a.IsAi && a.Game is null))
             {
                 Assert.NotEmpty(game.Answers);
                 Assert.True(game.Check(game.Answers));

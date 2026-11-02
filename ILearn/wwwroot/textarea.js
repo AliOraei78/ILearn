@@ -1,7 +1,7 @@
 const escapeArmed = new WeakSet();
 document.addEventListener("keydown", event => {
     const field = event.target;
-    if (!(field instanceof HTMLTextAreaElement) || field.id !== "draft" || field.readOnly || event.isComposing) return;
+    if (!(field instanceof HTMLTextAreaElement) || field.id !== "draft" || !field.classList.contains("code") || field.readOnly || event.isComposing) return;
     if (event.key === "Escape") { escapeArmed.add(field); return; }
     if (event.key !== "Tab") {
         if (!["Shift", "Control", "Alt", "Meta"].includes(event.key)) escapeArmed.delete(field);

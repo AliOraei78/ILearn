@@ -4,6 +4,10 @@
 
 ## ساختار
 
+راهنمای قواعد، کنترل‌ها و امتیازدهی همهٔ بازی‌ها: [MINI-GAMES.md](MINI-GAMES.md).
+
+گزارش نهایی بررسی ظاهر، رفتار و اندازه‌ها: [ممیزی UI/UX](verification/ux-audit-2026-11-02.md).
+
 - `ILearn.Domain`: مدل‌ها و قواعد مستقل از میزبان.
 - `ILearn.Application`: قرارداد سرویس‌ها، هویت جاری و قواعد یادگیری.
 - `ILearn.Infrastructure`: PostgreSQL، راه‌اندازی schema، SMTP، محتوای فایل و Ollama.

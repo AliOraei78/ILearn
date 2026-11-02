@@ -1,0 +1,80 @@
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
+
+(async () => {
+    const account = JSON.parse(fs.readFileSync('ILearn/App_Data/test-account.json', 'utf8'));
+    const lessons = JSON.parse(fs.readFileSync('ILearn/Content/lessons.json', 'utf8'));
+    const sizes = JSON.parse(fs.readFileSync('verification/ui-audit-after-chrome.json', 'utf8')).viewports;
+    const browser = await chromium.launch({ headless: true, channel: 'chrome' });
+    const context=await browser.newContext({viewport:{width:1440,height:900}});
+    const page = await context.newPage();
+    const errors = [], checks = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('response', response => { if (response.status() >= 400 && /\.(css|js|woff2|svg)(\?|$)/.test(response.url())) errors.push(response.status() + ' ' + response.url()); });
+    const watch=target=>target.on('pageerror',error=>errors.push(error.message));context.on('page',watch);
+    const click = name => page.getByRole('button', { name, exact: true }).click();
+    const base = 'http://127.0.0.1:5081';
+    try {
+        await page.goto(base + '/lobby'); await expect(page).toHaveURL(/\/login/);
+        await page.locator('#email').fill(account.email); await page.locator('#password').fill(account.password);
+        await click('وارد بازی شو'); await expect(page).toHaveURL(/\/lobby/);
+        await expect(page.locator('.player-bar-progress')).toBeVisible();
+        const xp = await page.locator('.player-bar-progress label').innerText();
+        checks.push('anonymous route and QA account login');
+        await page.goto(base + '/');
+        await expect(page.locator('a[href="/login"],a[href="/register"]')).toHaveCount(0);
+        await expect(page.getByRole('link', { name: 'برگشت به لابی', exact: true })).toBeVisible();
+        await page.screenshot({ path: 'verification/ux-live-authenticated-desktop.png', fullPage: true });
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.screenshot({ path: 'verification/ux-live-authenticated-mobile.png', fullPage: true });
+        checks.push('reported screenshot fixed in running Docker app');
+        for (const route of ['/login', '/register']) { await page.goto(base + route); await expect(page).toHaveURL(/\/lobby$/); }
+        checks.push('signed-in account pages redirect');
+        const invalidForm=await context.newPage();await invalidForm.goto(base+'/profile');await invalidForm.locator('#current-password').fill(account.password);
+        await invalidForm.locator('main form input[name=__RequestVerificationToken]').evaluate(element=>element.remove());
+        const rejected=invalidForm.waitForResponse(response=>response.url().endsWith('/auth/profile')&&response.request().method()==='POST');
+        await invalidForm.getByRole('button',{name:'ذخیره مشخصات',exact:true}).click();assert.equal((await rejected).status(),400);
+        await expect(invalidForm.getByRole('heading',{name:'درخواست معتبر نیست',exact:true})).toBeVisible();await invalidForm.close();
+        checks.push('rejected profile form keeps HTTP 400 and renders Persian recovery');
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto(base + '/lobby?lesson=S05&activity=0');
+        await expect(page.locator('#activity-title').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
+        if (await page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }).count()) await click('شروع چالش‌ها');
+        await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
+        await click('چالش بعد'); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title); await expect(page.locator('#activity-title')).toBeFocused();
+        await click('چالش قبل'); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
+        await page.locator('nav button').nth(1).click();
+        await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
+        await page.goBack(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);
+        await page.goForward(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
+        await page.reload(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
+        checks.push('Back/Forward and reload on live Blazor circuit');
+        await click('پاسخ کامل'); await expect(page.getByRole('heading', { name: 'پاسخ مرجع درس', exact: true })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'لغو توضیح مدل', exact: true })).toHaveCount(0);
+        await click('بستن پاسخ کامل');
+        checks.push('reference answer available without requesting AI');
+        for (const size of sizes) {
+            await page.setViewportSize(size);
+            assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'live overflow ' + JSON.stringify(size));
+            assert.ok(await page.locator('main button,main select').evaluateAll(elements => elements.filter(element => element.checkVisibility()).every(element => { const r = element.getBoundingClientRect(); return r.left >= -1 && r.right <= innerWidth + 1 && r.width >= 43 && r.height >= 43; })), 'live controls ' + JSON.stringify(size));
+        }
+        checks.push('published controls fit all audited viewport sizes');
+        await expect(page.locator('.player-bar-progress label')).toHaveText(xp);
+        checks.push('QA account XP unchanged by smoke checks');
+        const oldSession=await browser.newContext({storageState:await context.storageState()});oldSession.on('page',watch);
+        const oldPage=await oldSession.newPage();await oldPage.goto(base+'/lobby?lesson=S05&activity=6');await expect(oldPage.locator('#draft')).toBeVisible();
+        await click('خروج'); await expect(page).toHaveURL(/\/login$/);
+        await oldPage.locator('#draft').fill('متن آزمایشی پس از پایان نشست برای کپی باقی می‌ماند.');
+        await expect(oldPage.locator('main [role=alert]')).toContainText('نشست');
+        await expect(oldPage.locator('#draft')).toHaveValue('متن آزمایشی پس از پایان نشست برای کپی باقی می‌ماند.');
+        await expect(oldPage.locator('#draft')).toHaveAttribute('readonly','');
+        await oldPage.getByRole('link',{name:'ورود دوباره به حساب',exact:true}).click();await expect(oldPage).toHaveURL(/\/login/);await oldSession.close();
+        checks.push('expired open editor retains draft and offers a working login action');
+        await page.goto(base + '/'); await expect(page.getByRole('link', { name: 'ورود به حساب', exact: true })).toBeVisible();
+        checks.push('logout restores guest actions');
+        assert.deepEqual(errors, []);
+        fs.writeFileSync('verification/live-ux-smoke.json', JSON.stringify({ checks, viewportChecks: sizes.length, errors }, null, 2));
+        console.log(JSON.stringify({ passed: checks.length, viewportChecks: sizes.length, errors }));
+    } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

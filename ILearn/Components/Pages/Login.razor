@@ -1,6 +1,7 @@
 @page "/login"
 @page "/register"
 @inject NavigationManager Navigation
+@inject Microsoft.AspNetCore.DataProtection.IDataProtectionProvider Protection
 <PageTitle>حساب بازیکن | ILearn</PageTitle>
 <header><Brand /><h1>بیا با هم کد یاد بگیریم</h1></header>
 <main class="work account-panel">
@@ -11,8 +12,9 @@
 @if(Wait>0){<p role="alert" class="feedback error">تلاش‌ها زیاد شده؛ @Wait ثانیه دیگه امتحان کن.</p>}
 <form method="post" action="@(Register ? "/auth/register" : "/auth/login")" data-enhance="false">
 <AntiforgeryToken />
+<input type="hidden" name="returnUrl" value="@AccountEndpoints.ReturnDestination(ReturnUrl)" />
 @if(Register){<label for="name">@("نام بازیکن")</label><input id="name" name="name" required maxlength="50" autocomplete="@("nickname")" />}
-@if(true){<label for="email">ایمیل</label><input id="email" name="email" type="email" required maxlength="254" autocomplete="@(Register?"email":"username")" />}
+<label for="email">ایمیل</label><input id="email" name="email" type="email" dir="ltr" value="@(Register?"":AccountEndpoints.LoginEmail(Context,Protection))" required maxlength="254" autocomplete="@(Register?"email":"username")" />
 @if(Register){<p class="muted">اول ایمیلت رو تأیید می‌کنی، بعد رمزت رو می‌سازی. هر ایمیل یک حساب داره.</p>}
 else{<label for="password">رمز عبور</label><input id="password" name="password" type="password" required maxlength="256" autocomplete="current-password" /><label class="remember-choice"><input type="checkbox" name="remember" value="true" /><span>مرا به خاطر بسپار<small>روی دستگاه خودت، تا ۷ روز وارد بمون؛ بعد از ۲۴ ساعت بی‌فعالیتی باید دوباره وارد شی.</small></span></label>}
 <button class="primary" type="submit">@(Register ? "ارسال کد تأیید" : "وارد بازی شو")</button>
@@ -23,6 +25,9 @@ else{<label for="password">رمز عبور</label><input id="password" name="pas
 </div>
 </main><footer>هر حساب، سیو جداگانهٔ خودش رو داره.</footer>
 @code {
+ [CascadingParameter] public HttpContext Context {get;set;}=null!;
+ [SupplyParameterFromQuery(Name="returnUrl")] public string? ReturnUrl {get;set;}
+ protected override void OnInitialized(){if(Context.User.Identity?.IsAuthenticated==true)Navigation.NavigateTo(AccountEndpoints.ReturnDestination(ReturnUrl),forceLoad:true);}
  bool Register => new Uri(Navigation.Uri).AbsolutePath == "/register";
  [SupplyParameterFromQuery(Name="error")] public string? Error {get;set;}
  [SupplyParameterFromQuery(Name="message")] public string? Detail {get;set;}

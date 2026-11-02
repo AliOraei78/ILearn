@@ -6,8 +6,8 @@
    <span><bdi>Level @Levels.Number(Xp)</bdi> · @Levels.Title(Xp)</span>
   </div>
   <div class="player-bar-progress">
-   <label for="player-level-progress">تا لقب بعدی: @(Xp % 200) از ۲۰۰ امتیاز تجربه</label>
-   <progress id="player-level-progress" value="@(Xp % 200)" max="200"></progress>
+   <label for="player-level-progress">@(Xp<200?$"تا لقب بعدی: {Xp} از ۲۰۰ امتیاز تجربه":$"لقب کدآموز دریافت شد · {Xp} امتیاز تجربه")</label>
+   <progress id="player-level-progress" value="@Math.Min(Xp,200)" max="200"></progress>
   </div>
   <div class="player-bar-actions">
    <Brand />

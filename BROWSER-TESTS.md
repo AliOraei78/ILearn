@@ -1,5 +1,11 @@
 # Browser verification and anti-slop gate
 
+Final UI/UX audit (2026-11-02): [findings, fixes, responsive matrix, evidence and reproduction](verification/ux-audit-2026-11-02.md). Release/Production passed 80 .NET tests. Chrome and Edge each passed 51 browser groups and 3,024 layout/state/viewport checks across all 32 activities and 46 base viewport sizes, with zero measured layout findings or browser errors. The running Docker app on port 5081 was rebuilt and passed 10 smoke groups and 46 viewport checks. These results supersede the earlier reports below. Safari, Firefox and physical devices were not tested.
+
+First audit: [18 initial findings and fixes](verification/full-audit-2026-11-02.md), retained as historical evidence.
+
+Chapter S08: [six mini-games and delivery gate](verification/chapter08-delivery.md). 62 automated tests passed; 18 browser check groups include all six game surfaces at four widths, persistence and keyboard controls.
+
 Current RightPixel account behavior and exact email template: [rightpixel-account-delivery.md](verification/rightpixel-account-delivery.md). 43 unit tests and 62 isolated browser/integration checks, including concurrent sends across two app instances.
 
 Latest account controls/remember/recovery verification: [account-controls-delivery.md](verification/account-controls-delivery.md). 36 automated tests and 56 isolated browser checks, plus a dedicated local test-account login.

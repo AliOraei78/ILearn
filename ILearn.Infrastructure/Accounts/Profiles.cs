@@ -9,7 +9,7 @@ public sealed partial class PostgresAccounts
         return await StorageErrors.Run<Player>(async () =>
         {
             name = name.Trim();
-            if (name.Length is < 2 or > 50 || currentPassword.Length > 256) throw new ArgumentException("نام یا طول رمز معتبر نیست.");
+            if (name.Length is < 1 or > 50 || currentPassword.Length > 256) throw new ArgumentException("نام یا طول رمز معتبر نیست.");
             if (newPassword.Length > 0) AccountPasswords.Validate(newPassword);
             await using var connection = await source.OpenConnectionAsync(); await using var transaction = await connection.BeginTransactionAsync();
             var id = principal.PlayerId;

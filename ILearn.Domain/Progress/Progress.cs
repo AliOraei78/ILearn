@@ -11,5 +11,5 @@ public sealed class Progress
     public HashSet<string> IntroductionsRead { get; set; } = [];
     public bool HasStarted(string lesson) => IntroductionsRead.Contains("csharp/" + lesson) || (Lesson == lesson && Position > 0) ||
         Entries.Any(x => x.Key.StartsWith("csharp/" + lesson + "/") &&
-            (x.Value.Complete || x.Value.Draft.Length > 0 || x.Value.Answers.Count > 0 || x.Value.Feedback.Length > 0));
+            (x.Value.Complete || x.Value.Draft.Length > 0 || x.Value.Answers.Count > 0 || x.Value.Feedback.Length > 0 || x.Value.GameState.History.Count > 0 || x.Value.GameState.Marks.Count > 0));
 }

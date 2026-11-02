@@ -6,47 +6,54 @@
 @inject ICurriculum Content
 @inject PlayerStore Store
 @inject IReviewer Reviewer
+@inject ILogger<Home> Logger
+@inject NavigationManager Navigation
 <PageTitle>ILearn | کارگاه C#</PageTitle>
-@if(player is not null && progress is not null){<PlayerBar Player="@player" Xp="@Xp" />}
+@if(player is not null && progress is not null && !sessionExpired){<PlayerBar Player="@player" Xp="@Xp" />}
 <header>
- <Brand />
  <h1>لابی بازی</h1>
  <p class="muted">یک مسئله، یک کشف، یک قدم جلوتر.</p>
  @if (progress is not null) {
- <div class="toolbar">@if(screen>0){<button @onclick="()=>Lobby(0)">بازگشت به لابی</button>}<button @onclick="OpenReview">مرور اشتباه‌ها (@ReviewCount)</button></div>
- <p role="status" class="muted">@saveStatus</p>
+ <div class="toolbar">@if(screen>0){<button @onclick="()=>Lobby(0)">بازگشت به لابی</button>}@if(screen==2){<button @onclick="()=>Lobby(1)">فهرست فصل‌ها</button>}@if(screen==0&&progress.HasStarted(lesson.Id)){<button class="primary" @onclick="()=>Navigate(position)">ادامه آخرین چالش</button>}<button @onclick="OpenReview">مرور اشتباه‌ها (@ReviewCount)</button></div>
+ @if(screen<2||showIntro){<p role="status" class="muted">@saveStatus</p>}
  }
 </header>
 <main>
- @if(error is not null){<p class="feedback error" role="alert">@error</p>}
+ @if(error is not null){<div class="feedback error" role="alert" tabindex="-1" @ref="errorNotice"><p>@error</p>@if(sessionExpired){<a class="button-link" href="@LoginUrl" data-enhance-nav="false">ورود دوباره به حساب</a>}</div>}
  @if(progress is null){<p role="status">@(error is null?"در حال خواندن محتوای کارگاه…":"بارگذاری متوقف شد؛ اطلاعات قبلی بازنویسی نشده است.")</p>}
  else {
- @if(screen==0){<SubjectList Selected="()=>screen=1" />}
- else if(screen==1){<LessonList Content="Content" Selected="SelectLesson" />}
+ @if(screen==0){<SubjectList Selected="()=>Lobby(1)" />}
+ else if(screen==1){<LessonList Content="Content" Progress="progress" Selected="SelectLesson" />}
  else if(showIntro) {
  <LessonIntroduction Lesson="lesson" Started="progress.HasStarted(lesson.Id)" Start="StartChallenges" />
  } else {
  <button @onclick="ShowIntroduction">مرور پیش‌نیازها</button>
+ <div class="activity-picker"><label for="activity-picker">انتخاب چالش</label><select id="activity-picker" value="@position" @onchange="e=>Navigate(int.Parse(e.Value!.ToString()!))">@for(int i=0;i<lesson.Activities.Count;i++){var a=lesson.Activities[i];<option value="@i">@(i+1). @a.Title @(GetEntry(a).Complete?"✓":"")</option>}</select></div>
  <nav aria-label="چالش‌های جلسه">@for(int i=0;i<lesson.Activities.Count;i++){var n=i;var a=lesson.Activities[i];<button aria-current="@(position==i?"true":"false")" @onclick="()=>Navigate(n)">@(i+1). @a.Title @(GetEntry(a).Complete?"✓":"")</button>}</nav>
- <ActivityWorkspace @key="Key" Activity="activity" Position="position" Busy="busy" AnswerOpen="answerOpen" AnswerText="@answerText" Answer="FullAnswer" Cancel="CancelReview">
+ @if(error is null){<p class="muted" role="status">تکمیل فصل: @Completed از @lesson.Activities.Count چالش.@if(Completed==lesson.Activities.Count){<span> همهٔ چالش‌های این فصل تکمیل شد.</span>}</p>}
+ <ActivityWorkspace @key="Key" Activity="activity" Position="position" Count="lesson.Activities.Count" Busy="@(busy||sessionExpired)" Explaining="explaining" AnswerOpen="answerOpen" AnswerText="@answerText" HasModelAnswer="@(entry.FullAnswer.Length>0)" Answer="FullAnswer" Explain="ExplainAnswer" Cancel="CancelReview">
+ <fieldset class="activity-controls" disabled="@(sessionExpired&&!activity.IsAi)" aria-label="پاسخ چالش">
  @if(activity.IsAi) {
- <WrittenActivity Activity="activity" Entry="entry" Busy="busy" Changed="DraftChanged" Review="AskAi" Complete="SelfComplete" Cancel="CancelReview" />
+ <WrittenActivity Activity="activity" Entry="entry" Busy="busy" ReadOnly="sessionExpired" Changed="DraftChanged" Review="AskAi" Complete="SelfComplete" Cancel="CancelReview" />
+ } else if(activity.Game is not null) {
+ <MiniGameActivity @key="Key" Activity="activity" Entry="entry" Changed="()=>Save()" />
  } else if(activity.Kind=="slots") {
  <SlotActivity Activity="activity" Value="SlotValue" Changed="x=>SetSlot(x.Row,x.Value)" />
  } else if(activity.Kind=="order") {
  <OrderingActivity Activity="activity" Order="order" Moved="x=>Move(x.Row,x.Delta)" />
  } else if(activity.Kind=="trace") {
- <TraceActivity Activity="activity" Step="step" StepChanged="x=>step=x" Value="@SlotValue(step)" Selected="x=>SetSlot(step,x)" />
+ <TraceActivity Activity="activity" Step="step" StepChanged="StepChanged" Value="@SlotValue(step)" Selected="x=>SetSlot(step,x)" />
  } else {
- @if(activity.Kind=="detective"){<DetectiveActivity Activity="activity" Clues="clues" Opened="x=>clues.Add(x)" />}
+ @if(activity.Kind=="detective"){<DetectiveActivity Activity="activity" Clues="clues" Opened="OpenClue" />}
  <ChoiceActivity Activity="activity" Entry="entry" Selected="Toggle" />
  }
- @if(!activity.IsAi){<div class="toolbar"><button class="primary" @onclick="Check">ثبت جواب</button><button @onclick="()=>hint=!hint">@(hint?"بستن راهنمایی":"یک راهنمایی")</button></div>}
- @if(hint){<p class="feedback">@activity.Hint</p>}
- @if(!string.IsNullOrWhiteSpace(entry.Feedback)){<div class="feedback" role="status">@entry.Feedback</div>}
- @if(entry.Complete){<p class="muted">تکمیل ثبت شد: @entry.Source · تکرار این چالش XP اضافه نمی‌کند.</p>}
+ </fieldset>
+ @if(!activity.IsAi){<div class="toolbar"><button class="primary" disabled="@sessionExpired" @onclick="Check">ثبت جواب</button><button @onclick="()=>hint=!hint">@(hint?"بستن راهنمایی":"یک راهنمایی")</button></div>}
+ @if(hint){<p class="feedback" role="status">@activity.Hint</p>}
+ @if(!string.IsNullOrWhiteSpace(entry.Feedback)){<div class="@(entry.FeedbackError||entry.NeedsReview?"feedback error":"feedback")" role="status">@entry.Feedback</div>}
+ @if(entry.Complete && error is null){<p class="muted">امتیاز تکمیل ثبت شد: @entry.Source · تغییر پاسخ یا شروع مجدد، امتیاز قبلی را حذف نمی‌کند. تکرار این چالش XP اضافه نمی‌کند.</p>}
  </ActivityWorkspace>
- <div class="toolbar" style="margin-top:16px"><button disabled="@(position==0)" @onclick="()=>Navigate(position-1)">چالش قبل</button><button disabled="@(position==7)" @onclick="()=>Navigate(position+1)">چالش بعد</button><span class="muted" role="status">@saveStatus</span></div>
+ <div class="toolbar" style="margin-top:16px"><button disabled="@(position==0)" @onclick="()=>Navigate(position-1)">چالش قبل</button><button disabled="@(position==lesson.Activities.Count-1)" @onclick="()=>Navigate(position+1)">چالش بعد</button><span class="muted" role="status">@saveStatus</span></div>
  }
  }
 </main>

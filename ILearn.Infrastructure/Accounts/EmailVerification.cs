@@ -7,6 +7,7 @@ namespace ILearn.Infrastructure.Accounts;
 public sealed class EmailVerification(NpgsqlDataSource source, SchemaInitializer database, IConfiguration config, IEmailSender sender) : IEmailVerification
 {
     public static string Normalize(string value) => EmailAddress.Normalize(value);
+    public static string NormalizeCode(string value) => string.Concat(value.Select(c => c is >= '\u06f0' and <= '\u06f9' ? (char)('0' + c - '\u06f0') : c is >= '\u0660' and <= '\u0669' ? (char)('0' + c - '\u0660') : c));
     internal string Hash(string value) => Convert.ToHexString(HMACSHA256.HashData(Convert.FromBase64String(config["Auth:CodeKey"] ?? throw new InvalidOperationException("Auth:CodeKey is required.")), Encoding.UTF8.GetBytes(value)));
     const string NextSendSql = """
   SELECT GREATEST(
@@ -41,7 +42,7 @@ public sealed class EmailVerification(NpgsqlDataSource source, SchemaInitializer
     {
         return await StorageErrors.Run<string?>(async () =>
         {
-            email = Normalize(email); if (code.Length != 6 || !code.All(char.IsAsciiDigit)) return null; await database.Initialize(); await using var connection = await source.OpenConnectionAsync(); await using var tx = await connection.BeginTransactionAsync(); await Lock(connection, tx, "email:" + email); var now = await DatabaseTime(connection, tx);
+            email = Normalize(email); code = NormalizeCode(code); if (code.Length != 6 || !code.All(char.IsAsciiDigit)) return null; await database.Initialize(); await using var connection = await source.OpenConnectionAsync(); await using var tx = await connection.BeginTransactionAsync(); await Lock(connection, tx, "email:" + email); var now = await DatabaseTime(connection, tx);
             string expected; DateTime expires; int attempts;
             await using (var read = new NpgsqlCommand("SELECT code_hash,expires_at,attempts FROM email_challenges WHERE email=$1", connection, tx)) { read.Parameters.AddWithValue(email); await using var reader = await read.ExecuteReaderAsync(); if (!await reader.ReadAsync()) return null; expected = reader.GetString(0); expires = reader.GetDateTime(1); attempts = reader.GetInt32(2); }
             if (expected.Length == 0 || expires <= now || attempts >= 5) return null;

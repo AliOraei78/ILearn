@@ -1,0 +1,55 @@
+@using ILearn.Domain.Learning
+@using ILearn.Domain.Progress
+@if(Activity.Game is { } game) {
+ @if(Activity.Kind=="concept") {
+  <p>حدس @Entry.GameState.History.Count از @game.Limit</p>
+  @if(Entry.GameState.History.Count>=game.Limit && !MiniGames.Check(Activity,Entry.GameState,Entry.Answers)){<p class="feedback error" role="status">فرصت‌های این دور تمام شد. ویژگی‌های حدس‌ها را مقایسه کن و با «شروع مجدد دور» دوباره تلاش کن.</p>}
+  @foreach(var guess in Entry.GameState.History) {
+   <div class="feedback"><strong>@Activity.Options[guess]</strong>
+   @for(int f=0;f<game.Features.Length;f++){<p>@game.Features[f]: @game.Traits[guess][f] · @(game.Traits[guess][f]==game.Traits[int.Parse(Activity.Answers[0])][f]?"مطابق":"متفاوت")</p>}
+   </div>
+  }
+  <div class="options">@for(int i=0;i<Activity.Options.Length;i++){var index=i;<button disabled="@(Saving || Entry.GameState.History.Contains(i) || Entry.GameState.History.Count>=game.Limit || MiniGames.Check(Activity,Entry.GameState,Entry.Answers))" @onclick="()=>Record(index)">@Activity.Options[i]</button>}</div>
+ } else if(Activity.Kind=="experiment") {
+  <p>آزمایش‌های بازشده: @Entry.GameState.History.Count از @game.Limit</p>
+  <div class="toolbar">@for(int i=0;i<game.Results.Length;i++){var index=i;<button disabled="@(Saving || Entry.GameState.History.Contains(i)||Entry.GameState.History.Count>=game.Limit)" @onclick="()=>Record(index)">آزمایش @(i+1)</button>}</div>
+  @foreach(var i in Entry.GameState.History){<p class="feedback">@game.Results[i]</p>}
+  <ChoiceActivity Activity="Activity" Entry="Entry" Selected="Choose" />
+ } else if(Activity.Kind=="budget") {
+  var spent=Entry.Answers.Sum(x=>game.Costs[int.Parse(x)]);
+  <p role="status" class="@(spent>game.Limit?"feedback error":"")">بودجهٔ فرضی مرحله: @game.Limit · مصرف‌شده: @spent · @(spent>game.Limit?$"{spent-game.Limit} بیشتر از بودجه؛ یکی از گزینه‌ها را بردار.":$"باقی‌مانده: {game.Limit-spent}")</p>
+  @foreach(var goal in game.Goals){<p>@goal: @(Entry.Answers.Any(x=>game.Covers[int.Parse(x)].Contains(goal))?"پوشش داده شد":"هنوز پوشش ندارد")</p>}
+  <ChoiceActivity Activity="Activity" Entry="Entry" Selected="Choose" />
+ } else if(Activity.Kind=="mission") {
+  var node=MiniGames.Node(Activity,Entry.GameState);
+  @foreach(var decision in Decisions()){<p class="muted">@decision</p>}
+  @if(node>=0 && node<game.Nodes.Length){
+   <p class="feedback">@game.Nodes[node].Text</p>
+   <div class="options">@for(int i=0;i<game.Nodes[node].Choices.Length;i++){var index=i;<button disabled="@Saving" @onclick="()=>Record(index)">@game.Nodes[node].Choices[i]</button>}</div>
+  } else {<p role="alert">مسیر ذخیره‌شده معتبر نیست؛ دور را دوباره شروع کن.</p>}
+ } else if(Activity.Kind=="assessment") {
+  <SlotActivity Activity="Activity" Value="Value" Changed="x=>Slot(x.Row,x.Value)" />
+ } else if(Activity.Kind=="deduction") {
+  @foreach(var clue in Activity.Clues){<p>@clue</p>}
+  <table class="deduction"><caption>هر خانه: نامشخص، تأیید یا رد</caption><thead><tr><th>مرجع</th>@foreach(var option in Activity.Options){<th>@option</th>}</tr></thead>
+  <tbody>@for(int r=0;r<Activity.Rows.Length;r++){var row=r;<tr><th>@Activity.Rows[r]</th>@for(int c=0;c<Activity.Options.Length;c++){var col=c;var key=$"{row}:{col}";<td><button aria-label="@($"{Activity.Rows[row]}، {Activity.Options[col]}: {Mark(key)}")" @onclick="()=>Cycle(key)">@Mark(key)</button></td>}</tr>}</tbody></table>
+ }
+ @if(Saving){<p role="status">در حال ذخیره…</p>}
+ <div class="toolbar round-actions"><button disabled="@Saving" @onclick="Restart">شروع مجدد دور</button></div>
+}
+@code {
+ [Parameter,EditorRequired] public Activity Activity {get;set;}=null!;
+ [Parameter,EditorRequired] public Entry Entry {get;set;}=null!;
+ [Parameter] public EventCallback Changed {get;set;}
+ bool Saving;
+ async Task Persist(){Entry.Feedback="";Saving=true;try{await Changed.InvokeAsync();}finally{Saving=false;}}
+ async Task Record(int i){if(!Saving && MiniGames.Record(Activity,Entry.GameState,i))await Persist();}
+ async Task Choose(int i){var value=i.ToString();if(!Activity.Multiple)Entry.Answers.Clear();if(!Entry.Answers.Remove(value))Entry.Answers.Add(value);await Persist();}
+ string Value(int row)=>Entry.Answers.FirstOrDefault(x=>x.StartsWith(row+":"))?.Split(':')[1]??"";
+ async Task Slot(int row,string value){Entry.Answers.RemoveAll(x=>x.StartsWith(row+":"));if(value!="")Entry.Answers.Add(row+":"+value);await Persist();}
+ string Mark(string key)=>Entry.GameState.Marks.GetValueOrDefault(key) switch{1=>"تأیید",2=>"رد",_=>"نامشخص"};
+ async Task Cycle(string key){Entry.GameState.Marks[key]=(Entry.GameState.Marks.GetValueOrDefault(key)+1)%3;await Persist();}
+ async Task Restart(){if(Saving)return;Entry.GameState=new();Entry.Answers.Clear();Entry.Feedback="";await Persist();}
+ IEnumerable<string> Decisions(){int node=0;foreach(int choice in Entry.GameState.History){if(node<0||node>=Activity.Game!.Nodes.Length||choice<0||choice>=Activity.Game.Nodes[node].Choices.Length)yield break;yield return Activity.Game.Nodes[node].Choices[choice];node=Activity.Game.Nodes[node].Next[choice];}}
+}
+

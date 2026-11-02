@@ -4,17 +4,17 @@
 @inject IEmailVerification Verification
 <PageTitle>تأیید ایمیل | ILearn</PageTitle>
 <header><Brand /><h1>ایمیلت رو تأیید کن</h1></header>
-<main class="work">
+<main class="work account-panel">
 @if(email is null){<p>اول اطلاعات حساب رو وارد کن.</p><a class="button-link" href="/register" data-enhance-nav="false">ساخت حساب کاربری</a>}
 else{
  <p>کد شش‌رقمی رو در ایمیلت پیدا کن و اینجا بنویس. پوشهٔ هرزنامه رو هم نگاه کن. کد دو دقیقه معتبره.</p>
  <p><bdi>@email</bdi></p>
  @if(message is not null){<p role="alert" class="feedback error">@message</p>}
  <form method="post" action="/auth/verify" data-enhance="false"><AntiforgeryToken />
- <label for="code">کد تأیید ایمیل</label><input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required dir="ltr" />
+ <label for="code">کد تأیید ایمیل</label><input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9۰-۹٠-٩]{6}" minlength="6" maxlength="6" required dir="ltr" />
  <button class="primary">تأیید ایمیل و ادامه</button></form>
  <form method="post" action="/auth/resend" data-enhance="false"><AntiforgeryToken /><button disabled="@(remaining>0)" data-resend-seconds="@remaining">ارسال دوباره (@remaining ثانیه)</button></form>
- <p><a class="button-link" href="/register" data-enhance-nav="false">اصلاح اطلاعات ثبت‌نام</a></p>
+ <p><a class="button-link" href="@(Context.Request.Cookies["ILearn.VerificationFlow"]=="recovery"?"/forgot-password":"/register")" data-enhance-nav="false">تغییر ایمیل</a></p>
 }
 </main><footer>بعد از تأیید ایمیل، رمز حسابت رو تعیین می‌کنی.</footer>
 @code{

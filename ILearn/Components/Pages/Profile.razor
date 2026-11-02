@@ -2,30 +2,48 @@
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject PlayerStore Store
+@inject NavigationManager Navigation
 <PageTitle>پروفایل من | ILearn</PageTitle>
-@if(player is not null){<PlayerBar Player="@player" Xp="@xp" />}
+@if(player is not null && !sessionExpired){<PlayerBar Player="@player" Xp="@xp" />}
 <header><h1>پروفایل من</h1><a class="account-action compact" href="/lobby"><PixelIcon Kind="back" /><span>بازگشت به لابی</span></a></header>
 <main>
-@if(error is not null){<p role="alert" class="feedback error">@error</p>}
-@if(player is null){<p role="status">داریم پروفایلت رو می‌خونیم…</p>}
+@if(error is not null){<div role="alert" class="feedback error" tabindex="-1" @ref="errorNotice"><p>@error</p>@if(sessionExpired){<a class="button-link" href="@LoginUrl" data-enhance-nav="false">ورود دوباره به حساب</a>}</div>}
+@if(player is null){<p role="status">@(error is null?"داریم پروفایلت رو می‌خونیم…":"بارگذاری متوقف شد؛ صفحه را دوباره باز کن.")</p>}
 else {
  <section class="work"><h2>نام و رمز عبور</h2>
- @if(Saved){<p class="feedback" role="status">مشخصاتت ذخیره شد.</p>}
- @if(Detail is not null || AccountError is not null){<p class="feedback error" role="alert">@(Detail??"ذخیره انجام نشد؛ اتصال رو بررسی کن و دوباره امتحان کن.")</p>}
+ @if(Saved&&!sessionExpired){<p class="feedback" role="status">مشخصاتت ذخیره شد.</p>}
+ @if(!sessionExpired&&(Detail is not null || AccountError is not null)){<p class="feedback error" role="alert">@(Detail??"ذخیره انجام نشد؛ اتصال رو بررسی کن و دوباره امتحان کن.")</p>}
  <form method="post" action="/auth/profile" data-enhance="false"><AntiforgeryToken />
- <label for="profile-name">نام بازیکن</label><input id="profile-name" name="name" value="@player.Name" required maxlength="50" autocomplete="nickname" />
- <label for="current-password">رمز فعلی</label><input id="current-password" name="currentPassword" type="password" required maxlength="256" autocomplete="current-password" />
- <label for="new-password">رمز تازه (اگر نمی‌خوای عوض بشه خالی بذار)</label><input id="new-password" name="newPassword" type="password" minlength="6" maxlength="256" autocomplete="new-password" /><p class="muted">رمز تازه باید ۶ تا ۱۲۸ نویسه و شامل حرف، عدد و نماد باشه.</p>
- <label for="new-password-confirmation">تکرار رمز تازه</label><input id="new-password-confirmation" name="confirmation" type="password" minlength="6" maxlength="256" autocomplete="new-password" />
- <button class="primary">ذخیره مشخصات</button></form></section>
- <h2>کاراکترت رو انتخاب کن</h2><p role="status">@status</p><div class="avatar-grid">@for(int i=1;i<=48;i++){var id=$"avatar-{i:00}";<button aria-label="@($"کاراکتر {i}")" aria-pressed="@(player.Avatar==id)" @onclick="()=>Choose(id)"><Avatar Id="@id" /></button>}</div>}
+ <label for="profile-name">نام بازیکن</label><input id="profile-name" name="name" value="@player.Name" readonly="@sessionExpired" required maxlength="50" autocomplete="nickname" />
+ <label for="current-password">رمز فعلی</label><input id="current-password" name="currentPassword" type="password" readonly="@sessionExpired" required maxlength="256" autocomplete="current-password" />
+ <label for="new-password">رمز تازه (اگر نمی‌خوای عوض بشه خالی بذار)</label><input id="new-password" name="newPassword" type="password" readonly="@sessionExpired" minlength="6" maxlength="256" autocomplete="new-password" /><p class="muted">رمز تازه باید ۶ تا ۱۲۸ نویسه و شامل حرف، عدد و نماد باشه.</p>
+ <label for="new-password-confirmation">تکرار رمز تازه</label><input id="new-password-confirmation" name="confirmation" type="password" readonly="@sessionExpired" minlength="6" maxlength="256" autocomplete="new-password" />
+ <button class="primary" disabled="@sessionExpired">ذخیره مشخصات</button></form></section>
+ <h2>کاراکترت رو انتخاب کن</h2><p role="status">@status</p><div class="avatar-grid">@for(int i=1;i<=48;i++){var id=$"avatar-{i:00}";<button disabled="@sessionExpired" aria-label="@($"کاراکتر {i}")" aria-pressed="@(player.Avatar==id?"true":"false")" @onclick="()=>Choose(id)"><Avatar Id="@id" /></button>}</div>}
 </main><footer>انتخاب کاراکتر روی پیشرفتت اثری نداره.</footer>
 @code {
  Player? player; string? error; string status="";int xp;
+ readonly SemaphoreSlim avatarSaves = new(1,1);
+ int avatarRequest;
+ bool sessionExpired,focusError;ElementReference errorNotice;
+ string LoginUrl=>"/login?returnUrl="+Uri.EscapeDataString(new Uri(Navigation.Uri).PathAndQuery);
+ void RequireLogin(){sessionExpired=true;focusError=true;status="";error="نشست حسابت پایان یافته است. برای ذخیرهٔ تغییرها دوباره وارد حساب شو.";}
+ protected override async Task OnAfterRenderAsync(bool firstRender){if(focusError){focusError=false;await errorNotice.FocusAsync();}}
  [SupplyParameterFromQuery(Name="saved")] public bool Saved {get;set;}
  [SupplyParameterFromQuery(Name="message")] public string? Detail {get;set;}
  [SupplyParameterFromQuery(Name="error")] public string? AccountError {get;set;}
  [Inject] public ICurriculum Content {get;set;}=null!;
- protected override async Task OnInitializedAsync(){try{player=await Store.Profile();var progress=await Store.Load();xp=LearningService.Xp(Content.Lessons,progress);}catch{error="پروفایل باز نشد. اتصال دیتابیس رو بررسی کن.";}}
- async Task Choose(string id){try{await Store.Avatar(id);player=player! with {Avatar=id};status="کاراکترت ذخیره شد.";}catch{error="ذخیره نشد؛ دوباره امتحان کن.";}}
+ protected override async Task OnInitializedAsync(){try{player=await Store.Profile();var progress=await Store.Load();xp=LearningService.Xp(Content.Lessons,progress);}catch(UnauthorizedAccessException){RequireLogin();}catch{error="پروفایل باز نشد. اتصال دیتابیس رو بررسی کن.";}}
+ async Task Choose(string id)
+ {
+  var request=++avatarRequest;status="در حال ذخیرهٔ کاراکتر…";
+  await avatarSaves.WaitAsync();
+  try {
+   if(request!=avatarRequest||sessionExpired)return;
+   await Store.Avatar(id);
+   if(request!=avatarRequest)return;
+   player=player! with {Avatar=id};error=null;status="کاراکترت ذخیره شد.";
+  } catch(UnauthorizedAccessException){RequireLogin();} catch {if(request==avatarRequest){status="";error="ذخیره نشد؛ دوباره امتحان کن.";}}
+  finally {avatarSaves.Release();}
+ }
 }

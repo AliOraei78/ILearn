@@ -4,6 +4,12 @@ User direction: minimal Persian UI, one page, fixed dark theme, reusable control
 
 ENERGY 1 / RHYTHM 1 / MOTION 1.
 
+- The full-app audit keeps the existing palette, fonts and pixel treatment. Phones and short landscape viewports use a native challenge selector to keep eight navigation buttons from burying the activity; desktop keeps the existing button navigation. Game choices reuse the existing grid and toolbar spacing. Selected borders retain their dimensions, avatars fit their grid cells, and account verification uses the same reading width as the other account forms. The title progress bar stays full after the only defined promotion, instead of promising an undefined next title.
+
+- Account actions reflect the active session. The introduction offers lobby/profile actions after sign-in; expired editors retain text for copying and show a focused sign-in recovery action. Activity URLs preserve browser history and resume destinations. Reference answers open immediately, with model explanations requested separately. Invalid or incorrect answers use the error surface; incomplete input gives instructions without adding a review mistake.
+
+- Chapter S08 uses the same numbered workspace, native controls and palette. Text labels on feature comparisons and deduction cells convey meaning independently of color. Fixed deduction columns wrap labels so the three-by-three puzzle fits phones without shrinking touch targets. No new identity assets or decorative motion are introduced.
+
 - Account forms use a narrow 520px reading column. Secondary account actions are tactile square pixel controls with a functional portrait, key or back glyph and a short supporting line; raised/pressed edges distinguish actions without decorative animation. The remember option is a native checkbox in a full clickable row. Existing colors and 1/1/1 dials remain unchanged.
 
 - The user requested a pixel brand mark: an open book with code brackets ties the logo to learning programming. It uses the existing teal, ink and light text palette, and links to the public introduction.
@@ -22,8 +28,8 @@ ENERGY 1 / RHYTHM 1 / MOTION 1.
 - The progress bar uses the existing dimensions and square ends to match the pixel motif; radio buttons, checkboxes and dropdowns remain native controls.
 - Disabled buttons use readable ink and dashed borders instead of faded text, keeping contrast and dimensions intact.
 - The user requested RightPixel's pixel avatars. Reuse its Canvas rectangles at 64px with smoothing disabled; the avatar identifies the active save. No new logo is generated.
-- A topic lobby leads to three playable chapters. Unavailable roadmap chapters live in a native disclosure to keep the first choice short.
-- The header shows Level and title; its single progress bar measures the 200 XP to the next title. This replaces competing score/level indicators.
+- A topic lobby leads to four playable chapters. Unavailable roadmap chapters live in a native disclosure to keep the first choice short.
+- The header shows Level and title; its single progress bar measures the 200 XP to the defined promotion and stays full afterward. Total lifetime XP remains visible.
 - Player identity and progression live in a separate full-width top band, above page titles and chapter navigation. A slightly darker existing surface and one bottom border separate account state from learning content; the same component is used on the profile page. Responsive rows keep the avatar, name and actions readable without fixing the band over the exercise.
 - The introduction occupies the same work surface before challenges, keeping prerequisite reading separate without a new route.
 - A 12px label gap protects readability around the input focus ring. Native dark controls keep implementation small.

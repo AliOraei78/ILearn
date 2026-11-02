@@ -9,7 +9,7 @@ public class CurriculumTests
     {
         var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn"));
         var curriculum = new Curriculum(new Environment { ContentRootPath = root });
-        Assert.Equal(24, curriculum.Lessons.Sum(l => l.Activities.Count));
+        Assert.Equal(32, curriculum.Lessons.Sum(l => l.Activities.Count));
         foreach (var lesson in curriculum.Lessons) { Assert.NotEmpty(lesson.Summary); foreach (var activity in lesson.Activities) { Assert.NotEmpty(activity.Solution); Assert.NotEmpty(activity.Prompt); if (activity.Kind == "workshop") Assert.NotEmpty(activity.SolutionCode); } }
     }
     sealed class Environment : IWebHostEnvironment

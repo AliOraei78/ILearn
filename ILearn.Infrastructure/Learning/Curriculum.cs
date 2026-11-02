@@ -14,7 +14,7 @@ public sealed class Curriculum(IWebHostEnvironment env) : ICurriculum
         {
             var revision = revisions[lesson.Id + "/" + activity.Id];
             activity.Prompt = revision.Prompt; activity.Solution = revision.Solution; activity.SolutionCode = revision.SolutionCode;
-            if (!activity.IsAi) activity.Solution += "\nانتخاب‌های درست:\n" + string.Join("\n", activity.Answers.Select(key =>
+            if (!activity.IsAi && activity.Game is null) activity.Solution += "\nانتخاب‌های درست:\n" + string.Join("\n", activity.Answers.Select(key =>
             {
                 var parts = key.Split(':');
                 return parts.Length == 2 ? activity.Rows[int.Parse(parts[0])] + ": " + activity.Options[int.Parse(parts[1])] : activity.Options[int.Parse(key)];
