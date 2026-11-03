@@ -1,0 +1,56 @@
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const { createHash } = require('node:crypto');
+const { execFileSync } = require('node:child_process');
+const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
+const { measure, core } = require('./layout-checks.cjs');
+const base = 'http://127.0.0.1:5081';
+const channel = process.env.ILEARN_LIVE_BROWSER || 'chrome';
+
+(async () => {
+    const bank = JSON.parse(fs.readFileSync('ILearn/Content/interviews.json', 'utf8'))[0];
+    const sourceHash = createHash('sha256').update(fs.readFileSync('ILearn/Content/interviews.json')).digest('hex');
+    const deployedHash = execFileSync('docker', ['exec', 'ilearn-ilearn-1', 'sha256sum', '/app/Content/interviews.json'], { encoding: 'utf8', windowsHide: true }).split(/\s/)[0];
+    assert.equal(deployedHash, sourceHash);
+    const account = JSON.parse(fs.readFileSync('ILearn/App_Data/test-account.json', 'utf8'));
+    assert.match(account.email, /@example\.test$/);
+    const browser = await chromium.launch({ headless: true, channel: process.env.ILEARN_LIVE_BROWSER || 'chrome' });
+    const errors = [], checks = [], layouts = [];
+    try {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+        page.on('pageerror', error => errors.push(error.message));
+        page.on('response', response => { if (response.status() >= 400 && /\.(css|js|woff2|svg)(\?|$)/.test(response.url())) errors.push(response.status() + ' ' + response.url()); });
+        await page.goto(base + '/interview?subject=csharp&question=C017');
+        await page.locator('#email').fill(account.email); await page.locator('#password').fill(account.password);
+        await page.getByRole('button', { name: 'وارد بازی شو', exact: true }).click();
+        await expect(page.locator('#interview-question-title')).toHaveText(bank.Questions[16].Activity.Title);
+        await expect(page.locator('#game-navigation .active')).toHaveText('شبیه‌ساز مصاحبه');
+        await expect(page.locator('#interview-question option')).toHaveCount(100);
+        checks.push('published content hash matches; authenticated deep link opens C017 with all 100 questions');
+        await page.locator('#interview-question').selectOption('C100');
+        await expect(page.locator('#interview-question-title')).toHaveText(bank.Questions[99].Activity.Title);
+        await expect(page.getByRole('button', { name: 'سؤال بعدی', exact: true })).toBeDisabled();
+        const draft = await page.locator('#draft').inputValue(); await page.reload();
+        await expect(page.locator('#draft')).toHaveValue(draft);
+        await page.getByRole('link', { name: 'کُد روم', exact: true }).click(); await expect(page.locator('#code-problem-title')).toBeVisible();
+        await page.getByRole('link', { name: 'شبیه‌ساز مصاحبه', exact: true }).click(); await expect(page.locator('#interview-question')).toHaveValue('C100');
+        checks.push('last question, reload and return from code room retain the saved selection and draft');
+        await page.locator('#interview-question').selectOption('C017'); await expect(page.locator('#interview-question-title')).toHaveText(bank.Questions[16].Activity.Title);
+        await page.locator('.interview-workspace details').nth(3).locator('summary').click();
+        await expect(page.locator('.interview-sources a')).toHaveCount(bank.Questions[16].SourceIds.length);
+        await measure(page, 'deployed interview', layouts, core);
+        await page.setViewportSize({ width: 1440, height: 1000 }); await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({ path: 'verification/interview-docker-desktop.png', fullPage: true });
+        await page.setViewportSize({ width: 390, height: 844 }); await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({ path: 'verification/interview-docker-mobile.png', fullPage: true });
+        const previous = await page.locator('.interview-navigation button').first().boundingBox();
+        const next = await page.locator('.interview-navigation button').last().boundingBox();
+        const count = await page.locator('.interview-navigation > span').boundingBox();
+        assert.ok(Math.abs(previous.width - next.width) < 1 && Math.abs(previous.y - next.y) < 1 && count.y + count.height <= previous.y);
+        await page.getByRole('button', { name: 'بخش‌های بازی', exact: true }).click();
+        await page.getByRole('link', { name: 'آموزشگاه و کارگاه', exact: true }).click(); await expect(page.locator('h1')).toHaveText('آموزشگاه و کارگاه');
+        checks.push('deployed sources and mobile navigation; no external model request');
+        assert.deepEqual(errors, []); assert.deepEqual(layouts.filter(layout => layout.findings.length), []);
+        const result = JSON.stringify({ completed: true, channel, checks, sourceHash, deployedHash, layouts, errors, ai: 'No model requests made' }, null, 2);
+        fs.writeFileSync('verification/interview-docker.json', result); fs.writeFileSync(`verification/interview-docker-${channel}.json`, result);
+        console.log(JSON.stringify({ checks: checks.length, questions: 100, layoutChecks: layouts.length, errors }));
+    } finally { await browser.close(); }
+})().catch(error => { console.error(error.stack || error.message); process.exitCode = 1; });

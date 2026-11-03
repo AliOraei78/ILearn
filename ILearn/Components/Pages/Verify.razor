@@ -1,5 +1,6 @@
 @page "/verify"
 @using Microsoft.AspNetCore.DataProtection
+@attribute [ExcludeFromInteractiveRouting]
 @inject IDataProtectionProvider Protection
 @inject IEmailVerification Verification
 <PageTitle>تأیید ایمیل | ILearn</PageTitle>

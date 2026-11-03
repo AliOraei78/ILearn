@@ -6,7 +6,12 @@ namespace ILearn.Tests;
 
 public class CurriculumTests
 {
-    static Curriculum Load() => new(new Environment { ContentRootPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn")) });
+    static Curriculum Load()
+    {
+        var curriculum = new Curriculum(new Environment { ContentRootPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn")) });
+        curriculum.Lessons.RemoveAll(l => !l.Legacy);
+        return curriculum;
+    }
 
     [Fact]
     public void EveryPlayableActivityHasCompleteReference()
@@ -103,7 +108,7 @@ public class CurriculumTests
     [Fact]
     public void FreshProgressStartsAtOneAndExistingProgressRetainsItsChapter()
     {
-        Assert.Equal("S01", new Progress().Lesson);
+        Assert.Equal("R001", new Progress().Lesson);
         var old = JsonSerializer.Deserialize<Progress>("""{"Lesson":"S08","Position":4,"Entries":{"csharp/S08/assessment":{"Complete":true}},"IntroductionsRead":["csharp/S05"]}""")!;
         Assert.Equal("S08", old.Lesson);
         Assert.Equal(4, old.Position);

@@ -58,6 +58,25 @@ public sealed class LearningTests
         Assert.Equal("S05", context.RootElement.GetProperty("lessonId").GetString());
     }
     [Theory]
+    [InlineData("PostgreSQL", "optimize")]
+    [InlineData("Redis", "predict")]
+    public async Task ReviewerReceivesTechnologyTemplateAndReferenceWithoutImposingCSharp(string technology, string template)
+    {
+        var activity = new Activity { Prompt = "صورت مسئله", Explanation = "معیار", Solution = "پاسخ مرجع", SolutionCode = "reference" };
+        var handler = new CaptureHandler();
+        await new Reviewer(new HttpClient(handler), ReviewerConfig).Get(activity, "پاسخ", CancellationToken.None, technology: technology, template: template);
+        using var body = JsonDocument.Parse(handler.Body);
+        var messages = body.RootElement.GetProperty("messages");
+        Assert.DoesNotContain("تو مدرس دقیق C#", messages[0].GetProperty("content").GetString());
+        using var context = JsonDocument.Parse(messages[1].GetProperty("content").GetString()!);
+        Assert.Equal(technology, context.RootElement.GetProperty("technology").GetString());
+        Assert.Equal(template, context.RootElement.GetProperty("template").GetString());
+        Assert.Equal(CodeRoomTemplates.Find(template)!.Description, context.RootElement.GetProperty("templateDescription").GetString());
+        Assert.Equal(activity.Solution, context.RootElement.GetProperty("referenceAnswer").GetString());
+        Assert.Equal(activity.SolutionCode, context.RootElement.GetProperty("referenceCode").GetString());
+    }
+
+    [Theory]
     [InlineData("{}")]
     [InlineData("{\"score\":-1}")]
     [InlineData("{\"score\":101}")]
@@ -90,7 +109,7 @@ public sealed class LearningTests
     {
         var handler = new CaptureHandler(explain ? "این توضیح پاسخ مرجع است." : null);
         var reviewer = new Reviewer(new HttpClient(handler), ReviewerConfig);
-        var activity = new Activity { Prompt = "سؤال", Solution = "پاسخ مرجع", SolutionCode = "int x = 0;" };
+        var activity = new Activity { Prompt = "سؤال", Solution = "پاسخ مرجع", SolutionCode = "int x = 0;", ReferenceFiles=new(){["Program.cs"]="Console.WriteLine(3);"} };
         if (explain) Assert.Equal("این توضیح پاسخ مرجع است.", await reviewer.Answer(activity, CancellationToken.None));
         else Assert.Equal(100, (await reviewer.Get(activity, "پاسخ", CancellationToken.None)).score);
         Assert.Equal(1, handler.Calls);
@@ -111,6 +130,7 @@ public sealed class LearningTests
             using var context = JsonDocument.Parse(payload.GetProperty("messages")[1].GetProperty("content").GetString()!);
             Assert.Equal(activity.Solution, context.RootElement.GetProperty("answer").GetString());
             Assert.Equal(activity.SolutionCode, context.RootElement.GetProperty("code").GetString());
+            Assert.Equal(activity.ReferenceFiles["Program.cs"],context.RootElement.GetProperty("referenceFiles").GetProperty("Program.cs").GetString());
         }
         else
         {

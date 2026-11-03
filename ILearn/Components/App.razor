@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="@Assets["interaction.css"]" />
     <link rel="stylesheet" href="@Assets["ILearn.styles.css"]" />
     <ImportMap />
-    <HeadOutlet />
+    <HeadOutlet @rendermode="PageRenderMode" />
 </head>
 
 <body>
-    <Routes />
+    <Routes @rendermode="PageRenderMode" />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="@Assets["textarea.js"]" defer></script>
@@ -24,3 +24,9 @@
 </body>
 
 </html>
+
+@code {
+    [CascadingParameter] public HttpContext HttpContext { get; set; } = null!;
+    // Keep game navigation in one interactive router so NavigationLock also guards links and browser history.
+    IComponentRenderMode? PageRenderMode => HttpContext.AcceptsInteractiveRouting() ? new InteractiveServerRenderMode(prerender: false) : null;
+}

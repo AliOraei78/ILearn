@@ -8,7 +8,7 @@ namespace ILearn.Accounts;
 
 public static class AccountEndpoints
 {
-    public static string ReturnDestination(string? value) => value is not null && value.Split('?', '#')[0] is "/lobby" or "/profile" && !value.Contains('\\') && !value.Any(char.IsControl) ? value : "/lobby";
+    public static string ReturnDestination(string? value) => value is not null && value.Split('?', '#')[0] is "/lobby" or "/profile" or "/code-room" or "/interview" && !value.Contains('\\') && !value.Any(char.IsControl) ? value : "/lobby";
     public static string LoginEmail(HttpContext context, IDataProtectionProvider protection) { try { return context.Request.Cookies["ILearn.LoginEmail"] is string value ? protection.CreateProtector("ILearn.LoginEmail").Unprotect(value) : ""; } catch (CryptographicException) { return ""; } }
     public static string? Pending(HttpContext context, IDataProtectionProvider protection) { try { return context.Request.Cookies["ILearn.Pending"] is string value ? protection.CreateProtector("ILearn.PendingEmail").Unprotect(value) : null; } catch (CryptographicException) { return null; } }
     static void SetPending(HttpContext context, IDataProtectionProvider protection, string email) => context.Response.Cookies.Append("ILearn.Pending", protection.CreateProtector("ILearn.PendingEmail").Protect(email), new CookieOptions { HttpOnly = true, Secure = context.Request.IsHttps, SameSite = SameSiteMode.Strict, Path = "/", MaxAge = TimeSpan.FromMinutes(15) });

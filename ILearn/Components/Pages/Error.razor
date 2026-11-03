@@ -1,5 +1,6 @@
 @page "/Error"
 @using System.Diagnostics
+@attribute [ExcludeFromInteractiveRouting]
 
 <PageTitle>خطای برنامه | ILearn</PageTitle>
 <header><Brand /><h1>درخواست انجام نشد</h1></header>
@@ -10,7 +11,7 @@
     {
         <p class="muted">شناسهٔ پیگیری: <bdi>@RequestId</bdi></p>
     }
-    <a class="button-link" href="/lobby">بازگشت به لابی</a>
+    <a class="button-link" href="/lobby">بازگشت به آموزشگاه</a>
 </main>
 
 @code {

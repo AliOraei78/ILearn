@@ -1,5 +1,6 @@
 @page "/"
 @inject ICurriculum Content
+@attribute [ExcludeFromInteractiveRouting]
 <PageTitle>ILearn | با بازی کد یاد بگیر</PageTitle>
 <header><Brand /></header>
 <main class="introduction">
@@ -7,9 +8,9 @@
  <h1>قدم‌به‌قدم، با بازی کد یاد بگیر</h1>
  <p>ILearn یک بازی برای یاد گرفتن برنامه‌نویسیه. اینجا به‌جای حفظ کردن تعریف‌ها، با کدهای کوچیک بازی می‌کنی، نتیجه رو حدس می‌زنی و اشتباه‌ها رو پیدا می‌کنی.</p>
  <p>از موضوع مورد علاقه‌ات یک فصل انتخاب کن. اول یک معرفی کوتاه می‌خونی، بعد سراغ تمرین‌ها می‌ری. اگر جایی گیر کردی، راهنمایی و پاسخ کامل کنارت هستند. بررسی هوش مصنوعی هم اختیاریه و ممکنه اشتباه کنه.</p>
- <p>فعلاً موضوع <bdi>C#</bdi> با @Content.Lessons.Count فصل آماده است؛ از اجرای اولین کد و نوع داده تا متد، شیءگرایی و رکوردها. هر حساب سیو خودش رو داره و با جمع کردن تجربه، <bdi>Level</bdi> کاراکترت بالا می‌ره.</p>
+ <p>موضوع <bdi>C#</bdi> با @Content.Lessons.Count(l=>!l.Legacy) واحد در ۱۱ فاز آماده است؛ از اولین برنامه تا شیءگرایی، LINQ، async، حافظه و طراحی. هر حساب سیو خودش رو داره و با جمع کردن تجربه، <bdi>Level</bdi> کاراکترت بالا می‌ره.</p>
  <Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
-  <Authorized><p>با حساب @context.User.Identity?.Name وارد شده‌ای.</p><div class="toolbar"><a class="button-link primary" href="/lobby">برگشت به لابی</a><a class="button-link" href="/profile">پروفایل من</a></div></Authorized>
+  <Authorized><p>با حساب @context.User.Identity?.Name وارد شده‌ای.</p><div class="toolbar"><a class="button-link primary" href="/lobby">برگشت به آموزشگاه</a><a class="button-link" href="/profile">پروفایل من</a></div></Authorized>
   <NotAuthorized><div class="toolbar"><a class="button-link primary" href="/login" data-enhance-nav="false">ورود به حساب</a><a class="button-link" href="/register" data-enhance-nav="false">ساخت حساب کاربری</a></div></NotAuthorized>
  </Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
 </main>

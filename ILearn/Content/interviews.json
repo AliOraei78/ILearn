@@ -1,0 +1,2420 @@
+[
+  {
+    "Id": "csharp",
+    "Title": "C#",
+    "ReviewedOn": "2026-11-03",
+    "SelectionNote": "۱۰۰ سؤال با گزینش تحریری از موضوع‌های تکرارشونده در فهرست‌های عمومی لینکدین و موضوع‌های مهم مصاحبهٔ C# انتخاب شده‌اند. ترتیب سؤال‌ها آموزشی است؛ آمار سراسری یا رتبه‌بندی عددیِ فراوانی مصاحبه‌ها در دسترس نیست. صورت سؤال‌ها، پاسخ‌های مرجع و معیارها برای این مجموعه به فارسی تألیف شده‌اند. لینکدین مبنای انتخاب موضوع و مستندات رسمی Microsoft مرجع صحت فنی است. هر سؤال لینک منابع خودش را دارد؛ محور مجموعه زبان C# و زمان اجرای .NET است.",
+    "Sources": [
+      {
+        "Id": "li-core",
+        "Title": "Anton Martyniuk · 36 C# Interview Questions",
+        "Url": "https://www.linkedin.com/posts/anton-martyniuk_36-c-questions-asked-in-almost-every-interview-activity-7488843438138744833-9f4n",
+        "Role": "selection"
+      },
+      {
+        "Id": "li-overview",
+        "Title": "Mahesh Aelakurthi · Most Asked C# Concepts",
+        "Url": "https://www.linkedin.com/posts/maheshaelakurthi_csharp-interview-mostasked-activity-7379427158642913281-MSvh",
+        "Role": "selection"
+      },
+      {
+        "Id": "li-linq",
+        "Title": "Sandip Yadav · 15 LINQ Interview Questions",
+        "Url": "https://www.linkedin.com/pulse/15-linq-interview-questions-every-net-developer-should-sandip-yadav-vxhff",
+        "Role": "selection"
+      },
+      {
+        "Id": "li-advanced",
+        "Title": "Sachin Ghadi · C# / .NET Real-World Interview Questions",
+        "Url": "https://www.linkedin.com/posts/sachinghadi_csharp-dotnet-dotnetdeveloper-activity-7393316620175286273-7NUt",
+        "Role": "selection"
+      },
+      {
+        "Id": "li-foundations",
+        "Title": "Asharib Kamal · C# Interview Preparation, Part 3",
+        "Url": "https://www.linkedin.com/pulse/top-6-frequently-asked-interview-questions-answers-c-dot-kamal-wsirf",
+        "Role": "selection"
+      },
+      {
+        "Id": "ms-runtime",
+        "Title": "Microsoft · Managed execution and CLR",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/managed-execution-process",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-types",
+        "Title": "Microsoft · The C# type system",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-boxing",
+        "Title": "Microsoft · Boxing and unboxing",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-nullable",
+        "Title": "Microsoft · Nullable reference types",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/null-safety/nullable-reference-types",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-numbers",
+        "Title": "Microsoft · Floating-point numeric types",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-strings",
+        "Title": "Microsoft · Strings in C#",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/strings/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-equality",
+        "Title": "Microsoft · Equality comparisons",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/expressions/equality",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-const",
+        "Title": "Microsoft · const",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/const",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-readonly",
+        "Title": "Microsoft · readonly",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/readonly",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-parameters",
+        "Title": "Microsoft · Method parameters and modifiers",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/method-parameters",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-properties",
+        "Title": "Microsoft · Properties",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-patterns",
+        "Title": "Microsoft · Pattern matching",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-extensions",
+        "Title": "Microsoft · Extension members",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-records",
+        "Title": "Microsoft · Record types",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-tuples",
+        "Title": "Microsoft · Tuple types",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-tuples",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-oop",
+        "Title": "Microsoft · Object-oriented programming",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-constructors",
+        "Title": "Microsoft · Constructors",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constructors",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-di",
+        "Title": "Microsoft · Dependency injection",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection/overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-generics",
+        "Title": "Microsoft · Generic type parameters",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/generic-type-parameters",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-variance",
+        "Title": "Microsoft · Covariance and contravariance",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/generics/covariance-and-contravariance",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-collections",
+        "Title": "Microsoft · Selecting a collection class",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/collections/selecting-a-collection-class",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-yield",
+        "Title": "Microsoft · Iterator and yield",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/yield",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-linq",
+        "Title": "Microsoft · Introduction to LINQ queries",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/linq/get-started/introduction-to-linq-queries",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-operators",
+        "Title": "Microsoft · LINQ standard query operators",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/linq/standard-query-operators/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-delegates",
+        "Title": "Microsoft · Delegates and events",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/delegates-overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-lambda",
+        "Title": "Microsoft · Lambda expressions and variable capture",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-expressions",
+        "Title": "Microsoft · Expression trees",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/expression-trees/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-exceptions",
+        "Title": "Microsoft · Exceptions and exception handling",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/exceptions/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-async",
+        "Title": "Microsoft · Task-based asynchronous programming",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-cancellation",
+        "Title": "Microsoft · Task cancellation",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-cancellation",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-streams",
+        "Title": "Microsoft · Async streams",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/generate-consume-asynchronous-stream",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-valuetask",
+        "Title": "Microsoft · ValueTask<TResult>",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.valuetask-1",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-threading",
+        "Title": "Microsoft · Managed threading basics",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/threading/managed-threading-basics",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-lock",
+        "Title": "Microsoft · The lock statement",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-semaphore",
+        "Title": "Microsoft · SemaphoreSlim",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-volatile",
+        "Title": "Microsoft · The volatile keyword",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/volatile",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-concurrent",
+        "Title": "Microsoft · ConcurrentDictionary operations",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/collections/thread-safe/how-to-add-and-remove-items",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-channels",
+        "Title": "Microsoft · Channels",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/core/extensions/channels",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-starvation",
+        "Title": "Microsoft · Diagnose ThreadPool starvation",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-threadpool-starvation",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-gc",
+        "Title": "Microsoft · Garbage collection fundamentals",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-loh",
+        "Title": "Microsoft · Large object heap",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/large-object-heap",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-dispose",
+        "Title": "Microsoft · Implement Dispose",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-disposeasync",
+        "Title": "Microsoft · Implement DisposeAsync",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-disposeasync",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-span",
+        "Title": "Microsoft · Memory<T> and Span<T> usage guidelines",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/memory-and-spans/memory-t-usage-guidelines",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-refstruct",
+        "Title": "Microsoft · ref struct and language-version restrictions",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/ref-struct",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-pool",
+        "Title": "Microsoft · ArrayPool<T>",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/api/system.buffers.arraypool-1",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-gcmodes",
+        "Title": "Microsoft · Workstation and Server GC",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/workstation-server-gc",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-datetime",
+        "Title": "Microsoft · Choosing date and time types",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/datetime/choosing-between-datetime",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-comparison",
+        "Title": "Microsoft · Best practices for string comparison",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-strings",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-checked",
+        "Title": "Microsoft · checked and unchecked",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/checked-and-unchecked",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-http",
+        "Title": "Microsoft · HttpClient lifetime and DNS",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient-guidelines",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-json",
+        "Title": "Microsoft · System.Text.Json overview",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-aot",
+        "Title": "Microsoft · Native AOT deployment",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-logging",
+        "Title": "Microsoft · Logging in C#",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/core/extensions/logging/overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-reflection",
+        "Title": "Microsoft · Reflection overview",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/fundamentals/reflection/overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-parsing",
+        "Title": "Microsoft · Parsing numeric strings",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/base-types/parsing-numeric",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-waitasync",
+        "Title": "Microsoft · Task.WaitAsync",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.waitasync",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-timeprovider",
+        "Title": "Microsoft · TimeProvider",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/standard/datetime/timeprovider-overview",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-asynclocal",
+        "Title": "Microsoft · AsyncLocal<T>",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/api/system.threading.asynclocal-1",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-stackalloc",
+        "Title": "Microsoft · stackalloc expression",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/stackalloc",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-access",
+        "Title": "Microsoft · Access modifiers",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-solid",
+        "Title": "Microsoft · SOLID and dependency inversion",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/microservice-application-layer-web-api-design",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-joins",
+        "Title": "Microsoft · Join operations in LINQ",
+        "Url": "https://learn.microsoft.com/en-us/dotnet/csharp/linq/standard-query-operators/join-operations",
+        "Role": "verification"
+      },
+      {
+        "Id": "ms-configureawait",
+        "Title": "Microsoft .NET Blog · ConfigureAwait FAQ",
+        "Url": "https://devblogs.microsoft.com/dotnet/configureawait-faq/",
+        "Role": "verification"
+      },
+      {
+        "Id": "benchmark",
+        "Title": "BenchmarkDotNet · Good practices",
+        "Url": "https://benchmarkdotnet.org/articles/guides/good-practices.html",
+        "Role": "verification"
+      }
+    ],
+    "Questions": [
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-runtime",
+          "ms-aot"
+        ],
+        "Activity": {
+          "Id": "C001",
+          "Title": "C#، .NET و مسیر اجرای برنامه",
+          "Kind": "explain",
+          "Prompt": "تفاوت زبان C# با پلتفرم .NET چیست؟ در اجرای معمول یک برنامه، نقش کامپایلر، IL، CLR و JIT را توضیح بده و بگو Native AOT کجای این مسیر را تغییر می‌دهد.",
+          "Code": "",
+          "Solution": "C# زبان است؛ .NET زمان اجرا، کتابخانه‌ها و ابزارها را فراهم می‌کند. کامپایلر معمولاً کد را به IL همراه metadata تبدیل می‌کند. CLR اجرای مدیریت‌شده، GC و سرویس‌های زمان اجرا را فراهم می‌کند؛ JIT هنگام اجرا کد ماشین می‌سازد. Native AOT این تبدیل را هنگام انتشار انجام می‌دهد و برای اجرای برنامه به JIT متکی نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. تفکیک زبان از پلتفرم.\n2. ترتیب کامپایل به IL و اجرای CLR/JIT درست باشد.\n3. AOT را کامپایل بومی هنگام انتشار بداند.",
+          "Hint": "بین زمان ساخت، انتشار و اجرا فرق بگذار."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-types",
+          "ms-boxing"
+        ],
+        "Activity": {
+          "Id": "C002",
+          "Title": "Value type و Reference type؛ معنا و محل ذخیره",
+          "Kind": "explain",
+          "Prompt": "تفاوت value type و reference type در انتساب چیست؟ با مثال struct و class توضیح بده. آیا می‌توان گفت همهٔ value typeها همیشه روی stack هستند؟",
+          "Code": "",
+          "Solution": "متغیر value type مقدار را نگه می‌دارد و انتساب، مقدار را کپی می‌کند؛ متغیر reference type مرجع را نگه می‌دارد و کپی مرجع می‌تواند دو متغیر را به یک شیء برساند. یک int داخل فیلد کلاس یا آرایه جزئی از همان شیء است؛ boxing هم مقدار را در شیء قرار می‌دهد. محل نگهداری با طول عمر و زمینهٔ استفاده تعیین می‌شود، نه فقط نام نوع.",
+          "SolutionCode": "",
+          "Explanation": "1. معنای کپی مقدار و کپی مرجع را تفکیک کند.\n2. یک مثال معتبر برای struct و class بدهد.\n3. ادعای همیشه-stack را با فیلد، آرایه یا boxing رد کند.",
+          "Hint": "قواعد زبان دربارهٔ کپی را از جزئیات حافظه جدا کن."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-parameters"
+        ],
+        "Activity": {
+          "Id": "C003",
+          "Title": "ارسال class به متد بدون ref",
+          "Kind": "explain",
+          "Prompt": "در کد زیر نام a در پایان چیست؟ چرا تغییر عضو دیده می‌شود ولی انتساب new به پارامتر، a را عوض نمی‌کند؟",
+          "Code": "var a = new Person { Name = \"Ali\" };\nChange(a);\nConsole.WriteLine(a.Name);\nstatic void Change(Person p)\n{\n    p.Name = \"Mina\";\n    p = new Person { Name = \"Reza\" };\n}\nclass Person { public string Name { get; set; } = \"\"; }",
+          "Solution": "خروجی Mina است. پارامتر p یک کپی از مرجع a را می‌گیرد. تغییر Name روی شیء مشترک انجام می‌شود. انتساب new فقط کپی محلی مرجع را جایگزین می‌کند؛ برای جایگزین‌کردن متغیر فراخواننده باید پارامتر ref باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. خروجی Mina را اعلام کند.\n2. تغییر عضو را نتیجهٔ مرجع مشترک بداند.\n3. انتساب پارامتر را محلی بداند؛ ارسال پیش‌فرض را by-reference معرفی نکند.",
+          "Hint": "خود مرجع هم یک مقدار است که کپی می‌شود."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-boxing",
+          "ms-generics"
+        ],
+        "Activity": {
+          "Id": "C004",
+          "Title": "Boxing، Unboxing و تبدیل عددی",
+          "Kind": "explain",
+          "Prompt": "Boxing و unboxing چه هستند و چه هزینه‌ای دارند؟ اگر object x = 7 باشد، چرا (long)x خطا می‌دهد ولی (long)(int)x معتبر است؟ یک راه کاهش boxing در مجموعه‌ها بگو.",
+          "Code": "",
+          "Solution": "Boxing مقدار int را در شیء بسته‌بندی می‌کند و معمولاً تخصیص و کپی دارد. Unboxing باید با نوع مقدار بسته‌بندی‌شده سازگار باشد؛ x حاوی int است، نه long. ابتدا (int)x مقدار را باز می‌کند و سپس تبدیل عددی به long انجام می‌شود. List<int> به‌جای مجموعهٔ مبتنی بر object معمولاً boxing عناصر int را حذف می‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. بسته‌بندی، بازکردن و هزینه را توضیح دهد.\n2. علت InvalidCastException و درستی تبدیل دو مرحله‌ای را بگوید.\n3. نمونهٔ generic مناسب برای کاهش boxing بدهد.",
+          "Hint": "تبدیل نوع عددی با بازکردن جعبه یکی نیست."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-types"
+        ],
+        "Activity": {
+          "Id": "C005",
+          "Title": "var، object و dynamic",
+          "Kind": "explain",
+          "Prompt": "var، object و dynamic از نظر تعیین نوع و زمان بررسی عضو چه تفاوتی دارند؟ برای هرکدام یک کاربرد بگو و توضیح بده کدام می‌تواند خطای عضو ناموجود را تا زمان اجرا عقب بیندازد.",
+          "Code": "",
+          "Solution": "var استنتاج نوع در زمان کامپایل است؛ متغیر بعداً نوع ثابت دارد، مثلاً var count = 3. object نوع پایهٔ مشترک است و برای اعضای اختصاصی به cast یا pattern نیاز دارد؛ برای ورودی ناهمگون کاربرد دارد. dynamic اتصال عضو را به زمان اجرا می‌سپارد و در interop مفید است، اما عضو ناموجود می‌تواند RuntimeBinderException بدهد.",
+          "SolutionCode": "",
+          "Explanation": "1. var را نوع پویا نداند.\n2. محدودیت دسترسی object و کاربرد هر سه را بیان کند.\n3. بررسی دیرهنگام عضو را به dynamic نسبت دهد.",
+          "Hint": "استنتاج نوع با حذف بررسی زمان کامپایل فرق دارد."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-types"
+        ],
+        "Activity": {
+          "Id": "C006",
+          "Title": "Nullable value type و مقدار پیش‌فرض",
+          "Kind": "explain",
+          "Prompt": "int? چه تفاوتی با int دارد؟ برای یک مقدار null، رفتار HasValue، Value، GetValueOrDefault و عملگر ?? را توضیح بده. در پاسخ بگو چرا صفر همیشه جایگزین مناسبی برای نبودن داده نیست.",
+          "Code": "",
+          "Solution": "int? همان Nullable<int> است و می‌تواند نبود مقدار را نمایش دهد. برای null، HasValue برابر false است؛ خواندن Value خطا می‌دهد؛ GetValueOrDefault() صفر و x ?? 10 مقدار 10 می‌دهد. صفر می‌تواند یک دادهٔ معتبر مانند تعداد خرید باشد؛ جایگزینی خودکار آن، تفاوت «نامعلوم» و «واقعاً صفر» را از بین می‌برد.",
+          "SolutionCode": "",
+          "Explanation": "1. تفاوت ظرفیت null را توضیح دهد.\n2. رفتار چهار عضو یا عملگر برای null درست باشد.\n3. یک دلیل دامنه‌ای برای حفظ تفاوت null و صفر بدهد.",
+          "Hint": "ابتدا «نبود مقدار» را معنا کن، بعد مقدار جایگزین را انتخاب کن."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-nullable"
+        ],
+        "Activity": {
+          "Id": "C007",
+          "Title": "Nullable reference types و عملگر !",
+          "Kind": "explain",
+          "Prompt": "با فعال‌بودن nullable، string? و string چه تعهدی به کامپایلر می‌دهند؟ آیا ! مانع NullReferenceException می‌شود؟ نقش ?. و ?? را با یک مثال توضیح بده.",
+          "Code": "",
+          "Solution": "این annotationها تحلیل null را در زمان کامپایل هدایت می‌کنند؛ نوع اجرایی string عوض نمی‌شود. string? احتمال null را اعلام می‌کند و string قصد non-null بودن را. ! فقط هشدار را خاموش می‌کند و مقدار را بررسی نمی‌کند. مثلاً name?.Length ?? 0 در نبود name صفر می‌دهد؛ name!.Length همچنان ممکن است خطا بدهد.",
+          "SolutionCode": "",
+          "Explanation": "1. تحلیل زمان کامپایل را از تضمین اجرایی جدا کند.\n2. ! را رفع واقعی null معرفی نکند.\n3. یک مثال صحیح از ?. و ?? ارائه کند.",
+          "Hint": "خاموش‌شدن هشدار، دادهٔ ورودی را تغییر نمی‌دهد."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-numbers"
+        ],
+        "Activity": {
+          "Id": "C008",
+          "Title": "float، double و decimal برای پول",
+          "Kind": "explain",
+          "Prompt": "برای مختصات علمی و مبلغ یک فاکتور، چگونه بین float، double و decimal انتخاب می‌کنی؟ دلیل خطای نمایش بعضی کسرها را بگو. آیا decimal نیاز به سیاست گردکردن را حذف می‌کند؟",
+          "Code": "",
+          "Solution": "float و double نمایش دودویی با دقت و دامنهٔ متفاوت دارند؛ double معمولاً برای محاسبات علمی مناسب‌تر است. بعضی کسرهای ده‌دهی مانند 0.1 نمایش دودویی دقیق ندارند. decimal برای اعداد ده‌دهی مالی مناسب است و بسیاری از این کسرها را دقیق نگه می‌دارد، اما تقسیم‌ها و محدودیت دقت همچنان گردکردن می‌خواهند. مقیاس پول و MidpointRounding باید طبق قرارداد فاکتور تعیین شود.",
+          "SolutionCode": "",
+          "Explanation": "1. نمایش دودویی و کاربرد علمی را توضیح دهد.\n2. انتخاب decimal برای مبلغ را توجیه کند.\n3. نیاز به گردکردن و مقیاس قراردادی را حفظ کند.",
+          "Hint": "نوع داده و سیاست حسابداری دو تصمیم جدا هستند."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-strings"
+        ],
+        "Activity": {
+          "Id": "C009",
+          "Title": "رشتهٔ immutable و StringBuilder",
+          "Kind": "explain",
+          "Prompt": "چرا string با اینکه reference type است immutable محسوب می‌شود؟ در حلقه‌ای با هزاران الحاق، StringBuilder چه کمکی می‌کند؟ آیا هر الحاق کوتاه را باید با آن جایگزین کرد؟",
+          "Code": "",
+          "Solution": "محتوای یک نمونهٔ string پس از ایجاد عوض نمی‌شود؛ عملیات تغییر متن، نتیجهٔ تازه می‌سازند و انتساب فقط مرجع متغیر را عوض می‌کند. الحاق تکراری می‌تواند رشته‌های میانی و کپی زیاد بسازد. StringBuilder با بافر قابل‌تغییر این هزینه را در ساخت تدریجی متن کاهش می‌دهد. برای چند بخش کوتاه، interpolation یا الحاق معمول خواناتر است و انتخاب باید با اندازه و اندازه‌گیری متناسب باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. immutability را از reference بودن مستقل بداند.\n2. هزینهٔ رشته‌های میانی و نقش بافر را توضیح دهد.\n3. استفادهٔ همیشگی از StringBuilder را لازم نداند.",
+          "Hint": "به تعداد تغییرات و رشته‌های میانی نگاه کن."
+        }
+      },
+      {
+        "Category": "مبانی زبان و نوع‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-equality"
+        ],
+        "Activity": {
+          "Id": "C010",
+          "Title": "==، Equals و ReferenceEquals",
+          "Kind": "explain",
+          "Prompt": "دو string جدا با متن یکسان داریم. تفاوت ==، Equals و ReferenceEquals چیست؟ چرا اگر همان رشته‌ها در متغیرهای object قرار بگیرند، نتیجهٔ == ممکن است عوض شود؟",
+          "Code": "",
+          "Solution": "== برای متغیرهای string به برابری محتوا متصل می‌شود. Equals نیز برای string محتوا را می‌سنجد. ReferenceEquals هویت همان شیء را می‌سنجد و برای دو نمونهٔ جدا false است. وقتی نوع ایستای دو متغیر object باشد، == معمول object هویت را می‌سنجد؛ object.Equals می‌تواند پیاده‌سازی مجازی string.Equals را فراخوانی کند. overload عملگر بر پایهٔ نوع ایستا انتخاب می‌شود.",
+          "SolutionCode": "",
+          "Explanation": "1. برابری محتوا و هویت را جدا کند.\n2. تفاوت == برای نوع ایستای string و object را توضیح دهد.\n3. رفتار Equals رشته و ReferenceEquals را درست بگوید.",
+          "Hint": "نوع ایستای عملوند، انتخاب overload عملگر را تعیین می‌کند."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "li-foundations",
+          "ms-const",
+          "ms-readonly"
+        ],
+        "Activity": {
+          "Id": "C011",
+          "Title": "const، readonly و static readonly",
+          "Kind": "explain",
+          "Prompt": "برای یک ثابت ریاضی، زمان مقداردهی یک نوع در اجرا و یک فهرست قابل‌تغییر، const و readonly و static readonly چه تفاوتی دارند؟ آیا readonly List<int> عناصر را هم غیرقابل‌تغییر می‌کند؟",
+          "Code": "",
+          "Solution": "const مقدار ثابت زمان کامپایل است و مقدارش در کد مصرف‌کننده درج می‌شود؛ برای ثابت ریاضی مناسب است. readonly فیلد هر نمونه را در declaration یا constructor همان نوع مقداردهی می‌کند. static readonly یک فیلد مشترک با مقداردهی زمان اجراست، مثلاً زمان شروع نوع. readonly List<int> جلوی انتساب فهرست تازه را می‌گیرد؛ Add و تغییر عناصر را ممنوع نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. زمان مقداردهی و اشتراک static را تفکیک کند.\n2. برای ثابت و زمان شروع انتخاب قابل‌دفاع بدهد.\n3. readonly reference را immutability عناصر نداند.",
+          "Hint": "ثابت‌بودن مرجع با ثابت‌بودن شیء فرق دارد."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-parameters"
+        ],
+        "Activity": {
+          "Id": "C012",
+          "Title": "پارامترهای ref، out و in",
+          "Kind": "explain",
+          "Prompt": "ref، out و in در پارامتر متد چه تفاوتی دارند؟ الزام مقداردهی قبل و داخل متد را بگو و برای TryParse و یک struct بزرگِ فقط‌خواندنی انتخاب مناسب پیشنهاد بده.",
+          "Code": "",
+          "Solution": "ref به متغیر مقداردهی‌شدهٔ فراخواننده ارجاع می‌دهد و متد می‌تواند آن را بخواند و بنویسد. out به مقدار قبلی نیاز ندارد ولی متد باید در مسیرهای خروج عادی آن را مقداردهی کند؛ برای الگوی TryParse مناسب است. in ارسال با ارجاع فقط‌خواندنی است و بازنویسی پارامتر را ممنوع می‌کند؛ برای struct بزرگ قابل‌بررسی است، هرچند کپی دفاعی و عملکرد باید سنجیده شوند.",
+          "SolutionCode": "",
+          "Explanation": "1. الزام مقداردهی ref و out را درست بگوید.\n2. محدودیت نوشتن در in را بیان کند.\n3. انتخاب out برای TryParse و in برای ورودی فقط‌خواندنی را توجیه کند.",
+          "Hint": "پرسش اصلی این است: چه کسی مقدار را می‌نویسد؟"
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-parameters"
+        ],
+        "Activity": {
+          "Id": "C013",
+          "Title": "Named، optional و params در API",
+          "Kind": "explain",
+          "Prompt": "پارامتر named، optional و params چه کاربردی دارند؟ اگر مقدار پیش‌فرض یک پارامتر optional در کتابخانه عوض شود، چرا مصرف‌کنندهٔ کامپایل‌شدهٔ قدیمی ممکن است مقدار قبلی را بفرستد؟",
+          "Code": "",
+          "Solution": "named خوانایی فراخوانی و تعیین آرگومان با نام را فراهم می‌کند. optional اجازهٔ حذف آرگومان را می‌دهد؛ مقدار پیش‌فرض معمولاً در محل فراخوانی کامپایل می‌شود و مصرف‌کنندهٔ قدیمی تا ساخت مجدد می‌تواند مقدار قبلی را داشته باشد. params تعداد متغیری آرگومان هم‌نوع را می‌پذیرد، مثلاً params int[] values. تغییر نام پارامتر هم می‌تواند کد استفاده‌کننده از named را بشکند.",
+          "SolutionCode": "",
+          "Explanation": "1. کاربرد سه سازوکار و نمونهٔ params را بگوید.\n2. درج مقدار optional در کد فراخواننده را توضیح دهد.\n3. وابستگی فراخوانی named به نام پارامتر را تشخیص دهد.",
+          "Hint": "به کدی فکر کن که قبلاً کامپایل و منتشر شده است."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-properties"
+        ],
+        "Activity": {
+          "Id": "C014",
+          "Title": "Field، property، init و required",
+          "Kind": "explain",
+          "Prompt": "برای مدل ثبت‌نام چرا ممکن است property را به field عمومی ترجیح بدهیم؟ تفاوت set، init و required را بگو. آیا required string به‌تنهایی خالی‌نبودن یا معتبر بودن ایمیل را تضمین می‌کند؟",
+          "Code": "",
+          "Solution": "property سطح دسترسی و منطق خواندن یا نوشتن را کنترل می‌کند و می‌تواند اعتبارسنجی داشته باشد. set نوشتن را طبق دسترسی مجاز می‌کند؛ init مقداردهی را به زمان ساخت و initialization محدود می‌کند. required مصرف‌کننده را به مقداردهی عضو هنگام ایجاد وادار می‌کند، اما اعتبار دامنه‌ای مانند قالب ایمیل یا رشتهٔ خالی را بررسی نمی‌کند. برای ایمیل همچنان validation لازم است.",
+          "SolutionCode": "",
+          "Explanation": "1. تفاوت ذخیره‌سازی field با accessor property را بیان کند.\n2. set، init و الزام مقداردهی required را تفکیک کند.\n3. اعتبارسنجی ایمیل را تضمین required نداند.",
+          "Hint": "الزام مقداردهی با اعتبار مقدار یکسان نیست."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-oop",
+          "ms-access"
+        ],
+        "Activity": {
+          "Id": "C015",
+          "Title": "سطوح دسترسی در یک کتابخانه",
+          "Kind": "explain",
+          "Prompt": "public، private، internal و protected را برای یک کتابخانه توضیح بده. تفاوت protected internal با private protected چیست و برای helper داخلی که نباید API عمومی باشد چه انتخابی داری؟",
+          "Code": "",
+          "Solution": "public برای مصرف‌کنندگان قابل‌دسترسی است؛ private به نوع حاوی و دسترسی‌های مجاز وابسته به آن محدود است. internal در همان assembly و protected در نوع و مشتق‌های آن کاربرد دارد. protected internal اجتماع این دو محدوده است؛ private protected در مشتق‌های همان assembly قابل‌استفاده است. helper سطح کتابخانه معمولاً internal و helper فقط متعلق به یک نوع private می‌شود.",
+          "SolutionCode": "",
+          "Explanation": "1. چهار سطح پایه را درست توضیح دهد.\n2. اجتماع protected internal و اشتراک private protected را تفکیک کند.\n3. برای helper با توجه به محدودهٔ مصرف انتخاب بدهد.",
+          "Hint": "internal دربارهٔ assembly است؛ protected دربارهٔ وراثت."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-types",
+          "ms-readonly"
+        ],
+        "Activity": {
+          "Id": "C016",
+          "Title": "انتخاب struct، readonly struct یا class",
+          "Kind": "explain",
+          "Prompt": "برای یک مقدار کوچک مثل مختصات و یک موجودیت دارای هویت مثل سفارش، بین struct و class چگونه انتخاب می‌کنی؟ readonly struct چه محدودیتی اضافه می‌کند و چرا struct بزرگ می‌تواند پرهزینه شود؟",
+          "Code": "",
+          "Solution": "برای مقدار کوچک با معنای کپی و بدون هویت مستقل، struct یا readonly struct مناسب است. سفارش با هویت و چرخهٔ عمر مشترک معمولاً class است. readonly struct از تغییر وضعیت نمونه پس از ساخت جلوگیری می‌کند، اما مرجع یک شیء mutable داخل آن همچنان می‌تواند به دادهٔ تغییرپذیر برسد. کپی‌کردن struct بزرگ و کپی دفاعی می‌تواند هزینه داشته باشد؛ اندازه و الگوی مصرف مهم‌اند.",
+          "SolutionCode": "",
+          "Explanation": "1. معنای مقدار را از هویت موجودیت جدا کند.\n2. محدودیت readonly struct و عمق آن را درست بگوید.\n3. هزینهٔ کپی struct بزرگ را تشخیص دهد.",
+          "Hint": "انتخاب را از معنای مدل شروع کن، سپس هزینه را بسنج."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "li-core",
+          "ms-records"
+        ],
+        "Activity": {
+          "Id": "C017",
+          "Title": "Record و کپی سطحی با with",
+          "Kind": "explain",
+          "Prompt": "record class و record struct چه تفاوتی با class معمول دارند؟ در کد زیر پس از Add، تعداد اعضای a.Tags چند است؟ توضیح بده with چرا immutability عمیق نمی‌سازد.",
+          "Code": "var a = new Article(new List<string> { \"C#\" });\nvar b = a with { };\nb.Tags.Add(\".NET\");\nConsole.WriteLine(a.Tags.Count);\nrecord Article(List<string> Tags);",
+          "Solution": "recordها برابری مبتنی بر مقدار و اعضای تولیدشده مانند نمایش متنی دارند. record class مرجعی و record struct مقداری است؛ record بودن به‌خودی‌خود همهٔ اعضا را immutable نمی‌کند. with کپی سطحی می‌سازد. a و b همان List را نگه می‌دارند، پس تعداد a.Tags هم 2 می‌شود. برای استقلال باید مجموعه را نیز کپی کرد یا دادهٔ immutable مناسب به‌کار برد.",
+          "SolutionCode": "",
+          "Explanation": "1. record class و record struct و برابری record را توضیح دهد.\n2. خروجی 2 و اشتراک List را تشخیص دهد.\n3. with را کپی عمیق یا تضمین immutability نداند.",
+          "Hint": "فیلد مرجعی داخل یک کپی هنوز می‌تواند مشترک باشد."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-tuples",
+          "ms-records"
+        ],
+        "Activity": {
+          "Id": "C018",
+          "Title": "ValueTuple، deconstruction و مدل عمومی",
+          "Kind": "explain",
+          "Prompt": "بازگرداندن (bool Success, int Value) از متد چه مزیتی دارد؟ ValueTuple را با Tuple و یک record نام‌دار مقایسه کن. نام عناصر tuple در برابری و هویت نوع چه نقشی دارد؟",
+          "Code": "",
+          "Solution": "ValueTuple چند خروجی مرتبط را با syntax کوتاه و deconstruction ارائه می‌کند و نوع مقداری با فیلدهای قابل‌تغییر است. Tuple معمول نوع مرجعی است. نام عناصر tuple به خوانایی کمک می‌کند و جزو هویت نوع یا معیار برابری نیست. برای قرارداد عمومی دارای معنای دامنه‌ای، validation یا توسعهٔ طولانی‌مدت، record یا کلاس نام‌دار می‌تواند روشن‌تر باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. مزیت چندخروجی و deconstruction را توضیح دهد.\n2. ValueTuple و Tuple را از نظر نوع مقایسه کند.\n3. نقش صرفاً نام‌گذاری و مزیت مدل نام‌دار را بگوید.",
+          "Hint": "خوانایی محلی و قرارداد عمومی همیشه نیاز یکسان ندارند."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-patterns"
+        ],
+        "Activity": {
+          "Id": "C019",
+          "Title": "Pattern matching و پوشش حالت‌ها",
+          "Kind": "explain",
+          "Prompt": "برای ورودی object? شامل null، عدد مثبت و رشتهٔ غیرخالی، pattern matching چه کمکی می‌کند؟ راهی با switch expression پیشنهاد بده و توضیح بده guard و حالت پیش‌فرض چرا لازم‌اند.",
+          "Code": "",
+          "Solution": "الگوها بررسی نوع، null و ویژگی را با استخراج مقدار ترکیب می‌کنند. مثلاً null => \"missing\"، int n when n > 0 => \"positive\" و string { Length: > 0 } => \"text\" سه حالت خواسته‌شده‌اند. guard شرط تکمیلی روی مقدار استخراج‌شده است. _ => \"other\" اعداد دیگر، رشتهٔ خالی و نوع‌های دیگر را پوشش می‌دهد تا switch expression برای ورودی مجازِ پوشش‌نیافته خطا ندهد.",
+          "SolutionCode": "",
+          "Explanation": "1. سه حالت را با الگوی معتبر پوشش دهد.\n2. معنای guard را روشن کند.\n3. حالت پیش‌فرض برای بقیهٔ ورودی‌ها در نظر بگیرد.",
+          "Hint": "اول نوع و null را تشخیص بده، بعد شرط دامنه‌ای را."
+        }
+      },
+      {
+        "Category": "طراحی نوع و امکانات زبان",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-extensions"
+        ],
+        "Activity": {
+          "Id": "C020",
+          "Title": "Extension method و اولویت متد نمونه",
+          "Kind": "explain",
+          "Prompt": "چگونه بدون تغییر یک نوع، extension method برای آن تعریف می‌کنی؟ syntax متداول this را توضیح بده. اگر متد نمونهٔ قابل‌اعمال با همان نام موجود باشد، کدام انتخاب می‌شود؟",
+          "Code": "",
+          "Solution": "در الگوی متداول یک متد static در کلاس static تعریف می‌شود و پارامتر اول با this نوع مقصد را مشخص می‌کند. namespace مربوط باید در دسترس باشد. فراخوانی مانند عضو نمونه نوشته می‌شود ولی کامپایل به فراخوانی static است. متد نمونهٔ قابل‌اعمال بر extension اولویت دارد؛ extension عضو خصوصی یا override واقعی اضافه نمی‌کند. C# 14 همچنین extension block دارد؛ الگوی this همچنان معتبر است.",
+          "SolutionCode": "",
+          "Explanation": "1. کلاس static، متد static و پارامتر this را بگوید.\n2. فراخوانی را افزودن عضو اجرایی یا override نداند.\n3. اولویت متد نمونهٔ قابل‌اعمال را درست توضیح دهد.",
+          "Hint": "ظاهر فراخوانی نمونه‌ای است، اتصال متد static باقی می‌ماند."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-foundations",
+          "li-overview",
+          "ms-oop"
+        ],
+        "Activity": {
+          "Id": "C021",
+          "Title": "چهار اصل شیءگرایی در یک مثال",
+          "Kind": "explain",
+          "Prompt": "Encapsulation، abstraction، inheritance و polymorphism را با مثال سامانهٔ پرداخت توضیح بده. برای هر اصل نشان بده چه مسئله‌ای حل می‌شود؛ فقط نام‌بردن کافی نیست.",
+          "Code": "",
+          "Solution": "Encapsulation وضعیت پرداخت را پشت عملیات معتبر مثل Confirm نگه می‌دارد. Abstraction قراردادی مثل IPaymentGateway ارائه می‌دهد که جزئیات شبکه را پنهان می‌کند. Inheritance می‌تواند رفتار مشترک انواع مرتبط را در پایه نگه دارد. Polymorphism اجازه می‌دهد سرویس با قرارداد مشترک، درگاه‌های متفاوت را فراخوانی کند. برای چندریختی لازم نیست همهٔ درگاه‌ها از یک کلاس پایه ارث ببرند؛ پیاده‌سازی interface هم کافی است.",
+          "SolutionCode": "",
+          "Explanation": "1. هر چهار مفهوم را درست تعریف کند.\n2. برای هرکدام اثر عملی در مثال پرداخت بدهد.\n3. چندریختی را فقط هم‌نامی متدها یا الزام کلاس پایه نداند.",
+          "Hint": "برای هر اصل یک مرز یا تغییر واقعی در سیستم پیدا کن."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-foundations",
+          "ms-oop"
+        ],
+        "Activity": {
+          "Id": "C022",
+          "Title": "Abstract class یا interface در C# جدید",
+          "Kind": "explain",
+          "Prompt": "برای اشتراک وضعیت و رفتار میان انواع مرتبط، و برای قرارداد میان انواع نامرتبط، abstract class یا interface را چگونه انتخاب می‌کنی؟ default interface method چه چیزی را تغییر می‌دهد؟",
+          "Code": "",
+          "Solution": "کلاس abstract می‌تواند وضعیت نمونه، constructor و رفتار مشترک داشته باشد و یک کلاس فقط یک پایهٔ کلاسی مستقیم دارد. interface قرارداد چندگانه میان انواع مختلف فراهم می‌کند و وضعیت نمونهٔ مشترکِ کلاس پایه را ندارد. interfaceهای جدید می‌توانند پیاده‌سازی پیش‌فرض و اعضای static داشته باشند؛ بنابراین «interface هیچ بدنه‌ای ندارد» درست نیست. انتخاب همچنان به نیاز به حالت مشترک، رابطهٔ واقعی و قرارداد بستگی دارد.",
+          "SolutionCode": "",
+          "Explanation": "1. وضعیت نمونه، constructor و محدودیت وراثت کلاسی را توضیح دهد.\n2. کاربرد قرارداد چندگانه را بگوید.\n3. وجود پیاده‌سازی پیش‌فرض در interface جدید را بشناسد.",
+          "Hint": "نیاز به state مشترک را از نیاز به قرارداد جدا کن."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "ms-oop"
+        ],
+        "Activity": {
+          "Id": "C023",
+          "Title": "Overload، override و new در dispatch",
+          "Kind": "explain",
+          "Prompt": "خروجی دو فراخوانی زیر چیست؟ تفاوت overload، override و پنهان‌کردن عضو با new را از نظر انتخاب در زمان کامپایل و اجرا توضیح بده.",
+          "Code": "A x = new B();\nConsole.WriteLine(x.V());\nConsole.WriteLine(x.H());\nclass A\n{\n    public virtual string V() => \"A\";\n    public string H() => \"A\";\n}\nclass B : A\n{\n    public override string V() => \"B\";\n    public new string H() => \"B\";\n}",
+          "Solution": "خروجی V برابر B و H برابر A است. V مجازی است و override بر اساس نوع اجرایی B انتخاب می‌شود. H غیرمجازی و عضو B با new پنهان شده است؛ از مرجع با نوع ایستای A، متد A صدا زده می‌شود. overload چند امضای متفاوت با نام یکسان است و انتخاب معمول آن بر پایهٔ اطلاعات زمان کامپایل انجام می‌شود.",
+          "SolutionCode": "",
+          "Explanation": "1. دو خروجی B و A را درست بگوید.\n2. override را dispatch مجازی و new را hiding بداند.\n3. overload را تفاوت امضا، جدا از override توضیح دهد.",
+          "Hint": "نوع ایستای متغیر و نوع واقعی شیء را جدا بنویس."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-foundations",
+          "ms-oop"
+        ],
+        "Activity": {
+          "Id": "C024",
+          "Title": "virtual، abstract و sealed",
+          "Kind": "explain",
+          "Prompt": "virtual و abstract چه تفاوتی در بدنه و الزام override دارند؟ sealed روی کلاس و sealed override روی متد چه محدودیتی می‌گذارند؟ آیا هر virtual حتماً باید در مشتق بازنویسی شود؟",
+          "Code": "",
+          "Solution": "virtual بدنه دارد و بازنویسی آن اختیاری است. متد abstract بدنه ندارد؛ یک مشتق concrete باید پیاده‌سازی مناسب آن را فراهم کند، اما مشتق abstract می‌تواند الزام را ادامه دهد. کلاس sealed قابل‌ارث‌بری نیست. sealed override جلوی بازنویسی بیشتر همان عضو را در مشتق‌های بعدی می‌گیرد؛ لزوماً خود کلاس را sealed نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. بدنه و الزام پیاده‌سازی virtual و abstract را درست بگوید.\n2. مشتق abstract و concrete را تفکیک کند.\n3. اثر sealed روی کلاس و override را جدا بیان کند.",
+          "Hint": "وجود پیاده‌سازی پایه تعیین می‌کند چه چیزی اجباری است."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-foundations",
+          "ms-oop",
+          "ms-di"
+        ],
+        "Activity": {
+          "Id": "C025",
+          "Title": "وراثت چندگانه و composition",
+          "Kind": "explain",
+          "Prompt": "چرا یک class در C# نمی‌تواند هم‌زمان از دو class پایه ارث ببرد ولی چند interface را پیاده کند؟ برای سرویسی که هم ارسال ایمیل و هم ثبت گزارش می‌خواهد، composition چگونه کمک می‌کند؟",
+          "Code": "",
+          "Solution": "C# یک پایهٔ کلاسی مستقیم را مجاز می‌داند تا ترکیب وضعیت و پیاده‌سازی پایه‌های متعدد وارد مدل وراثت کلاس نشود. یک کلاس می‌تواند قرارداد چند interface را پیاده کند. سرویس می‌تواند IEmailSender و ILogger را به‌صورت وابستگی دریافت کند و کار را به آن‌ها بسپارد؛ این composition است و رابطهٔ «دارد» را مدل می‌کند. پیش‌فرض‌های متعارض interface نیز ممکن است حل صریح بخواهند.",
+          "SolutionCode": "",
+          "Explanation": "1. محدودیت یک class پایه و امکان چند interface را بگوید.\n2. composition را نگهداری یا دریافت همکاران توضیح دهد.\n3. برای ایمیل و گزارش یک تفویض مسئولیت معتبر پیشنهاد کند.",
+          "Hint": "سرویس لازم نیست از فرستندهٔ ایمیل «یک نوع» باشد."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "ms-generics",
+          "ms-constructors",
+          "ms-threading"
+        ],
+        "Activity": {
+          "Id": "C026",
+          "Title": "اعضای static و constructor ایستا",
+          "Kind": "explain",
+          "Prompt": "فیلد static و constructor static چه طول عمری و دامنهٔ اشتراکی دارند؟ آیا Cache<int> و Cache<string> یک فیلد static مشترک دارند؟ یک خطر وضعیت static قابل‌تغییر در سرویس هم‌زمان بگو.",
+          "Code": "",
+          "Solution": "فیلد static به نوع تعلق دارد، نه هر نمونه. constructor ایستا برای مقداردهی همان نوع اجرا می‌شود و سازوکار زمان اجرا اجرای آن را هماهنگ می‌کند. برای نوع generic، هر نوع بسته مثل Cache<int> و Cache<string> وضعیت static جدا دارد. وضعیت مشترک قابل‌تغییر می‌تواند race condition، نگه‌داشتن طولانی اشیا یا وابستگی میان تست‌ها بسازد؛ static به‌تنهایی thread-safe نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. اشتراک در سطح نوع و نقش constructor ایستا را توضیح دهد.\n2. جدایی static در generic بسته را بشناسد.\n3. یک خطر واقعی وضعیت مشترک و نیاز به هماهنگی را بگوید.",
+          "Hint": "هر ترکیب مشخص از آرگومان‌های generic یک نوع بسته است."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "ms-constructors",
+          "ms-oop"
+        ],
+        "Activity": {
+          "Id": "C027",
+          "Title": "زنجیرهٔ constructor و خطر فراخوانی virtual",
+          "Kind": "explain",
+          "Prompt": "در ساخت یک شیء مشتق، بدنهٔ constructor پایه و مشتق با چه ترتیبی اجرا می‌شوند؟ this(...) و base(...) چه می‌کنند؟ چرا فراخوانی virtual از constructor پایه می‌تواند خطرناک باشد؟",
+          "Code": "",
+          "Solution": "زنجیرهٔ constructor باید ابتدا ساخت پایه را انجام دهد؛ بدنهٔ پایه پیش از بدنهٔ مشتق اجرا می‌شود. this به constructor دیگر همان نوع و base به constructor پایه متصل می‌شود. فراخوانی virtual در constructor پایه ممکن است به override مشتق برسد، درحالی‌که بدنهٔ constructor مشتق هنوز اجرا نشده و invariant آن کامل نیست. بهتر است سازنده به رفتار قابل‌بازنویسیِ وابسته به حالت کامل تکیه نکند.",
+          "SolutionCode": "",
+          "Explanation": "1. ترتیب بدنهٔ پایه و مشتق را درست بگوید.\n2. this و base را از نظر مقصد تفکیک کند.\n3. خطر اجرای override پیش از تکمیل invariant مشتق را توضیح دهد.",
+          "Hint": "dispatch مجازی در زمان ساخت هم می‌تواند به مشتق برسد."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "li-overview",
+          "ms-oop",
+          "ms-di",
+          "ms-solid"
+        ],
+        "Activity": {
+          "Id": "C028",
+          "Title": "SOLID با مثال تغییرپذیری",
+          "Kind": "explain",
+          "Prompt": "پنج اصل SOLID را کوتاه توضیح بده. در سرویسی که برای هر روش تخفیف یک if جدید می‌گیرد، یک اصلاح مطابق Open/Closed پیشنهاد کن و بگو چه زمانی این جداسازی ارزش دارد.",
+          "Code": "",
+          "Solution": "SRP یعنی تمرکز مسئولیت و دلیل تغییر؛ OCP توسعه با کاهش دست‌کاری رفتار پایدار؛ LSP حفظ قرارداد هنگام جایگزینی زیرنوع؛ ISP قراردادهای متناسب با مصرف‌کننده؛ DIP وابستگی سیاست به abstraction. برای تخفیف‌های رو‌به‌رشد می‌توان قرارداد IDiscountPolicy و پیاده‌سازی‌های مجزا داشت. برای دو شرط سادهٔ ثابت، این جداسازی ممکن است هزینهٔ اضافی باشد؛ فراوانی تغییر و نیاز آزمون تصمیم را توجیه می‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. هر پنج اصل را بدون جابه‌جایی مفهوم توضیح دهد.\n2. یک توسعهٔ قابل‌تعویض برای تخفیف پیشنهاد کند.\n3. هزینهٔ abstraction را با نیاز واقعی تغییر بسنجد.",
+          "Hint": "اصل را به دلیل تغییر و حفظ قرارداد وصل کن."
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "li-overview",
+          "ms-di"
+        ],
+        "Activity": {
+          "Id": "C029",
+          "Title": "طول عمرهای DI و وابستگی اسیر",
+          "Kind": "explain",
+          "Prompt": "Transient، Scoped و Singleton در container متداول .NET چه تفاوتی دارند؟ چرا دریافت یک سرویس Scoped در Singleton مشکل‌ساز است؟ برای کار پس‌زمینه‌ای که به سرویس Scoped نیاز دارد چه راهی داری؟",
+          "Code": "",
+          "Solution": "Transient در هر resolve نمونهٔ تازه می‌سازد؛ Scoped در محدودهٔ یک scope مشترک است؛ Singleton در container مشترک می‌ماند. در برنامهٔ وب scope معمولاً به درخواست متصل است. گرفتن مستقیم Scoped در Singleton می‌تواند آن را بیش از طول عمر درست نگه دارد و اعتبارسنجی scope نیز می‌تواند خطا بدهد. کار پس‌زمینه می‌تواند scope صریح بسازد و وابستگی را در همان محدوده resolve و dispose کند.",
+          "SolutionCode": "",
+          "Explanation": "1. سه طول عمر را درست تفکیک کند.\n2. ناسازگاری طول عمر Scoped در Singleton را توضیح دهد.\n3. ساخت و پایان scope برای کار پس‌زمینه را پیشنهاد کند.",
+          "Hint": "مالک سرویس چه کسی است و چه زمانی آن را آزاد می‌کند؟"
+        }
+      },
+      {
+        "Category": "شیءگرایی و قراردادها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-foundations",
+          "li-overview",
+          "ms-di",
+          "ms-solid"
+        ],
+        "Activity": {
+          "Id": "C030",
+          "Title": "تفاوت Dependency Inversion و Dependency Injection",
+          "Kind": "explain",
+          "Prompt": "DIP و DI چه تفاوتی دارند؟ برای OrderService که خودش EmailSender واقعی می‌سازد، یک طراحی قابل‌آزمون پیشنهاد بده. آیا داشتن container برای DI اجباری است؟",
+          "Code": "",
+          "Solution": "DIP اصل جهت وابستگی است: سیاست سطح بالا به قرارداد مناسب وابسته باشد. DI راه تأمین وابستگی از بیرون است. OrderService می‌تواند IEmailSender را از constructor بگیرد و تست، نمونهٔ جعلی کنترل‌شده را تزریق کند. در محل ترکیب برنامه، پیاده‌سازی واقعی ساخته می‌شود. این کار با new و سیم‌کشی دستی هم DI است؛ container ابزار اختیاری مدیریت ساخت و طول عمر است.",
+          "SolutionCode": "",
+          "Explanation": "1. اصل طراحی DIP را از روش تزریق جدا کند.\n2. تزریق constructor و جایگزین آزمون‌پذیر پیشنهاد کند.\n3. container را الزام DI نداند.",
+          "Hint": "ساخت وابستگی را از مصرف آن جدا کن."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-generics",
+          "ms-boxing"
+        ],
+        "Activity": {
+          "Id": "C031",
+          "Title": "Generics و constraintها",
+          "Kind": "explain",
+          "Prompt": "Generics نسبت به دریافت object چه مزیتی دارند؟ constraintهایی مثل where T : class و where T : new() چه چیزی را مجاز می‌کنند؟ آیا generic بودن تمام boxingها را در هر مسیری حذف می‌کند؟",
+          "Code": "",
+          "Solution": "Generics قرارداد نوع را حفظ می‌کنند و castهای پراکنده و boxing بسیاری از مقدارها در مجموعه‌های generic را کاهش می‌دهند. class به reference type محدود می‌کند و new() امکان ساخت T با constructor عمومی بدون پارامتر را می‌دهد. قیدها عملیات مجاز را برای کامپایلر مشخص می‌کنند. تبدیل T مقداری به object یا interface همچنان می‌تواند boxing داشته باشد؛ generic بودن تضمین حذف همهٔ تخصیص‌ها نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. type safety و کاهش cast را بیان کند.\n2. دو constraint و امکان حاصل از آن‌ها را توضیح دهد.\n3. تضمین نادرست حذف مطلق boxing ندهد.",
+          "Hint": "قید نوع، مجوز عملیات در بدنهٔ generic است."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-overview",
+          "li-core",
+          "ms-variance"
+        ],
+        "Activity": {
+          "Id": "C032",
+          "Title": "Covariance و contravariance",
+          "Kind": "explain",
+          "Prompt": "اگر Dog از Animal مشتق باشد، چرا IEnumerable<Dog> می‌تواند IEnumerable<Animal> باشد ولی List<Dog> به List<Animal> تبدیل نمی‌شود؟ contravariance را هم با Action<Animal> توضیح بده.",
+          "Code": "",
+          "Solution": "IEnumerable<out T> تولیدکنندهٔ T است و برای نوع‌های مرجعی covariance دارد؛ مصرف‌کننده می‌تواند هر Dog را Animal ببیند. List<T> قابلیت نوشتن هم دارد؛ تبدیل آن اجازهٔ افزودن Animal غیرDog می‌داد، پس invariant است. Action<in T> مصرف‌کننده است: تابعی که هر Animal را می‌پذیرد می‌تواند در جای Action<Dog> استفاده شود. این تبدیل‌های variance برای آرگومان‌های value type به همان شکل برقرار نیستند.",
+          "SolutionCode": "",
+          "Explanation": "1. جهت تبدیل IEnumerable و out را درست بگوید.\n2. خطر نوشتن در List و invariance را توضیح دهد.\n3. جهت Action و in و محدودیت reference type را درست بیان کند.",
+          "Hint": "نوع تولیدشده و نوع مصرف‌شده را جدا دنبال کن."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "li-core",
+          "ms-variance",
+          "ms-types"
+        ],
+        "Activity": {
+          "Id": "C033",
+          "Title": "Covariance آرایه و خطای زمان اجرا",
+          "Kind": "explain",
+          "Prompt": "چرا کد زیر کامپایل می‌شود ولی هنگام انتساب خطا می‌دهد؟ نوع واقعی آرایه و نوع ایستای متغیر را توضیح بده و بگو List<object> چه تفاوتی دارد.",
+          "Code": "object[] values = new string[1];\nvalues[0] = 42;",
+          "Solution": "آرایه‌های نوع مرجعی covariance دارند؛ string[] می‌تواند به object[] نسبت داده شود. اما شیء واقعی همچنان string[] است و فقط رشته یا null می‌پذیرد. نوشتن int بسته‌بندی‌شده موجب ArrayTypeMismatchException می‌شود. List<object> واقعی می‌تواند objectهای مختلف نگه دارد، ولی List<string> به List<object> تبدیل نمی‌شود؛ generic List invariant است.",
+          "SolutionCode": "",
+          "Explanation": "1. تبدیل اولیه را covariance آرایه بداند.\n2. نوع خطا و بررسی نوع عنصر در زمان اجرا را توضیح دهد.\n3. با invariance در List مقایسه کند.",
+          "Hint": "تبدیل مرجع، نوع واقعی محل ذخیره را تغییر نمی‌دهد."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-collections"
+        ],
+        "Activity": {
+          "Id": "C034",
+          "Title": "Array، List و LinkedList",
+          "Kind": "explain",
+          "Prompt": "برای دادهٔ با اندازهٔ ثابت، افزودن پشت‌سرهم و درج کنار یک node شناخته‌شده، بین Array، List<T> و LinkedList<T> چه انتخابی داری؟ هزینهٔ جست‌وجوی محل درج را هم در پاسخ حساب کن.",
+          "Code": "",
+          "Solution": "Array اندازهٔ ثابت و دسترسی اندیسی مستقیم دارد. List<T> آرایهٔ قابل‌رشد است؛ دسترسی اندیسی سریع و افزودن انتهایی با هزینهٔ سرشکن معمولاً ثابت دارد، اما درج وسط جابه‌جایی می‌خواهد. LinkedList<T> کنار node معلوم درج یا حذف ثابت دارد، ولی پیدا‌کردن node معمولاً خطی است و هر node سربار و locality ضعیف‌تری دارد. صرف زیادبودن درج، بدون دانستن محل، برتری قطعی LinkedList را ثابت نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. انتخاب سه سناریو را توجیه کند.\n2. هزینهٔ درج وسط List و یافتن node را بشناسد.\n3. مزیت LinkedList را به داشتن node معلوم مشروط کند.",
+          "Hint": "هزینهٔ پیدا‌کردن محل را از هزینهٔ تغییر ساختار جدا کن."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-equality",
+          "ms-collections"
+        ],
+        "Activity": {
+          "Id": "C035",
+          "Title": "Dictionary و قرارداد Equals/GetHashCode",
+          "Kind": "explain",
+          "Prompt": "Dictionary چگونه کلید را پیدا می‌کند؟ چه رابطه‌ای بین Equals و GetHashCode لازم است؟ اگر فیلدی که در hash کلید نقش دارد بعد از درج تغییر کند، چه مشکلی پیش می‌آید؟",
+          "Code": "",
+          "Solution": "hash برای محدودکردن محل جست‌وجو و equality برای تشخیص کلید واقعی استفاده می‌شود. دو کلید برابر باید hash برابر بدهند؛ hash برابر به‌تنهایی برابری را ثابت نمی‌کند. تغییر بخش مؤثر در hash یا equality پس از درج می‌تواند جست‌وجو و حذف را مختل کند، چون کلید در جای مناسب مقدار قبلی قرار دارد. کلید پایدار یا comparer مناسب لازم است؛ جست‌وجوی معمول میانگین ثابت است، نه تضمین همیشگی.",
+          "SolutionCode": "",
+          "Explanation": "1. نقش hash و equality را جدا کند.\n2. جهت صحیح قرارداد برابرها و برخورد hash را بگوید.\n3. خطر کلید mutable و راه پیشگیری را توضیح دهد.",
+          "Hint": "آدرس منطقی کلید نباید بعد از درج عوض شود."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-collections",
+          "ms-comparison"
+        ],
+        "Activity": {
+          "Id": "C036",
+          "Title": "HashSet و جست‌وجوی تکراری",
+          "Kind": "explain",
+          "Prompt": "برای تشخیص وجود و حذف شناسه‌های تکراری، HashSet<T> چه مزیتی نسبت به List<T> دارد؟ اگر شناسه‌ها باید بدون حساسیت به بزرگی حروف مقایسه شوند چه می‌کنی؟ ترتیب خروجی را هم در نظر بگیر.",
+          "Code": "",
+          "Solution": "HashSet یکتایی را بر اساس comparer حفظ می‌کند و Contains معمولاً میانگین ثابت دارد؛ جست‌وجوی List خطی است. برای شناسهٔ متنی مستقل از فرهنگ می‌توان HashSet<string>(StringComparer.OrdinalIgnoreCase) ساخت. این انتخاب سیاست برابری را صریح می‌کند. نباید برای قرارداد ترتیب خروجی به ترتیب پیمایش HashSet تکیه کرد؛ اگر ترتیب مهم است، آن را جدا حفظ یا مرتب می‌کنیم.",
+          "SolutionCode": "",
+          "Explanation": "1. یکتایی و هزینهٔ معمول جست‌وجو را مقایسه کند.\n2. comparer سازگار با شناسه پیشنهاد کند.\n3. ترتیب موردنیاز را مستقل از HashSet تضمین کند.",
+          "Hint": "برابری و ترتیب دو قرارداد مستقل مجموعه‌اند."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-collections"
+        ],
+        "Activity": {
+          "Id": "C037",
+          "Title": "IEnumerable، ICollection و IReadOnlyList",
+          "Kind": "explain",
+          "Prompt": "تفاوت IEnumerable<T>، ICollection<T>، IList<T> و IReadOnlyList<T> چیست؟ آیا برگرداندن IReadOnlyList<T> تضمین می‌کند که دادهٔ پشت آن هرگز تغییر نمی‌کند؟",
+          "Code": "",
+          "Solution": "IEnumerable امکان پیمایش می‌دهد. ICollection قرارداد Count و عملیات مجموعه مانند Add و Remove را اضافه می‌کند، هرچند پیاده‌سازی می‌تواند فقط‌خواندنی باشد. IList دسترسی اندیسی و عملیات موقعیتی دارد. IReadOnlyList پیمایش، Count و خواندن با اندیس می‌دهد، ولی فقط رابط مصرف‌کننده را محدود می‌کند؛ List پشت آن ممکن است از مسیر دیگری عوض شود. برای snapshot پایدار باید کپی یا ساختار immutable مناسب داشت.",
+          "SolutionCode": "",
+          "Explanation": "1. قابلیت اصلی هر چهار رابط را تفکیک کند.\n2. read-only view را با immutable data یکی نداند.\n3. برای snapshot پایدار کپی یا ساختار مناسب پیشنهاد کند.",
+          "Hint": "رابط فقط می‌گوید این مصرف‌کننده چه عملیاتی می‌بیند."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-yield",
+          "ms-dispose"
+        ],
+        "Activity": {
+          "Id": "C038",
+          "Title": "yield و طول عمر iterator",
+          "Kind": "explain",
+          "Prompt": "yield return و yield break چه می‌کنند؟ در iterator دارای using، اجرای بدنه چه زمانی شروع می‌شود و اگر مصرف‌کننده با foreach زودتر break کند، منبع چگونه آزاد می‌شود؟",
+          "Code": "",
+          "Solution": "yield return یک عنصر می‌دهد و وضعیت برای ادامه حفظ می‌شود؛ yield break پایان دنباله است. بدنهٔ iterator معمولاً با پیمایش شروع می‌شود، نه صرف فراخوانی متد. using در iterator تا پایان پیمایش یا dispose شدن enumerator زنده می‌ماند. foreach هنگام خروج، از جمله break، enumerator قابل‌dispose را آزاد می‌کند و finally یا using اجرا می‌شود. مصرف دستی باید Dispose را رعایت کند.",
+          "SolutionCode": "",
+          "Explanation": "1. توقف و ادامه و پایان iterator را توضیح دهد.\n2. زمان اجرای بدنه را deferred بداند.\n3. آزادسازی در break با foreach و مسئولیت مصرف دستی را بگوید.",
+          "Hint": "طول عمر enumerator تعیین‌کنندهٔ طول عمر منبع است."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-operators",
+          "ms-comparison"
+        ],
+        "Activity": {
+          "Id": "C039",
+          "Title": "OrderBy، ThenBy و مقایسه‌گر",
+          "Kind": "explain",
+          "Prompt": "برای مرتب‌سازی کارمندها ابتدا با Department و سپس Name، چرا ThenBy لازم است؟ OrderBy دوم چه می‌کند؟ برای نام نمایشی فارسی چه تفاوتی میان comparer فرهنگی و Ordinal وجود دارد؟",
+          "Code": "",
+          "Solution": "OrderBy(x => x.Department).ThenBy(x => x.Name) کلید دوم را داخل گروه کلید اول اعمال می‌کند. OrderBy دوم ترتیب اولیهٔ تازه‌ای بر اساس کلید خودش می‌سازد؛ در LINQ to Objects پایداری ترتیب می‌تواند ترتیب قبلی را برای کلیدهای برابر حفظ کند، اما جای ThenBy با همان قرارداد نیست. برای نام انسانی، comparer فرهنگی مناسب زبان کاربرد دارد؛ Ordinal بر نمایش کدواحدها تکیه دارد و برای شناسه‌ها مناسب‌تر است.",
+          "SolutionCode": "",
+          "Explanation": "1. ترکیب OrderBy و ThenBy را درست پیشنهاد کند.\n2. OrderBy دوم را کلید اصلی تازه بداند.\n3. مقایسهٔ فرهنگی و Ordinal را با کاربرد مرتبط کند.",
+          "Hint": "کلید اصلی و کلید حل تساوی را جدا مشخص کن."
+        }
+      },
+      {
+        "Category": "جنریک و مجموعه‌ها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-collections",
+          "ms-threading"
+        ],
+        "Activity": {
+          "Id": "C040",
+          "Title": "Queue، Stack و دسترسی هم‌زمان",
+          "Kind": "explain",
+          "Prompt": "برای صف پردازش و عملیات Undo، Queue<T> یا Stack<T> را چگونه انتخاب می‌کنی؟ چرا Count > 0 و سپس Dequeue در چند thread امن نیست؟ یک API مناسب برای برداشتن هم‌زمان پیشنهاد کن.",
+          "Code": "",
+          "Solution": "Queue رفتار FIFO برای صف پردازش و Stack رفتار LIFO برای Undo دارد. نوع‌های معمولی برای تغییر هم‌زمان ایمن نیستند. حتی با ساختار هم‌زمان، بررسی Count و برداشت دو عملیات جدا هستند و وضعیت بین آن‌ها می‌تواند عوض شود. ConcurrentQueue<T>.TryDequeue یا ConcurrentStack<T>.TryPop نتیجهٔ برداشت را در یک عملیات مناسب گزارش می‌کند؛ برای انتظار ناهمگام می‌توان سازوکار بالاتری انتخاب کرد.",
+          "SolutionCode": "",
+          "Explanation": "1. FIFO و LIFO را به دو کاربرد درست وصل کند.\n2. خطر check-then-act را توضیح دهد.\n3. TryDequeue یا TryPop مناسب پیشنهاد کند.",
+          "Hint": "مشاهدهٔ وضعیت، آن را برای عملیات بعدی رزرو نمی‌کند."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-linq",
+          "ms-expressions"
+        ],
+        "Activity": {
+          "Id": "C041",
+          "Title": "IEnumerable در برابر IQueryable",
+          "Kind": "explain",
+          "Prompt": "IEnumerable<T> و IQueryable<T> در ساخت و اجرای query چه تفاوتی دارند؟ در query دیتابیس، AsEnumerable و AsQueryable روی List چه اثری دارند؟ آیا هر IQueryable الزاماً به SQL تبدیل می‌شود؟",
+          "Code": "",
+          "Solution": "IEnumerable قرارداد پیمایش است؛ عملگرهای Enumerable معمولاً delegateهای محلی را اجرا می‌کنند. IQueryable درخت expression و provider دارد که می‌تواند query را ترجمه کند؛ SQL فقط یکی از providerهاست. AsEnumerable مرز انتخاب عملگرهای بعدی را به Enumerable می‌برد، بدون materialize فوری. AsQueryable روی List موتور دیتابیس نمی‌سازد؛ منبع همان حافظه است. قابلیت ترجمه به provider و عبارت وابسته است.",
+          "SolutionCode": "",
+          "Explanation": "1. پیمایش را از expression/provider تفکیک کند.\n2. AsEnumerable را مرز عملگر، نه materialize فوری بداند.\n3. AsQueryable روی List و نبود تضمین SQL را توضیح دهد.",
+          "Hint": "قرارداد query را از محل واقعی منبع جدا کن."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-linq"
+        ],
+        "Activity": {
+          "Id": "C042",
+          "Title": "Deferred execution با تغییر منبع",
+          "Kind": "explain",
+          "Prompt": "در کد زیر خروجی چیست و query چه زمانی اجرا می‌شود؟ اگر پیش از Add، q را با ToList ذخیره کنیم چه تغییری رخ می‌دهد؟",
+          "Code": "var numbers = new List<int> { 1, 2, 3 };\nvar q = numbers.Where(n => n > 1);\nnumbers.Add(4);\nConsole.WriteLine(string.Join(\",\", q));",
+          "Solution": "خروجی 2,3,4 است؛ Where هنگام ساخت q فهرست نتیجه نمی‌سازد و در زمان پیمایش، منبع فعلی را می‌بیند. string.Join دنباله را پیمایش می‌کند و عدد 4 تازه نیز حاضر است. اگر پیش از Add، نتیجه را با ToList materialize کنیم، snapshot آن نتیجه فقط 2 و 3 را دارد. این کپی فهرست برای اشیای مرجعی همچنان سطحی است.",
+          "SolutionCode": "",
+          "Explanation": "1. خروجی 2,3,4 را درست بدهد.\n2. اجرای Where را زمان پیمایش بداند.\n3. اثر ToList قبل از Add را به نتیجهٔ 2,3 محدود کند.",
+          "Hint": "تعریف query و پیمایش آن دو رخداد جدا هستند."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C043",
+          "Title": "ToList و پیمایش چندباره",
+          "Kind": "explain",
+          "Prompt": "یک IEnumerable پرهزینه را ابتدا Count و سپس foreach می‌کنیم. چه خطرهایی دارد و چه وقت ToList راه‌حل مناسبی است؟ هزینهٔ حافظه و تغییرپذیری منبع را هم توضیح بده.",
+          "Code": "",
+          "Solution": "اگر منبع lazy و قابل‌تکرار باشد، دو پیمایش می‌تواند کار پرهزینه یا I/O را دوباره انجام دهد؛ بعضی منابع یک‌بارمصرف‌اند و بعضی در هر بار نتیجهٔ متفاوت دارند. ToList یک بار نتیجه را می‌خواند و برای مصرف مجدد نگه می‌دارد، اما حافظه و زمان اولیه می‌خواهد و جریان نامتناهی را نمی‌توان کامل materialize کرد. برای فقط یک مصرف، پردازش جریانی می‌تواند مناسب‌تر باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. تکرار کار، اثر جانبی یا تفاوت نتیجه را تشخیص دهد.\n2. materialize یک‌باره را برای مصرف چندباره توجیه کند.\n3. محدودیت حافظه و منبع بزرگ یا نامتناهی را بگوید.",
+          "Hint": "اول مشخص کن داده واقعاً چند بار مصرف می‌شود."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C044",
+          "Title": "Select و SelectMany",
+          "Kind": "explain",
+          "Prompt": "هر سفارش چند قلم دارد. تفاوت orders.Select(o => o.Items) و SelectMany چیست؟ اگر خروجی باید هم شناسهٔ سفارش و هم نام قلم را داشته باشد، چه شکلی پیشنهاد می‌کنی؟",
+          "Code": "",
+          "Solution": "Select برای هر سفارش یک مجموعهٔ Items می‌دهد؛ خروجی دنباله‌ای از مجموعه‌هاست. SelectMany آن‌ها را به دنبالهٔ تخت اقلام تبدیل می‌کند. با result selector مانند SelectMany(o => o.Items, (o, item) => new { o.Id, item.Name }) اطلاعات والد و فرزند را نگه می‌داریم. سفارش بدون قلم در flatten معمول عنصری تولید نمی‌کند؛ حفظ والد خالی قرارداد دیگری می‌خواهد.",
+          "SolutionCode": "",
+          "Explanation": "1. شکل خروجی nested و flat را درست بیان کند.\n2. یک projection معتبر با اطلاعات والد و قلم بدهد.\n3. رفتار سفارش بدون قلم را توضیح دهد.",
+          "Hint": "تعداد عناصر هر خروجی را نسبت به هر ورودی بررسی کن."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C045",
+          "Title": "فیلتر و projection پیش از materialize",
+          "Kind": "explain",
+          "Prompt": "در یک query قابل‌ترجمهٔ دیتابیس، فیلتر فعال‌بودن و انتخاب دو ستون را قبل یا بعد از ToList قرار می‌دهی؟ اثر آن بر انتقال داده را بگو؛ آیا هر متد دلخواه C# را می‌توان داخل provider اجرا کرد؟",
+          "Code": "",
+          "Solution": "معمولاً Where و Select موردنیاز را روی IQueryable و پیش از ToList می‌گذاریم تا provider بتواند فیلتر و projection را در منبع اجرا کند و دادهٔ کمتری برگرداند. ToList مرز materialization است؛ عملیات بعدی روی دادهٔ خوانده‌شده انجام می‌شود. متد دلخواه C# لزوماً ترجمه ندارد؛ باید قابلیت provider را بررسی کرد و مرز اجرای محلی را آگاهانه انتخاب کرد. نمی‌توان بدون بررسی SQL یا اندازه‌گیری، نتیجهٔ سرعت قطعی داد.",
+          "SolutionCode": "",
+          "Explanation": "1. فیلتر و projection قابل‌ترجمه را پیش از ToList قرار دهد.\n2. اثر بر دادهٔ منتقل‌شده را توضیح دهد.\n3. محدودیت ترجمهٔ متد دلخواه را بشناسد.",
+          "Hint": "چه چیزی به منبع فرستاده می‌شود و چه چیزی محلی می‌ماند؟"
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C046",
+          "Title": "First، Single و حالت بدون نتیجه",
+          "Kind": "explain",
+          "Prompt": "First، FirstOrDefault، Single و SingleOrDefault در صفر، یک و چند نتیجه چگونه رفتار می‌کنند؟ برای «ایمیل یکتا» و «اولین پیام جدید» کدام مناسب‌تر است؟",
+          "Code": "",
+          "Solution": "First اولین نتیجه را می‌گیرد و در نبود نتیجه خطا می‌دهد؛ FirstOrDefault در نبود نتیجه default می‌دهد. Single دقیقاً یک نتیجه می‌خواهد و برای صفر یا چند نتیجه خطا می‌دهد. SingleOrDefault صفر را با default می‌پذیرد ولی چند نتیجه را رد می‌کند. برای ایمیلِ با قرارداد یکتا، خانوادهٔ Single مناسب است؛ برای اولین پیام، خانوادهٔ First همراه ترتیب مشخص. default برای int صفر است و همیشه null نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. رفتار چهار عملگر در سه تعداد را درست بگوید.\n2. انتخاب سناریوی یکتا و اولین مورد را توجیه کند.\n3. default را الزاماً null نداند.",
+          "Hint": "انتخاب عملگر بخشی از بیان قرارداد تعداد نتیجه‌هاست."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators",
+          "ms-collections"
+        ],
+        "Activity": {
+          "Id": "C047",
+          "Title": "Any، Count و All روی دنبالهٔ خالی",
+          "Kind": "explain",
+          "Prompt": "برای دانستن اینکه حداقل یک عضو شرط را دارد، Any(predicate) و Count(predicate) چه تفاوتی دارند؟ نتیجهٔ All روی دنبالهٔ خالی چیست؟ آیا Count همیشه ناچار به پیمایش است؟",
+          "Code": "",
+          "Solution": "Any(predicate) با اولین تطابق می‌تواند تمام شود؛ Count(predicate) تعداد همهٔ تطابق‌ها را می‌خواهد. برای صرف وجود، Any منظور را روشن‌تر بیان می‌کند. All روی دنبالهٔ خالی true است، چون عضو ناقضی وجود ندارد؛ برای «غیرخالی و همه معتبر» باید Any و All را طبق قرارداد ترکیب کرد. Count بدون predicate برای برخی مجموعه‌ها از Count ذخیره‌شده استفاده می‌کند؛ هزینهٔ همیشگی خطی ادعای درستی نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. توقف زودهنگام وجود در برابر شمارش تطابق‌ها را توضیح دهد.\n2. All خالی را true بداند.\n3. بهینه‌سازی Count برخی مجموعه‌ها را از Count(predicate) جدا کند.",
+          "Hint": "«همه معتبرند» الزاماً به معنای «حداقل یکی وجود دارد» نیست."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C048",
+          "Title": "GroupBy، ToLookup و گروه‌بندی",
+          "Kind": "explain",
+          "Prompt": "برای گروه‌بندی سفارش‌ها بر اساس مشتری، GroupBy و ToLookup در LINQ to Objects چه تفاوتی از نظر زمان اجرا دارند؟ اگر چند بار دسترسی با کلید می‌خواهیم، چه انتخابی داری؟",
+          "Code": "",
+          "Solution": "GroupBy معمولاً deferred است؛ وقتی پیمایشش شروع می‌شود گروه‌ها را از منبع می‌سازد و برای این کار buffering دارد. ToLookup فوراً منبع را می‌خواند و نگاشت یک کلید به چند مقدار را نگه می‌دارد. برای دسترسی چندباره با کلید، lookup آماده می‌تواند مناسب باشد؛ کلید ناموجود دنبالهٔ خالی می‌دهد. هر دو برای دادهٔ بزرگ هزینهٔ حافظه دارند و comparer بر مرزبندی گروه‌ها اثر دارد.",
+          "SolutionCode": "",
+          "Explanation": "1. deferred بودن GroupBy و فوری بودن ToLookup را درست بگوید.\n2. دسترسی چندمقداری با کلید و کلید ناموجود را توضیح دهد.\n3. buffering و هزینهٔ حافظه را در نظر بگیرد.",
+          "Hint": "گروه‌بندی برای مصرف یک‌باره با شاخص دسترسی چندباره فرق دارد."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators",
+          "ms-joins"
+        ],
+        "Activity": {
+          "Id": "C049",
+          "Title": "Join و حفظ والد بدون فرزند",
+          "Kind": "explain",
+          "Prompt": "برای نمایش همهٔ مشتری‌ها همراه سفارش‌هایشان، حتی مشتری بدون سفارش، چرا Join معمول کافی نیست؟ یک الگوی left join در LINQ پیشنهاد بده و رفتار چند سفارش برای یک مشتری را توضیح بده.",
+          "Code": "",
+          "Solution": "Join معمول فقط زوج‌های دارای کلید متناظر را می‌دهد؛ مشتری بدون سفارش حذف می‌شود. الگوی GroupJoin همراه SelectMany و DefaultIfEmpty، یا query با join ... into و from ... DefaultIfEmpty، مشتری بی‌سفارش را با فرزند پیش‌فرض حفظ می‌کند. برای فرزند مرجعی معمولاً null را باید در projection مدیریت کرد. مشتری با چند سفارش چند ردیف می‌دهد. LeftJoin در .NET 10 نیز گزینهٔ مستقیم‌تری است.",
+          "SolutionCode": "",
+          "Explanation": "1. حذف والد بدون تطابق در Join را بشناسد.\n2. یک left join معتبر و مدیریت فرزند پیش‌فرض پیشنهاد کند.\n3. تکثیر ردیف برای چند فرزند را توضیح دهد.",
+          "Hint": "ابتدا مشخص کن کدام سمت باید در نبود تطابق باقی بماند."
+        }
+      },
+      {
+        "Category": "LINQ و جریان داده",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-linq",
+          "ms-operators"
+        ],
+        "Activity": {
+          "Id": "C050",
+          "Title": "صفحه‌بندی پایدار با LINQ",
+          "Kind": "explain",
+          "Prompt": "برای صفحه‌بندی داده‌ها با Skip و Take چرا ترتیب قطعی لازم است؟ اگر چند رکورد زمان یکسان دارند، چه می‌کنی؟ برای offset بزرگ و دادهٔ درحال‌تغییر چه محدودیتی می‌بینی؟",
+          "Code": "",
+          "Solution": "بدون OrderBy قرارداد پایداری برای صفحات نداریم. اگر زمان تکراری است، ThenBy روی کلید یکتا مثل Id، ترتیب کل را قطعی می‌کند. Skip در offset بزرگ می‌تواند کار زیادی برای عبور از داده بخواهد؛ درج و حذف هم‌زمان می‌تواند میان صفحات تکرار یا جاافتادگی بسازد. برای مرور ترتیبی بزرگ، صفحه‌بندی مبتنی بر آخرین کلید با ترتیب سازگار قابل‌بررسی است؛ برای snapshot ثابت، سیاست ثبات داده نیز لازم است.",
+          "SolutionCode": "",
+          "Explanation": "1. ترتیب قطعی و tie-breaker یکتا را لازم بداند.\n2. محدودیت offset بزرگ و تغییر هم‌زمان را توضیح دهد.\n3. جایگزین keyset یا snapshot را متناسب پیشنهاد کند.",
+          "Hint": "هر صفحه باید ادامهٔ یک ترتیب تعریف‌شده باشد."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-delegates"
+        ],
+        "Activity": {
+          "Id": "C051",
+          "Title": "Delegate، Func، Action و Predicate",
+          "Kind": "explain",
+          "Prompt": "Delegate چه قراردادی دارد و Func، Action و Predicate چه تفاوتی دارند؟ برای فیلتر عددها و ثبت پیام مثال بزن. در multicast delegate با مقدار بازگشتی، نتیجهٔ عادی از کدام فراخوانی می‌آید؟",
+          "Code": "",
+          "Solution": "Delegate ارجاع نوع‌امن به متد سازگار است. Func نتیجه برمی‌گرداند، Action خروجی ندارد و Predicate<T> نتیجهٔ bool می‌دهد. n => n > 0 یک Predicate<int> و message => Console.WriteLine(message) یک Action<string> می‌تواند باشد. در multicast، در اجرای بدون خطا، نتیجهٔ آخرین handler برمی‌گردد؛ برای جمع‌آوری همهٔ نتایج باید invocation list را صریح مدیریت کرد. خطای یک handler می‌تواند ادامهٔ فراخوانی را متوقف کند.",
+          "SolutionCode": "",
+          "Explanation": "1. سه قرارداد نتیجه را درست تفکیک کند.\n2. دو مثال با امضای سازگار بدهد.\n3. نتیجهٔ آخرین handler در اجرای موفق multicast را بگوید.",
+          "Hint": "امضای ورودی و خروجی، سازگاری متد را تعیین می‌کند."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-delegates",
+          "ms-gc"
+        ],
+        "Activity": {
+          "Id": "C052",
+          "Title": "Event، delegate و نشت حافظهٔ مشترک",
+          "Kind": "explain",
+          "Prompt": "event چه محدودیتی نسبت به یک فیلد delegate عمومی ایجاد می‌کند؟ چرا publisher طولانی‌عمر ممکن است subscriber را در حافظه نگه دارد و چگونه اشتراک را درست پایان می‌دهی؟",
+          "Code": "",
+          "Solution": "event معمول به مصرف‌کننده اجازهٔ += و -= می‌دهد، ولی اجازهٔ جایگزینی کل delegate یا invoke آن را خارج از نوع اعلان‌کننده نمی‌دهد. publisher می‌تواند از طریق delegate به subscriber مرجع نگه دارد؛ اگر طول عمرش بیشتر باشد، subscriber هنوز reachable می‌ماند. هنگام پایان عمر مصرف‌کننده unsubscribe می‌کنیم، مثلاً در Dispose. برای lambda باید همان handler ثبت‌شده را نگه داریم؛ lambda تازه لزوماً همان delegate نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. محدودیت مصرف‌کنندهٔ event نسبت به delegate عمومی را بگوید.\n2. زنجیرهٔ مرجع publisher به subscriber را توضیح دهد.\n3. unsubscribe با همان handler و زمان مناسب پیشنهاد کند.",
+          "Hint": "GC شیء قابل‌دسترسی از publisher را زباله حساب نمی‌کند."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "li-core",
+          "ms-lambda"
+        ],
+        "Activity": {
+          "Id": "C053",
+          "Title": "Closure و متغیر حلقه",
+          "Kind": "explain",
+          "Prompt": "کد زیر چه عددهایی چاپ می‌کند و چرا؟ با کمترین تغییر طوری اصلاحش کن که 0، 1 و 2 چاپ شوند. تفاوت گرفتن متغیر و گرفتن مقدار را توضیح بده.",
+          "Code": "var actions = new List<Action>();\nfor (int i = 0; i < 3; i++)\n    actions.Add(() => Console.WriteLine(i));\nforeach (var action in actions) action();",
+          "Solution": "سه بار 3 چاپ می‌شود. lambdaها متغیر مشترک i را capture می‌کنند و هنگام اجرا، حلقه تمام شده و i برابر 3 است. داخل هر تکرار var copy = i می‌سازیم و () => copy را ثبت می‌کنیم تا هر handler متغیر مستقل داشته باشد. capture تصویر ثابت از مقدار در زمان تعریف نیست. متغیر foreach در C# امروزی برای هر تکرار جداست و نباید این رفتار for را به آن تعمیم داد.",
+          "SolutionCode": "",
+          "Explanation": "1. خروجی 3،3،3 را درست اعلام کند.\n2. capture متغیر مشترک را علت بداند.\n3. کپی محلیِ هر تکرار و استفاده از آن در lambda را پیشنهاد کند.",
+          "Hint": "زمان ساخت تابع با زمان خواندن متغیر یکی نیست."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-overview",
+          "ms-expressions"
+        ],
+        "Activity": {
+          "Id": "C054",
+          "Title": "Expression tree در برابر Func",
+          "Kind": "explain",
+          "Prompt": "تفاوت Func<int,bool> و Expression<Func<int,bool>> چیست؟ چرا query provider به expression tree نیاز دارد؟ Compile چه می‌کند و چرا ترجمهٔ همهٔ lambdaها تضمین‌شده نیست؟",
+          "Code": "",
+          "Solution": "Func رفتار قابل‌فراخوانی است؛ Expression<Func<...>> ساختار داده‌ای توصیف‌کنندهٔ همان عبارت است و می‌توان nodeهای آن را بررسی کرد. provider از این ساختار برای ترجمه به زبان منبع استفاده می‌کند. Compile یک delegate برای اجرای محلی می‌سازد و خودش query را به SQL تبدیل نمی‌کند. همهٔ syntaxها به expression tree پشتیبانی‌شده تبدیل نمی‌شوند و provider هم همهٔ nodeها یا متدها را ترجمه نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. رفتار اجرایی را از نمایش داده‌ای عبارت جدا کند.\n2. کاربرد provider و Compile را درست بگوید.\n3. دو مرز پشتیبانی زبان و ترجمهٔ provider را بشناسد.",
+          "Hint": "یکی کد را اجرا می‌کند؛ دیگری امکان بررسی شکل کد را می‌دهد."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-aot",
+          "ms-reflection"
+        ],
+        "Activity": {
+          "Id": "C055",
+          "Title": "Reflection و attribute",
+          "Kind": "explain",
+          "Prompt": "Reflection برای کشف propertyهای یک نوع چه می‌کند؟ attribute چه نوع اطلاعاتی اضافه می‌کند و چرا صرف افزودن attribute رفتار اعتبارسنجی ایجاد نمی‌کند؟ یک ملاحظهٔ هزینه یا انتشار بگو.",
+          "Code": "",
+          "Solution": "Reflection با Type و metadata اعضای نوع را در زمان اجرا بررسی می‌کند و در صورت نیاز می‌تواند عضو را فراخوانی کند. attribute دادهٔ توصیفی روی عضو یا نوع است؛ کد یا framework باید آن را بخواند و به آن معنا بدهد، پس attribute خودبه‌خود validation اجرا نمی‌کند. کشف تکراری metadata هزینه دارد و می‌توان نتایج مناسب را cache کرد. در trimming و AOT باید حفظ metadata موردنیاز بررسی شود.",
+          "SolutionCode": "",
+          "Explanation": "1. کشف اعضا با metadata را توضیح دهد.\n2. attribute را دادهٔ نیازمند مصرف‌کننده بداند.\n3. هزینهٔ کشف تکراری یا محدودیت trimming/AOT را مطرح کند.",
+          "Hint": "نشانه‌گذاری داده با اجرای منطقِ خوانندهٔ آن فرق دارد."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-exceptions"
+        ],
+        "Activity": {
+          "Id": "C056",
+          "Title": "throw و throw ex در بازپرتاب خطا",
+          "Kind": "explain",
+          "Prompt": "داخل catch، تفاوت throw; و throw ex; چیست؟ اگر بخواهی زمینهٔ دامنه‌ای اضافه کنی، چگونه خطای اصلی را نگه می‌داری؟ دلیل اهمیت stack trace را هم بگو.",
+          "Code": "",
+          "Solution": "throw; همان exception را با حفظ مسیر اصلی stack trace بازپرتاب می‌کند. throw ex; مسیر stack را از محل بازپرتاب تغییر می‌دهد و تشخیص منشأ را سخت می‌کند. برای افزودن معنا می‌توان exception مناسب تازه با پیام مفید و خطای قبلی به‌عنوان InnerException ساخت. باید در مرز مناسب ترجمه شود و پیام یا لاگ، دادهٔ حساس را افشا نکند؛ گرفتن و پرتاب بی‌دلیل فقط نویز می‌سازد.",
+          "SolutionCode": "",
+          "Explanation": "1. اثر دو شکل بازپرتاب بر stack trace را درست بگوید.\n2. اهمیت منشأ خطا را برای عیب‌یابی توضیح دهد.\n3. نگه‌داشتن خطای اصلی در InnerException را پیشنهاد کند.",
+          "Hint": "اطلاعات منشأ خطا بخشی از قرارداد عیب‌یابی است."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-exceptions"
+        ],
+        "Activity": {
+          "Id": "C057",
+          "Title": "ترتیب catch، فیلتر خطا و finally",
+          "Kind": "explain",
+          "Prompt": "چرا catch اختصاصی باید پیش از catch عمومی قرار بگیرد؟ catch when چه کاربردی دارد؟ نقش finally را توضیح بده و بگو آیا در توقف اجباری فرایند هم اجرای آن تضمین می‌شود؟",
+          "Code": "",
+          "Solution": "اولین catch سازگار انتخاب می‌شود؛ catch عمومی پیشین می‌تواند catchهای اختصاصی بدون فیلتر را غیرقابل‌دسترسی کند. when شرطی برای پذیرش همان خطا می‌گذارد، مثلاً رسیدگی فقط به کد خاص. finally در خروج معمول از try و unwind استثنا برای پاکسازی اجرا می‌شود. با پایان اجباری فرایند، FailFast یا قطع سیستم نمی‌توان اجرای آن را تضمین کرد؛ نگه‌داری حیاتی داده نباید فقط به پایان فرایند متکی باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. ترتیب خاص به عام و انتخاب catch را توضیح دهد.\n2. یک کاربرد فیلتر when بدهد.\n3. نقش پاکسازی finally و حد تضمین آن را درست بگوید.",
+          "Hint": "خروج کنترل‌شده از بلوک با نابودی فرایند متفاوت است."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-overview",
+          "ms-numbers",
+          "ms-comparison",
+          "ms-parsing"
+        ],
+        "Activity": {
+          "Id": "C058",
+          "Title": "Parse، TryParse و فرهنگ ورودی",
+          "Kind": "explain",
+          "Prompt": "برای ورودی عددیِ کاربر که ممکن است نامعتبر باشد، Parse یا TryParse را انتخاب می‌کنی؟ رفتار خطای قالب و خارج‌بودن از محدوده را بگو. برای فایل تبادل با قالب ثابت، culture را چگونه تعیین می‌کنی؟",
+          "Code": "",
+          "Solution": "Parse برای متن بدقالب یا مقدار خارج از محدوده exception مناسب می‌دهد. TryParse در این شکست‌های عادی false برمی‌گرداند و باید نتیجهٔ bool را بررسی کرد؛ برای ورودی کاربر معمولاً مناسب‌تر است. مقدار out در شکست را نباید به‌عنوان دادهٔ موفق مصرف کرد. در قالب تبادل ثابت، NumberStyles و CultureInfo.InvariantCulture یا فرهنگ قراردادی صریح انتخاب می‌شود؛ رابط کاربر می‌تواند فرهنگ کاربر را رعایت کند.",
+          "SolutionCode": "",
+          "Explanation": "1. شکست Parse و نتیجهٔ TryParse را درست بگوید.\n2. مصرف مقدار فقط پس از موفقیت را لازم بداند.\n3. فرهنگ ثابت تبادل را از فرهنگ رابط کاربر جدا کند.",
+          "Hint": "علامت اعشار بخشی از قرارداد متن ورودی است."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-exceptions",
+          "ms-cancellation"
+        ],
+        "Activity": {
+          "Id": "C059",
+          "Title": "خطای موردانتظار، exception و بلعیدن خطا",
+          "Kind": "explain",
+          "Prompt": "در ثبت سفارش، «موجودی کافی نیست» و «اتصال ذخیره‌ساز قطع شد» را چگونه از نظر نتیجه و exception مدیریت می‌کنی؟ چرا catch(Exception) خالی خطرناک است و cancellation را چگونه از شکست عادی جدا می‌کنی؟",
+          "Code": "",
+          "Solution": "ردشدنِ موردانتظار دامنه می‌تواند نتیجهٔ صریح قابل‌رسیدگی باشد؛ خطای زیرساختی باید طبق قرارداد در مرز مناسب ثبت، ترجمه یا منتشر شود. تصمیم exception یا result به قرارداد سیستم وابسته است، ولی خطا نباید موفقیت جعلی بسازد. catch خالی علت و شکست عملیات را پنهان می‌کند. OperationCanceledException مرتبط با token لغوشده را معمولاً به‌عنوان لغو درخواست حفظ می‌کنیم، نه خطای کسب‌وکار یا موفقیت.",
+          "SolutionCode": "",
+          "Explanation": "1. شکست موردانتظار و زیرساختی را با قرارداد روشن تفکیک کند.\n2. خطر موفقیت ظاهری و ازبین‌رفتن اطلاعات در catch خالی را بگوید.\n3. cancellation مرتبط را از شکست عادی جدا کند.",
+          "Hint": "مصرف‌کننده باید بتواند موفقیت، رد دامنه‌ای و لغو را تشخیص دهد."
+        }
+      },
+      {
+        "Category": "متدها، رویدادها و خطاها",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-overview",
+          "ms-records",
+          "ms-types"
+        ],
+        "Activity": {
+          "Id": "C060",
+          "Title": "کپی سطحی و عمیق یک مدل",
+          "Kind": "explain",
+          "Prompt": "کپی سطحی و کپی عمیق چه تفاوتی دارند؟ اگر MemberwiseClone روی شیئی دارای List<Address> اجرا شود، تغییر آدرس‌ها چه اثری روی اصل دارد؟ برای یک کپی مستقل چه قراردادی تعریف می‌کنی؟",
+          "Code": "",
+          "Solution": "کپی سطحی فیلدها را کپی می‌کند؛ مراجع به اشیای داخلی مشترک می‌مانند. MemberwiseClone فهرست Address را عمیق کپی نمی‌کند، پس تغییر فهرست مشترک یا عضو مشترک از هر دو مسیر دیده می‌شود. برای استقلال باید خود فهرست و هر Address تغییرپذیرِ موردنیاز کپی شوند. عمق کپی باید طبق مدل تعریف شود؛ چرخه‌ها، هویت و مراجع عمداً مشترک، کپی عمومی بی‌قاعده را نامناسب می‌کنند.",
+          "SolutionCode": "",
+          "Explanation": "1. کپی مرجع داخلی در shallow copy را توضیح دهد.\n2. اشتراک فهرست و Addressها را تشخیص دهد.\n3. ساخت مجموعه و عناصر مستقل را طبق قرارداد پیشنهاد کند.",
+          "Hint": "کپی یک ظرف الزاماً محتویات مرجعی آن را تکثیر نمی‌کند."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-async"
+        ],
+        "Activity": {
+          "Id": "C061",
+          "Title": "async/await و ماشین حالت",
+          "Kind": "explain",
+          "Prompt": "در اجرای متد async، پیش از اولین await چه رخ می‌دهد؟ اگر Task از قبل تمام شده باشد چه می‌شود؟ نقش ماشین حالت را توضیح بده و بگو آیا async خودش thread تازه می‌سازد.",
+          "Code": "",
+          "Solution": "متد async به‌صورت همگام شروع می‌شود و تا await نیازمند انتظار یا پایان متد پیش می‌رود. await روی Task تکمیل‌شده می‌تواند همان‌جا ادامه یابد. برای انتظار ناتمام، وضعیت لازم حفظ و ادامه ثبت می‌شود تا caller بی‌جهت مسدود نشود. کامپایلر این جریان را به ماشین حالت تبدیل می‌کند. async و await ذاتاً thread تازه نمی‌سازند و ادامه هم الزاماً روی thread دیگری نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. شروع همگام و await تکمیل‌شده را درست توضیح دهد.\n2. حفظ وضعیت و continuation را به ماشین حالت وصل کند.\n3. ساخت thread یا تغییر thread را تضمین async نداند.",
+          "Hint": "ناتمام‌بودن awaitable مرز واقعی تعلیق است."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-core",
+          "ms-async",
+          "ms-threading"
+        ],
+        "Activity": {
+          "Id": "C062",
+          "Title": "Task، Thread و ThreadPool",
+          "Kind": "explain",
+          "Prompt": "Task چه تفاوتی با Thread دارد و ThreadPool چه نقشی دارد؟ یک عملیات I/O ناهمگام را با محاسبه‌ای که با Task.Run اجرا می‌شود مقایسه کن؛ آیا هر Task یک thread اختصاصی دارد؟",
+          "Code": "",
+          "Solution": "Thread مسیر اجرای سیستم‌عامل با هزینه و طول عمر مستقل است. Task نمایندهٔ تکمیل یک عملیات و نتیجه یا خطای آن است؛ ممکن است محاسبه، I/O یا تکمیل دستی باشد. Task.Run معمولاً محاسبه را روی ThreadPool صف می‌کند. در I/O واقعاً ناهمگام، هنگام انتظار لازم نیست thread کارگری به همان درخواست اختصاص یابد. ThreadPool threadها را بازاستفاده و مدیریت می‌کند؛ نسبت یک‌به‌یک Task و Thread وجود ندارد.",
+          "SolutionCode": "",
+          "Explanation": "1. نمایندهٔ عملیات را از مسیر اجرا جدا کند.\n2. نقش ThreadPool در Task.Run را بگوید.\n3. انتظار I/O و نبود thread اختصاصی برای هر Task را توضیح دهد.",
+          "Hint": "یک عملیات درحال‌انتظار همیشه به یک thread درحال‌انتظار نیاز ندارد."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "مقدماتی",
+        "SourceIds": [
+          "li-core",
+          "ms-async"
+        ],
+        "Activity": {
+          "Id": "C063",
+          "Title": "خطر async void",
+          "Kind": "explain",
+          "Prompt": "چرا برای عملیات عادی async Task به async void ترجیح دارد؟ caller چگونه پایان و خطا را دنبال می‌کند؟ چه کاربرد معمولی برای async void باقی می‌ماند؟",
+          "Code": "",
+          "Solution": "Task اجازه می‌دهد caller پایان، خطا و لغو عملیات را با await مشاهده و ترکیب کند. async void چیزی برای await برنمی‌گرداند؛ خطاهای ناهمگام آن معمولاً از مسیر context منتشر می‌شوند و try/catch دور صرف فراخوانی، آن‌ها را مثل await روی Task نمی‌گیرد. کاربرد معمول async void، event handler با امضای void اجباری است؛ آن هم باید مدیریت خطای مناسب درون handler داشته باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. قابلیت await، ترکیب و مشاهدهٔ خطای Task را توضیح دهد.\n2. محدودیت try/catch caller برای async void را بشناسد.\n3. event handler اجباری را کاربرد مناسب بداند.",
+          "Hint": "caller باید یک نشانهٔ قابل‌انتظار برای پایان عملیات داشته باشد."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-async",
+          "ms-configureawait",
+          "ms-starvation"
+        ],
+        "Activity": {
+          "Id": "C064",
+          "Title": "Result، Wait و deadlock وابسته به context",
+          "Kind": "explain",
+          "Prompt": "در یک رابط UI تک‌ریسمانی، چرا .Result روی متد async ممکن است deadlock بسازد؟ راه اصلی اصلاح چیست؟ آیا همین نوع deadlock در ASP.NET Core پیش‌فرض همیشه رخ می‌دهد؟",
+          "Code": "",
+          "Solution": "اگر متد async context رابط را برای continuation ثبت کند، .Result همان thread لازم برای ادامه را مسدود می‌کند؛ caller منتظر Task و ادامه منتظر thread می‌ماند. راه اصلی await در زنجیرهٔ فراخوانی است. ASP.NET Core به‌طور پیش‌فرض SynchronizationContext اختصاصی مشابه UI ندارد، پس همان چرخه تضمین‌شده نیست؛ بااین‌حال blocking می‌تواند ظرفیت ThreadPool را مصرف کند و زیر بار starvation ایجاد کند.",
+          "SolutionCode": "",
+          "Explanation": "1. چرخهٔ انتظار UI و continuation را توضیح دهد.\n2. راه‌حل async در زنجیره با await را پیشنهاد کند.\n3. ASP.NET Core پیش‌فرض و خطر starvation را دقیق تفکیک کند.",
+          "Hint": "ببین ادامهٔ عملیات برای اجرا به کدام context نیاز دارد."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-configureawait"
+        ],
+        "Activity": {
+          "Id": "C065",
+          "Title": "ConfigureAwait(false) و حدود اثر آن",
+          "Kind": "explain",
+          "Prompt": "ConfigureAwait(false) چه چیزی را دربارهٔ continuation تغییر می‌دهد؟ برای کتابخانهٔ عمومی و کد وابسته به UI چگونه تصمیم می‌گیری؟ آیا اجرای ادامه روی thread تازه یا حذف همهٔ deadlockها را تضمین می‌کند؟",
+          "Code": "",
+          "Solution": "ConfigureAwait(false) از await می‌خواهد continuation را برای بازگشت به context یا scheduler ثبت‌شدهٔ معمول مقید نکند. در کتابخانه‌ای که به UI وابسته نیست غالباً مفید است؛ کد UI باید نیاز بازگشت به context را رعایت کند. ادامه ممکن است همگام یا روی thread موجود اجرا شود؛ thread تازه تضمین نمی‌شود. این گزینه درمان همهٔ deadlockها نیست و جریان ExecutionContext مانند AsyncLocal را به‌خودی‌خود قطع نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. اثر بر capture context را درست توضیح دهد.\n2. نیاز کتابخانه و UI را جدا بسنجد.\n3. تضمین thread تازه یا رفع عمومی deadlock ندهد.",
+          "Hint": "هدف، حذف الزام بازگشت است؛ نه انتخاب یک thread مشخص."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-cancellation"
+        ],
+        "Activity": {
+          "Id": "C066",
+          "Title": "CancellationToken و لغو همکاری‌محور",
+          "Kind": "explain",
+          "Prompt": "لغو را چگونه از endpoint تا عملیات I/O و حلقهٔ محاسباتی منتقل می‌کنی؟ Cancel روی CancellationTokenSource چه چیزی را تضمین نمی‌کند؟ تفاوت درخواست لغو و پایان واقعی عملیات را توضیح بده.",
+          "Code": "",
+          "Solution": "token را به متدهای پایین‌دست و overloadهای I/O منتقل می‌کنیم. حلقهٔ طولانی باید در نقاط مناسب IsCancellationRequested یا ThrowIfCancellationRequested را بررسی کند. Cancel درخواست را اعلام می‌کند؛ اجرای جاری را به‌زور نمی‌کشد و جبران اثرهای انجام‌شده را هم تضمین نمی‌کند. caller برای پایان واقعی Task را مشاهده می‌کند. آزادسازی منبع باید در using یا finally باقی بماند و لغو مرتبط به‌درستی منتشر شود.",
+          "SolutionCode": "",
+          "Explanation": "1. عبور token و بررسی حلقه را توضیح دهد.\n2. لغو را همکاری‌محور و جدا از پایان یا rollback بداند.\n3. مشاهدهٔ پایان و پاکسازی منبع را حفظ کند.",
+          "Hint": "token پیام درخواست است، نه کلید قطع اجباری thread."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-async",
+          "ms-cancellation"
+        ],
+        "Activity": {
+          "Id": "C067",
+          "Title": "WhenAll، WhenAny و مشاهدهٔ خطا",
+          "Kind": "explain",
+          "Prompt": "Task.WhenAll و Task.WhenAny چه زمانی کامل می‌شوند؟ اگر چند Task خطا بدهند، خطاهای WhenAll را چگونه می‌بینی؟ چرا پس از await WhenAny معمولاً باید Task برنده را هم await کرد؟",
+          "Code": "",
+          "Solution": "WhenAll پس از پایان همهٔ Taskهای داده‌شده کامل می‌شود؛ خودش الزاماً آغازگر عملیات‌ها نیست. اگر چند خطا باشند، Task ترکیبی آن‌ها را در Exception نگه می‌دارد، ولی await معمولاً یکی را پرتاب می‌کند؛ برای همه باید Exception آن Task را بررسی کرد. WhenAny با پایان اولین Task، همان Task را برمی‌گرداند. برنده می‌تواند faulted یا canceled باشد، پس باید خودش await شود؛ بازنده‌ها خودکار لغو نمی‌شوند.",
+          "SolutionCode": "",
+          "Explanation": "1. شرط پایان دو ترکیب را درست بگوید.\n2. خطای await را از مجموعهٔ خطاهای Task WhenAll جدا کند.\n3. await برنده و ادامهٔ بازنده‌ها را توضیح دهد.",
+          "Hint": "پایانِ انتظار برای برنده، به معنای موفقیت خود برنده نیست."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-async",
+          "ms-starvation"
+        ],
+        "Activity": {
+          "Id": "C068",
+          "Title": "CPU-bound، I/O-bound و Task.Run روی سرور",
+          "Kind": "explain",
+          "Prompt": "برای خواندن HTTP و محاسبهٔ سنگین تصویر، چه الگوی async انتخاب می‌کنی؟ چرا پیچیدن هر درخواست HTTP در Task.Run روی سرور الزاماً throughput را بهتر نمی‌کند؟",
+          "Code": "",
+          "Solution": "برای HTTP از API ناهمگام و await مستقیم استفاده می‌کنیم تا انتظار شبکه thread را بی‌جهت اشغال نکند. پردازش تصویر CPU-bound است؛ در UI، Task.Run می‌تواند پاسخ‌گویی رابط را حفظ کند. روی سرور این انتقال ظرفیت CPU تازه نمی‌سازد و صف و زمان‌بندی اضافه دارد؛ برای کار سنگین باید هم‌زمانی را محدود یا پردازش را طبق نیاز به worker منتقل کرد. نتیجه باید با بار واقعی سنجیده شود.",
+          "SolutionCode": "",
+          "Explanation": "1. await مستقیم برای I/O و ماهیت CPU کار تصویر را تشخیص دهد.\n2. فایدهٔ پاسخ‌گویی UI را از ظرفیت سرور جدا کند.\n3. Task.Run بی‌قاعده را افزایش تضمینی throughput نداند.",
+          "Hint": "منبع گلوگاه را مشخص کن: انتظار بیرونی یا زمان CPU."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-valuetask"
+        ],
+        "Activity": {
+          "Id": "C069",
+          "Title": "Task<T> یا ValueTask<T>",
+          "Kind": "explain",
+          "Prompt": "ValueTask<T> چه زمانی می‌تواند تخصیص را کم کند؟ چه محدودیتی در مصرف آن وجود دارد و چرا نباید همهٔ APIهای Task را بدون اندازه‌گیری به ValueTask تبدیل کرد؟",
+          "Code": "",
+          "Solution": "وقتی عملیات پرتکرار اغلب همگام نتیجه می‌دهد، ValueTask<T> می‌تواند نتیجه را بدون Task جدا حمل کند؛ همچنین ممکن است پشت آن IValueTaskSource باشد. قرارداد مصرف عمومی آن یک بار await است؛ await چندباره یا ترکیب نامعتبر می‌تواند مشکل‌ساز شود. در صورت نیاز به مصرف چندباره می‌توان یک بار AsTask گرفت. خود struct و مسیرهای پیچیده هزینه دارند؛ Task انتخاب معمول ساده‌تری است مگر profiling مزیت را نشان دهد.",
+          "SolutionCode": "",
+          "Explanation": "1. مزیت مسیر تکمیل همگام را توضیح دهد.\n2. مصرف یک‌باره و راه تبدیل یک‌بارهٔ AsTask را بشناسد.\n3. تبدیل سراسری بدون اندازه‌گیری را توجیه نکند.",
+          "Hint": "کاهش تخصیص در یک مسیر، قرارداد مصرف ساده‌تر را تضمین نمی‌کند."
+        }
+      },
+      {
+        "Category": "برنامه‌نویسی ناهمگام",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "li-advanced",
+          "ms-streams"
+        ],
+        "Activity": {
+          "Id": "C070",
+          "Title": "IAsyncEnumerable و جریان تدریجی",
+          "Kind": "explain",
+          "Prompt": "برای دریافت تدریجی تعداد زیادی رکورد، IAsyncEnumerable<T> چه تفاوتی با Task<List<T>> دارد؟ نحوهٔ مصرف، لغو و پایان زودهنگام را توضیح بده.",
+          "Code": "",
+          "Solution": "Task<List<T>> معمولاً تا آماده‌شدن کل فهرست نتیجه نمی‌دهد و حافظهٔ همه را نگه می‌دارد. IAsyncEnumerable اجازه می‌دهد عنصرها با await foreach تدریجی برسند و latency اولین عنصر و مصرف حافظه کنترل شود. token باید به تولیدکننده منتقل شود؛ در iterator async می‌توان قرارداد EnumeratorCancellation و WithCancellation را رعایت کرد. await foreach هنگام break، DisposeAsync enumerator را انجام می‌دهد؛ لغو باید در کار زیرین هم پشتیبانی شود.",
+          "SolutionCode": "",
+          "Explanation": "1. جریان عنصرها را از آماده‌شدن فهرست کامل جدا کند.\n2. await foreach و انتقال صحیح لغو را توضیح دهد.\n3. پایان زودهنگام و آزادسازی enumerator را بشناسد.",
+          "Hint": "تدریجی‌بودنِ تولید و انتقال token هر دو لازم‌اند."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-threading",
+          "ms-volatile"
+        ],
+        "Activity": {
+          "Id": "C071",
+          "Title": "Race condition در count++",
+          "Kind": "explain",
+          "Prompt": "چرا count++ روی یک int مشترک، حتی اگر خواندن و نوشتن int اتمیک باشد، thread-safe نیست؟ برای شمارندهٔ ساده و برای تغییر هماهنگ دو فیلد چه راه‌حلی داری؟",
+          "Code": "",
+          "Solution": "++ ترکیب خواندن، محاسبه و نوشتن است؛ دو thread می‌توانند مقدار قبلی یکسان را بخوانند و یک افزایش گم شود. Interlocked.Increment برای شمارندهٔ مستقل عملیات اتمیک مناسبی است. اگر دو فیلد باید invariant مشترک را حفظ کنند، اتمیک‌بودن جداگانهٔ هرکدام کافی نیست؛ lock روی ناحیهٔ مشترک یا طراحی هماهنگ دیگری لازم است. همهٔ مسیرهای دسترسی باید قرارداد هماهنگی را رعایت کنند.",
+          "SolutionCode": "",
+          "Explanation": "1. read-modify-write و lost update را توضیح دهد.\n2. Interlocked مناسب برای شمارنده پیشنهاد کند.\n3. برای invariant چندفیلدی هماهنگی مشترک بخواهد.",
+          "Hint": "اتمیک‌بودن اجزا، ترکیب آن‌ها را اتمیک نمی‌کند."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-lock"
+        ],
+        "Activity": {
+          "Id": "C072",
+          "Title": "lock و شیء قفل مناسب",
+          "Kind": "explain",
+          "Prompt": "lock چه تضمینی برای ناحیهٔ بحرانی می‌دهد؟ چرا قفل اختصاصی private بهتر از this یا string عمومی است؟ آیا می‌توان داخل lock از await استفاده کرد؟ اشاره‌ای هم به System.Threading.Lock جدید بکن.",
+          "Code": "",
+          "Solution": "مسیرهایی که همان قفل را می‌گیرند، ناحیهٔ بحرانی را با انحصار متقابل اجرا می‌کنند؛ آزادسازی در خروج نیز مدیریت می‌شود. قفل اختصاصی private دخالت کد بیرونی و قفل ناخواسته روی رشتهٔ internشده را کاهش می‌دهد. await داخل بدنهٔ lock مجاز نیست؛ برای انتظار ناهمگام معمولاً SemaphoreSlim مناسب‌تر است. در C# 13 و .NET 9 به بعد، نوع مشخص System.Threading.Lock با lock پشتیبانی مستقیم دارد.",
+          "SolutionCode": "",
+          "Explanation": "1. انحصار را به استفاده از همان قفل مشروط کند.\n2. دلیل قفل private و خطر this/string را بگوید.\n3. ممنوعیت await و گزینهٔ Lock جدید را درست بیان کند.",
+          "Hint": "هماهنگی فقط میان مسیرهایی برقرار است که بر یک قفل توافق دارند."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-core",
+          "ms-semaphore",
+          "ms-cancellation"
+        ],
+        "Activity": {
+          "Id": "C073",
+          "Title": "SemaphoreSlim و Release در finally",
+          "Kind": "explain",
+          "Prompt": "چطور هم‌زمانی یک عملیات async را به سه اجرا محدود می‌کنی؟ جای WaitAsync، try/finally و Release را توضیح بده. اگر انتظار لغو شود، آیا باید Release انجام شود؟",
+          "Code": "",
+          "Solution": "یک SemaphoreSlim(3, 3) مشترک میان عملیات‌های مربوط می‌سازیم. ابتدا await gate.WaitAsync(token) انجام می‌شود و فقط پس از گرفتن مجوز وارد try می‌شویم؛ کار در try و Release در finally است. اگر WaitAsync پیش از کسب مجوز لغو یا خطادار شود، نباید Release کنیم، چون مجوزی نگرفته‌ایم. semaphore باید تا پایان استفادهٔ تمام عملیات زنده بماند و dispose هم‌زمان با مصرف نشود.",
+          "SolutionCode": "",
+          "Explanation": "1. semaphore مشترک با ظرفیت سه پیشنهاد کند.\n2. گرفتن مجوز پیش از try و Release در finally را درست بچیند.\n3. در لغوِ انتظار بدون کسب مجوز، Release نکند.",
+          "Hint": "فقط مجوزی را پس بده که واقعاً گرفته‌ای."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-threading",
+          "ms-lock"
+        ],
+        "Activity": {
+          "Id": "C074",
+          "Title": "Deadlock و ترتیب قفل‌ها",
+          "Kind": "explain",
+          "Prompt": "دو عملیات یکی قفل A سپس B و دیگری B سپس A را می‌گیرند. deadlock چگونه شکل می‌گیرد و چطور پیشگیری می‌کنی؟ آیا استفاده از await به‌جای انتظار همگام همهٔ deadlockها را حذف می‌کند؟",
+          "Code": "",
+          "Solution": "ممکن است هر عملیات یک قفل را نگه دارد و برای قفل دیگری که دست عملیات مقابل است منتظر بماند؛ چرخهٔ انتظار تشکیل می‌شود. ترتیب سراسری یکسان برای کسب قفل‌ها، کاهش ناحیهٔ بحرانی و پرهیز از تماس بیرونی زیر قفل به پیشگیری کمک می‌کند. timeout و لغو راه خروج یا تشخیص می‌دهند ولی طراحی چرخه‌دار را خودبه‌خود درست نمی‌کنند. انتظارهای async هم می‌توانند چرخهٔ وابستگی بسازند.",
+          "SolutionCode": "",
+          "Explanation": "1. چرخهٔ نگه‌داشتن و انتظار را توضیح دهد.\n2. ترتیب ثابت و کاهش دامنهٔ قفل پیشنهاد کند.\n3. async را حذف‌کنندهٔ عمومی deadlock نداند.",
+          "Hint": "منبع مصرف‌شده مهم نیست؛ چرخهٔ وابستگی را دنبال کن."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-volatile"
+        ],
+        "Activity": {
+          "Id": "C075",
+          "Title": "volatile در برابر Interlocked و lock",
+          "Kind": "explain",
+          "Prompt": "volatile چه نوع تضمینی می‌دهد و چرا volatile int counter مشکل counter++ را حل نمی‌کند؟ برای flag ساده، شمارنده و invariant چندفیلدی چگونه تصمیم می‌گیری؟",
+          "Code": "",
+          "Solution": "volatile برخی جابه‌جایی‌های خواندن و نوشتن را محدود و قواعد visibility و ordering مربوط را فراهم می‌کند؛ تراکنش چندمرحله‌ای نمی‌سازد. counter++ همچنان read-modify-write غیراتمیک است. برای شمارنده Interlocked و برای invariant چندفیلدی lock یا سازوکار بالاتر مناسب است. flag ساده هم نیاز به بررسی دقیق پروتکل دارد؛ CancellationToken یا primitive آماده اغلب روشن‌تر است. volatile تضمین دیدن همیشگی تازه‌ترین مقدار یا ترتیب کلی همهٔ threadها نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. visibility/ordering را از atomicity ترکیبی جدا کند.\n2. counter++ را با volatile امن نداند.\n3. primitive متناسب برای شمارنده و invariant پیشنهاد کند.",
+          "Hint": "قابلیت دیدن مقدار با انحصار تغییرات متفاوت است."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "li-advanced",
+          "ms-starvation"
+        ],
+        "Activity": {
+          "Id": "C076",
+          "Title": "ThreadPool starvation و تشخیص زیر بار",
+          "Kind": "explain",
+          "Prompt": "یک سرویس با CPU متوسط، latency زیاد و صف کار رو‌به‌رشد مواجه است. ThreadPool starvation چگونه ممکن است دخیل باشد؟ چه شواهدی جمع می‌کنی و چرا افزایش threadها اولین درمان قطعی نیست؟",
+          "Code": "",
+          "Solution": "اگر workerها در .Result، Wait یا I/O همگام معطل باشند، کارهای تازه دیر اجرا می‌شوند حتی وقتی CPU اشباع نیست. با dotnet-counters روند تعداد thread، صف و نرخ تکمیل را، و با stack یا trace محل blocking را بررسی می‌کنیم. latency و وابستگی بیرونی نیز باید مقایسه شوند؛ این نشانه‌ها اثبات تنها علت نیستند. رفع blocking، async سرتاسری و محدودکردن بار معمولاً ریشه‌ای‌تر از افزایش کورکورانهٔ threadهاست.",
+          "SolutionCode": "",
+          "Explanation": "1. blocking workerها را به صف و latency وصل کند.\n2. شواهد counter و stack/trace پیشنهاد کند.\n3. بدون مدرک تشخیص قطعی یا افزایش thread تضمینی ندهد.",
+          "Hint": "CPU آزاد می‌تواند با ناتوانی زمان‌بندی کار تازه هم‌زمان باشد."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-threading",
+          "ms-async",
+          "ms-semaphore"
+        ],
+        "Activity": {
+          "Id": "C077",
+          "Title": "Parallel.ForEach و کار async محدودشده",
+          "Kind": "explain",
+          "Prompt": "foreach معمول، Parallel.ForEach و Parallel.ForEachAsync چه کاربردهایی دارند؟ برای درخواست HTTP به صدها مقصد، چرا async lambda در Parallel.ForEach خطرناک است و هم‌زمانی را چگونه محدود می‌کنی؟",
+          "Code": "",
+          "Solution": "foreach معمول ترتیبی است؛ Parallel.ForEach برای کار همگامِ قابل‌موازی‌سازی به‌ویژه CPU کاربرد دارد. async lambda در overload مبتنی بر Action ممکن است async void شود و پایان یا خطاها درست دنبال نشوند. Parallel.ForEachAsync بدنهٔ async و کنترل MaxDegreeOfParallelism و token دارد؛ محدودکنندهٔ SemaphoreSlim هم گزینه است. تعداد هم‌زمان باید طبق ظرفیت مقصد تعیین شود؛ نوع‌های مشترک و وابستگی‌ها نیز باید برای این مصرف امن باشند.",
+          "SolutionCode": "",
+          "Explanation": "1. سه شکل را از نظر ترتیب و async تفکیک کند.\n2. خطر async void در Action را تشخیص دهد.\n3. محدودیت صریح هم‌زمانی و انتظار پایان پیشنهاد کند.",
+          "Hint": "API باید Taskهای ایجادشده را بشناسد و منتظرشان بماند."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-concurrent"
+        ],
+        "Activity": {
+          "Id": "C078",
+          "Title": "ConcurrentDictionary و تکرار value factory",
+          "Kind": "explain",
+          "Prompt": "آیا GetOrAdd در ConcurrentDictionary تضمین می‌کند value factory فقط یک بار اجرا شود؟ اگر factory پول کسر کند یا دانلود سنگین انجام دهد، چه مشکلی داریم و چطور طراحی را اصلاح می‌کنی؟",
+          "Code": "",
+          "Solution": "GetOrAdd درج نهایی را هماهنگ می‌کند، اما factory ممکن است هم‌زمان چند بار و بیرون قفل داخلی اجرا شود؛ یک مقدار در dictionary ثبت می‌شود. بنابراین factory نباید اثر جانبی غیرقابل‌تکرار مانند کسر پول داشته باشد. اثر مالی باید قرارداد مستقل و idempotency مناسب داشته باشد. برای اشتراک یک محاسبه می‌توان Lazy یا Lazy<Task<T>> ذخیره کرد و شکست و retry آن را هم صریح مدیریت کرد.",
+          "SolutionCode": "",
+          "Explanation": "1. اتمیک‌بودن درج را از اجرای دقیقاً یک‌بارهٔ factory جدا کند.\n2. خطر تکرار اثر جانبی را توضیح دهد.\n3. طراحی بی‌اثر جانبی، idempotency یا Lazy با سیاست خطا پیشنهاد کند.",
+          "Hint": "یک مقدار نهایی، الزاماً به معنای یک بار محاسبه نیست."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "li-advanced",
+          "ms-channels"
+        ],
+        "Activity": {
+          "Id": "C079",
+          "Title": "Channel، BlockingCollection و فشار برگشتی",
+          "Kind": "explain",
+          "Prompt": "برای producer-consumer ناهمگام، Channel<T> چه مزیتی نسبت به Queue معمول یا BlockingCollection دارد؟ ظرفیت محدود و FullMode.Wait چه اثری دارند؟ پایان تولید و لغو را هم توضیح بده.",
+          "Code": "",
+          "Solution": "Channel هماهنگی تولید و مصرف با انتظار async را فراهم می‌کند؛ Queue ساده انتظار یا هماهنگی ندارد و BlockingCollection در انتظار معمول thread را مسدود می‌کند. bounded channel با FullMode.Wait وقتی پر است، تولیدکننده را به‌صورت async منتظر می‌گذارد و فشار برگشتی ایجاد می‌کند. تولیدکننده باید writer را complete کند؛ مصرف‌کننده با ReadAllAsync و token پایان یا لغو را دنبال می‌کند. حالت‌های drop قرارداد متفاوت و احتمال ازدست‌رفتن داده دارند.",
+          "SolutionCode": "",
+          "Explanation": "1. انتظار async و نقش هماهنگی Channel را توضیح دهد.\n2. ظرفیت محدود و backpressure در Wait را درست بگوید.\n3. completion و token و تفاوت drop را در نظر بگیرد.",
+          "Hint": "اگر مصرف‌کننده کند شود، تولیدکننده نباید بی‌حد حافظه بگیرد."
+        }
+      },
+      {
+        "Category": "هم‌زمانی و چندریسمانی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-core",
+          "ms-configureawait",
+          "ms-threading",
+          "ms-asynclocal"
+        ],
+        "Activity": {
+          "Id": "C080",
+          "Title": "AsyncLocal در برابر ThreadLocal",
+          "Kind": "explain",
+          "Prompt": "برای شناسهٔ رهگیری که باید در زنجیرهٔ await همراه عملیات بماند، AsyncLocal یا ThreadLocal را انتخاب می‌کنی؟ نقش ExecutionContext و خطر قرار‌دادن شیء mutable مشترک در آن را توضیح بده.",
+          "Code": "",
+          "Solution": "ThreadLocal به thread فیزیکی وابسته است؛ ادامهٔ async می‌تواند روی thread دیگری باشد. AsyncLocal مقدار محیطی را در ExecutionContext جریان منطقی نگه می‌دارد و برای شناسهٔ رهگیری مناسب‌تر است. جریان معمول ExecutionContext از ConfigureAwait(false) مستقل است و می‌توان آن را صریح سرکوب کرد. اگر مقدار، مرجع شیء mutable باشد، عملیات فرزند ممکن است همان شیء را ببیند؛ جریان context، کپی عمیق یا thread safety آن شیء ایجاد نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. thread فیزیکی را از جریان منطقی جدا کند.\n2. AsyncLocal و ExecutionContext را برای رهگیری انتخاب کند.\n3. اشتراک احتمالی شیء mutable و نبود تضمین thread safety را بگوید.",
+          "Hint": "کپی context لزوماً شیء قرارگرفته در آن را کپی نمی‌کند."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-gc"
+        ],
+        "Activity": {
+          "Id": "C081",
+          "Title": "GC roots، نسل‌ها و چرخهٔ مرجع",
+          "Kind": "explain",
+          "Prompt": "GC چگونه تشخیص می‌دهد شیء قابل‌جمع‌آوری است؟ نسل‌های 0، 1 و 2 چه ایده‌ای دارند؟ آیا دو شیء که فقط به هم مرجع دارند، بدون هیچ مسیر از root، الزاماً نشت می‌کنند؟",
+          "Code": "",
+          "Solution": "GC دسترس‌پذیری از rootهایی مثل مراجع زندهٔ stack، فیلدهای static و handleها را دنبال می‌کند؛ شمارش سادهٔ مراجع نیست. اشیای کوتاه‌عمر معمولاً در نسل جوان جمع می‌شوند و بازمانده‌ها می‌توانند ارتقا یابند تا جمع‌آوری‌های کوچک‌تر رایج‌تر باشند. جمع‌آوری نسل 2 دامنهٔ بیشتری دارد. چرخهٔ بدون مسیر از root قابل‌جمع‌آوری است. ازدست‌رفتن آخرین مرجع زمان دقیق اجرا یا بازگشت حافظه به سیستم‌عامل را تعیین نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. reachability از root را معیار بداند.\n2. ایدهٔ نسل و ارتقای بازمانده‌ها را توضیح دهد.\n3. چرخهٔ بدون root را نشت اجتناب‌ناپذیر نداند.",
+          "Hint": "یک مسیر زنده از root مهم است، نه صرف وجود مرجع متقابل."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-loh"
+        ],
+        "Activity": {
+          "Id": "C082",
+          "Title": "Large Object Heap و تخصیص بافر بزرگ",
+          "Kind": "explain",
+          "Prompt": "LOH چیست و چرا ساخت مکرر بافرهای بزرگ در سرویس طولانی‌عمر می‌تواند مشکل ایجاد کند؟ آستانهٔ معمول، رابطه با نسل 2 و موضوع fragmentation را توضیح بده؛ یک راه کاهش فشار پیشنهاد کن.",
+          "Code": "",
+          "Solution": "در پیکربندی معمول مستندشده، اشیای حدود 85000 بایت و بالاتر به LOH می‌روند؛ اندازهٔ کل شیء مهم است، نه فقط تعداد عناصر. LOH همراه جمع‌آوری نسل 2 بررسی می‌شود و معمولاً مانند heap کوچک در هر نوبت فشرده نمی‌شود. تخصیص و رهاسازی مکرر می‌تواند فشار GC و fragmentation بدهد. reuse یا pooling با مالکیت صحیح و پردازش جریانی می‌تواند مفید باشد؛ انتخاب باید با اندازه‌گیری همراه باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. آستانهٔ معمول را دربارهٔ بایت و اندازهٔ شیء درست بگوید.\n2. نسل 2 و احتمال fragmentation را توضیح دهد.\n3. reuse، pooling یا streaming قابل‌دفاع پیشنهاد کند.",
+          "Hint": "عمر کوتاه بافر بزرگ هم لزوماً هزینهٔ جمع‌آوری کمی ندارد."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "ms-gc",
+          "ms-dispose"
+        ],
+        "Activity": {
+          "Id": "C083",
+          "Title": "نشت حافظه در محیط مدیریت‌شده",
+          "Kind": "explain",
+          "Prompt": "با وجود GC، یک سرویس C# چگونه نشت حافظه پیدا می‌کند؟ سه علت محتمل و مسیر بررسی با dump یا profiler پیشنهاد کن. چرا بالارفتن حافظهٔ فرایند به‌تنهایی اثبات leak نیست؟",
+          "Code": "",
+          "Solution": "GC شیء reachable را آزاد نمی‌کند؛ cache بی‌حد، event subscription فراموش‌شده و مجموعهٔ static می‌توانند اشیای دیگر را زنده نگه دارند. ابتدا روند حافظه و heap پس از جمع‌آوری‌های قابل‌مقایسه را می‌سنجیم، سپس dumpها را از نظر تعداد و حجم نوع‌ها و مسیر تا root مقایسه می‌کنیم. ظرفیت رزروشده، cache سالم یا بار موقت هم حافظهٔ فرایند را بالا می‌برند؛ باید نگه‌داری رو‌به‌رشد و بی‌نیاز را ثابت کرد.",
+          "SolutionCode": "",
+          "Explanation": "1. سه علت reachability ناخواسته بدهد.\n2. روند، مقایسهٔ dump و مسیر root را پیشنهاد کند.\n3. رشد حافظهٔ فرایند را به‌تنهایی اثبات leak نداند.",
+          "Hint": "از شیء باقی‌مانده بپرس: چه چیزی هنوز مرا زنده نگه داشته است؟"
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-dispose"
+        ],
+        "Activity": {
+          "Id": "C084",
+          "Title": "IDisposable، finalizer و SafeHandle",
+          "Kind": "explain",
+          "Prompt": "GC و Dispose هرکدام چه مسئله‌ای را حل می‌کنند؟ چه وقت finalizer لازم است و SafeHandle چه کمکی می‌کند؟ اگر یک نوع finalizer دارد، GC.SuppressFinalize بعد از پاکسازی موفق چه نقشی دارد؟",
+          "Code": "",
+          "Solution": "GC حافظهٔ مدیریت‌شدهٔ غیرقابل‌دسترسی را جمع می‌کند؛ Dispose پایان قابل‌پیش‌بینیِ استفاده از منابع تحت مالکیت را فراهم می‌کند و باید برای تکرار ایمن طراحی شود. معمولاً استفاده از SafeHandle برای handle بومی بهتر از finalizer دست‌نویس است. فقط داشتن اعضای managed الزام finalizer نمی‌آورد. برای نوع دارای finalizer، SuppressFinalize پس از پاکسازی مناسب جلوی اجرای نهایی غیرضروری را می‌گیرد؛ dispose کردن به معنای جمع‌شدن فوری حافظهٔ خود شیء نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. حافظهٔ managed را از آزادسازی قطعی منبع جدا کند.\n2. finalizer را الزام همهٔ IDisposableها نداند و SafeHandle را بشناسد.\n3. نقش SuppressFinalize و نبود جمع‌آوری فوری شیء را توضیح دهد.",
+          "Hint": "مالک منبع باید زمان پایان استفاده را مشخص کند."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "ms-disposeasync"
+        ],
+        "Activity": {
+          "Id": "C085",
+          "Title": "IAsyncDisposable و await using",
+          "Kind": "explain",
+          "Prompt": "اگر پایان استفاده از منبع نیازمند I/O ناهمگام باشد، IAsyncDisposable چه کمکی می‌کند؟ using و await using چگونه فرق دارند؟ اگر نوع هر دو interface را داشته باشد، using معمول کدام مسیر را انتخاب می‌کند؟",
+          "Code": "",
+          "Solution": "IAsyncDisposable متد DisposeAsync با نتیجهٔ ValueTask برای پاکسازی ناهمگام فراهم می‌کند. await using آن را هنگام خروج scope فراخوانی و await می‌کند، از جمله در مسیر خطا. using معمول مسیر همگام Dispose را به‌کار می‌گیرد؛ داشتن هر دو interface باعث انتخاب خودکار مسیر async نمی‌شود. پیاده‌سازی باید مالکیت و آزادسازی ایمن را رعایت کند؛ نام async به‌تنهایی تضمین نمی‌کند عملیات واقعاً نیازمند انتظار باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. کاربرد پاکسازی async و امضای DisposeAsync را بگوید.\n2. رفتار await using در خروج را توضیح دهد.\n3. انتخاب Dispose توسط using معمول را درست بیان کند.",
+          "Hint": "syntax مصرف‌کننده مسیر پاکسازی را مشخص می‌کند."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-span",
+          "ms-refstruct"
+        ],
+        "Activity": {
+          "Id": "C086",
+          "Title": "Span<T>، Memory<T> و slicing بدون کپی",
+          "Kind": "explain",
+          "Prompt": "Span<T> و Memory<T> چه نوع ناحیه‌ای از داده را نمایش می‌دهند و slicing آن‌ها چه مزیتی دارد؟ برای نگه‌داری داده در یک فیلد و در طول await، چرا Memory معمولاً مناسب‌تر است؟",
+          "Code": "",
+          "Solution": "هر دو نمایی روی حافظهٔ پیوسته‌اند و slice معمولاً بدون کپی عناصر، بخش دیگری از همان داده را نشان می‌دهد. Span یک ref struct با محدودیت escape است؛ دادهٔ پشت آن می‌تواند آرایهٔ heap یا حافظهٔ stack یا بومی باشد. Memory قابل‌ذخیره در heap است و برای عبور از مرز async مناسب‌تر است، ولی مالکیت و طول عمر بافر باید حفظ شود. هیچ‌کدام خودبه‌خود کپی عمیق یا thread safety ایجاد نمی‌کنند.",
+          "SolutionCode": "",
+          "Explanation": "1. view و slicing بدون کپی عناصر را توضیح دهد.\n2. محل backing storage را از محدودیت Span جدا کند.\n3. Memory را برای نگه‌داری و مرز async با رعایت طول عمر پیشنهاد کند.",
+          "Hint": "نمای حافظه با مالک حافظه یکی نیست."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-pool"
+        ],
+        "Activity": {
+          "Id": "C087",
+          "Title": "ArrayPool و مالکیت بافر اجاره‌ای",
+          "Kind": "explain",
+          "Prompt": "در استفاده از ArrayPool<byte>.Shared.Rent(1000)، چه تضمینی دربارهٔ طول و محتوای آرایه داریم؟ الگوی بازگرداندن را توضیح بده و برای دادهٔ حساس و استفاده پس از Return چه ملاحظه‌ای داری؟",
+          "Code": "",
+          "Solution": "Rent آرایه‌ای با طول حداقل مقدار خواسته‌شده می‌دهد؛ ممکن است بزرگ‌تر باشد و محتوای قبلی داشته باشد. فقط بخش موردنیاز را با طول منطقی مصرف می‌کنیم. بافر باید پس از پایان تمام مصرف‌کنندگان، یک بار در finally به همان pool بازگردد. پس از Return دیگر مالک آن نیستیم و نباید بخوانیم یا بنویسیم. برای دادهٔ حساس، پاک‌کردن مناسب بافر یا Return با clearArray طبق نیاز لازم است؛ pooling قرارداد مالکیت را حذف نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. حداقل طول و نبود تضمین صفر بودن را بگوید.\n2. بازگرداندن یک‌باره پس از مصرف و در finally را پیشنهاد کند.\n3. استفاده پس از Return و باقی‌ماندن دادهٔ حساس را مدیریت کند.",
+          "Hint": "بافر اجاره‌ای فقط تا پایان اجاره متعلق به این عملیات است."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-refstruct",
+          "ms-span",
+          "ms-stackalloc"
+        ],
+        "Activity": {
+          "Id": "C088",
+          "Title": "stackalloc و محدودیت‌های ref struct",
+          "Kind": "explain",
+          "Prompt": "stackalloc برای یک بافر کوچک موقت چه مزیتی دارد و چرا اندازهٔ بزرگ یا استفادهٔ تکراری در حلقه خطرناک است؟ آیا Span می‌تواند در فیلد class یا در طول await زنده بماند؟ تفاوت نسخه‌های جدید C# را هم رعایت کن.",
+          "Code": "",
+          "Solution": "stackalloc می‌تواند برای دادهٔ موقت کوچک تخصیص heap را حذف کند، اما فضای stack محدود است و تخصیص بزرگ یا تکراری در حلقه خطر stack overflow دارد. Span و ref struct نباید به فیلد class یا طول عمری فراتر از محل مجاز escape کنند. از C# 13 استفادهٔ محلی محدود در بخش‌های مجاز متد async ممکن است؛ ممنوعیت کلی «هیچ Span در async» دقیق نیست. نباید ref struct را از مرز await زنده عبور داد.",
+          "SolutionCode": "",
+          "Explanation": "1. مزیت بافر کوچک و خطر فضای محدود stack را توضیح دهد.\n2. escape به class یا عبور از await را مجاز نداند.\n3. محدودیت نسخه‌های جدید را با ممنوعیت کلی قدیمی یکی نکند.",
+          "Hint": "بررسی کن داده تا چه لحظه‌ای زنده است و از کدام مرز می‌گذرد."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-gcmodes"
+        ],
+        "Activity": {
+          "Id": "C089",
+          "Title": "Server GC، Workstation GC و latency",
+          "Kind": "explain",
+          "Prompt": "Workstation GC و Server GC برای چه نوع بارهایی طراحی شده‌اند؟ آیا Server GC همیشه بهتر است؟ background GC چه نسبتی با این دو دارد و برای انتخاب چه داده‌ای جمع می‌کنی؟",
+          "Code": "",
+          "Solution": "Workstation برای سناریوهای کلاینت و Server برای throughput و مقیاس‌پذیری سرور طراحی شده‌اند؛ Server از منابع و راهبردهای موازی متناسب استفاده می‌کند و می‌تواند هزینهٔ حافظه بیشتری داشته باشد. نتیجه به CPU، محدودیت container و بار بستگی دارد. background یک بعد جدا دربارهٔ نحوهٔ جمع‌آوری است و می‌تواند در هر دو flavor پشتیبانی شود. برای تصمیم، pause، نرخ تخصیص، throughput، latency و حافظه را تحت بار واقعی مقایسه می‌کنیم.",
+          "SolutionCode": "",
+          "Explanation": "1. هدف دو flavor را درست مقایسه کند.\n2. Server را برندهٔ همیشگی و background را flavor سوم نداند.\n3. معیارهای pause، latency و حافظه زیر بار پیشنهاد کند.",
+          "Hint": "توان عملیاتی و مکث تعاملی نیاز یکسانی ندارند."
+        }
+      },
+      {
+        "Category": "حافظه و منابع",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "ms-starvation",
+          "ms-gc",
+          "benchmark"
+        ],
+        "Activity": {
+          "Id": "C090",
+          "Title": "اندازه‌گیری عملکرد پیش از بهینه‌سازی",
+          "Kind": "explain",
+          "Prompt": "برای مقایسهٔ دو پیاده‌سازی یک متد C#، چه خطاهایی در اندازه‌گیری با Stopwatch ممکن است رخ دهد؟ طرحی برای benchmark قابل‌تکرار بده و توضیح بده چه وقت profiler لازم است.",
+          "Code": "",
+          "Solution": "اجرای Debug، اتصال debugger، JIT و warmup، دادهٔ غیرنماینده، حذف کارِ بی‌مصرف توسط optimizer و GC می‌توانند نتیجه را منحرف کنند. benchmark باید در Release، با warmup، چند تکرار، ورودی نماینده و مصرف واقعی نتیجه انجام شود؛ زمان و تخصیص و پراکندگی را می‌سنجیم. profiler برای یافتن سهم CPU، allocation و انتظار در برنامهٔ واقعی مفید است. microbenchmark برتری کل سرویس را خودبه‌خود ثابت نمی‌کند.",
+          "SolutionCode": "",
+          "Explanation": "1. چند عامل مخدوش‌کنندهٔ معتبر را تشخیص دهد.\n2. Release، warmup، تکرار و ورودی نماینده را در طرح بیاورد.\n3. benchmark جزء را از profiling کل برنامه جدا کند.",
+          "Hint": "پیش از سنجش، مشخص کن دقیقاً کدام فرض را آزمایش می‌کنی."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-datetime"
+        ],
+        "Activity": {
+          "Id": "C091",
+          "Title": "DateTime، DateTimeOffset و تاریخ تقویمی",
+          "Kind": "explain",
+          "Prompt": "برای لحظهٔ ثبت سفارش، تاریخ تولد و ساعت بازشدن فروشگاه، کدام نوع‌های .NET مناسب‌اند؟ تفاوت offset با منطقهٔ زمانی را بگو و توضیح بده چرا ذخیرهٔ صرف ساعت محلی برای لحظهٔ جهانی کافی نیست.",
+          "Code": "",
+          "Solution": "لحظهٔ سفارش را می‌توان با DateTimeOffset یا DateTime دارای قرارداد صریح UTC ثبت کرد. تاریخ تولد معمولاً DateOnly و ساعت روزانه TimeOnly است. DateTimeOffset لحظه همراه offset دارد، ولی شناسه و قواعد تغییر ساعت یک timezone را نگه نمی‌دارد. برای برنامهٔ محلی وابسته به منطقه، TimeZoneInfo یا شناسهٔ منطقه و سیاست ابهام زمانی لازم است؛ ساعت محلیِ تنها ممکن است تکراری یا ناموجود باشد.",
+          "SolutionCode": "",
+          "Explanation": "1. سه سناریو را به نوع متناسب وصل کند.\n2. offset را با timezone و قواعدش یکی نداند.\n3. ابهام لحظه در ساعت محلیِ بدون قرارداد را توضیح دهد.",
+          "Hint": "لحظهٔ جهانی، روز تقویمی و زمان روز سه مفهوم متفاوت‌اند."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "ms-comparison"
+        ],
+        "Activity": {
+          "Id": "C092",
+          "Title": "مقایسهٔ شناسه‌ها و متن انسانی",
+          "Kind": "explain",
+          "Prompt": "برای نام یک فرمان فنی بدون حساسیت به حروف و برای مرتب‌سازی نام فارسی کاربران، چه comparerهایی انتخاب می‌کنی؟ چرا ToLower بر پایهٔ culture جاری، جایگزین عمومی مقایسهٔ شناسه نیست؟",
+          "Code": "",
+          "Solution": "برای فرمان فنی معمولاً OrdinalIgnoreCase قرارداد روشن و مستقل از فرهنگ می‌دهد. برای مرتب‌سازی نام انسان، comparer فرهنگی مناسب زبان و محصول انتخاب می‌شود. ToLower با culture جاری می‌تواند در فرهنگ‌هایی مثل ترکی رفتار متفاوت بسازد و تخصیص هم اضافه کند؛ سیاست برابری بهتر است مستقیم در StringComparison یا StringComparer مشخص شود. حساسیت به اعراب، شکل‌های Unicode و نرمال‌سازی باید طبق قرارداد جداگانه تعیین شود.",
+          "SolutionCode": "",
+          "Explanation": "1. OrdinalIgnoreCase را برای شناسه و comparer فرهنگی را برای نام توجیه کند.\n2. اثر culture در ToLower را تشخیص دهد.\n3. سیاست مقایسه را صریح و سازگار نگه دارد.",
+          "Hint": "قواعد زبان انسانی را ناخواسته وارد کلید فنی نکن."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-checked",
+          "ms-numbers"
+        ],
+        "Activity": {
+          "Id": "C093",
+          "Title": "checked، unchecked و overflow",
+          "Kind": "explain",
+          "Prompt": "برای int x = int.MaxValue، حاصل unchecked(x + 1) و checked(x + 1) چیست؟ آیا checked تمام متدهای فراخوانی‌شده را هم تحت پوشش می‌برد و رفتار decimal دقیقاً مثل int است؟",
+          "Code": "",
+          "Solution": "در unchecked حاصل wrap می‌شود و int.MinValue است؛ در checked، OverflowException رخ می‌دهد. context بررسی به متن عملیات مربوط است و صرف فراخوانی یک متد از داخل checked، محاسبات تعریف‌شده در بدنهٔ آن متد را checked نمی‌کند. تنظیمات پروژه هم برای context پیش‌فرض مهم‌اند. decimal در overflow عملیات خود exception می‌دهد و با unchecked به wrap عدد صحیح تبدیل نمی‌شود؛ نوع عملیات باید جدا بررسی شود.",
+          "SolutionCode": "",
+          "Explanation": "1. دو نتیجهٔ int را درست بگوید.\n2. محدودهٔ متنی checked را از بدنهٔ متد دیگر جدا کند.\n3. رفتار overflow decimal را با wrap int یکی نداند.",
+          "Hint": "context مربوط به جایی است که عبارت محاسباتی تعریف شده است."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-cancellation",
+          "ms-async",
+          "ms-waitasync"
+        ],
+        "Activity": {
+          "Id": "C094",
+          "Title": "Timeout انتظار در برابر لغو عملیات",
+          "Kind": "explain",
+          "Prompt": "اگر یک Task را با WaitAsync و timeout منتظر بمانیم و زمان تمام شود، آیا عملیات اصلی حتماً متوقف شده است؟ طراحی لغو و مشاهدهٔ پایان عملیات اصلی را توضیح بده.",
+          "Code": "",
+          "Solution": "timeout در WaitAsync انتظار caller را تمام می‌کند، نه اینکه الزاماً کار اصلی را متوقف کند. باید در صورت پشتیبانی، token مناسب با CancelAfter یا منبع linked به خود عملیات هم بدهیم. حتی درخواست لغو نیز همکاری‌محور است. بعد از پایان انتظار، مالک باید سرنوشت Task اصلی، خطاهای احتمالی و منابعش را طبق قرارداد دنبال کند؛ رهاکردن بی‌حساب کارهای پس‌زمینه می‌تواند اثر جانبی و مصرف منبع ادامه‌دار بسازد.",
+          "SolutionCode": "",
+          "Explanation": "1. پایان انتظار را از پایان عملیات جدا کند.\n2. token یا timeout را به عملیات اصلی هم منتقل کند.\n3. مشاهدهٔ پایان یا خطا و مالکیت منبع باقی‌مانده را در نظر بگیرد.",
+          "Hint": "بستن ساعت انتظار به معنی متوقف‌کردن کار نیست."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "ms-http"
+        ],
+        "Activity": {
+          "Id": "C095",
+          "Title": "طول عمر HttpClient و تغییر DNS",
+          "Kind": "explain",
+          "Prompt": "چرا ساخت و Dispose یک HttpClient مستقل برای هر درخواست در بار زیاد مشکل‌ساز می‌شود؟ استفادهٔ طولانی‌مدت چه ملاحظه‌ای دربارهٔ DNS دارد و دو راه متداول مدیریت طول عمر چیست؟",
+          "Code": "",
+          "Solution": "هر HttpClient معمول pool اتصال خودش را دارد؛ ساخت و حذف پی‌درپی poolها می‌تواند هزینه و فشار پورت ایجاد کند. یک client طولانی‌عمر اتصال‌ها را reuse می‌کند، ولی DNS معمولاً هنگام ساخت اتصال حل می‌شود و باید تازه‌شدن آن را مدیریت کرد. دو راه متداول، client طولانی‌عمر با SocketsHttpHandler و PooledConnectionLifetime مناسب، یا clientهای ساخته‌شده با IHttpClientFactory و مدیریت handler است. responseها و streamهای مصرف‌شده نیز باید به‌درستی پایان یابند.",
+          "SolutionCode": "",
+          "Explanation": "1. هزینهٔ pool و اتصال‌های پی‌درپی را توضیح دهد.\n2. reuse را با تازه‌شدن DNS همراه کند.\n3. دو الگوی client بلندعمر یا factory را درست پیشنهاد کند.",
+          "Hint": "عمر client، عمر handler و عمر connection را جدا ببین."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "ms-json"
+        ],
+        "Activity": {
+          "Id": "C096",
+          "Title": "قرارداد System.Text.Json و اعتبار داده",
+          "Kind": "explain",
+          "Prompt": "System.Text.Json به‌طور معمول چه چیزی از یک شیء را serialize می‌کند؟ برای نام‌گذاری propertyها و fieldها چه تنظیمی لازم می‌شود؟ چرا deserialize موفق به‌تنهایی به معنی معتبر بودن مدل سفارش نیست؟",
+          "Code": "",
+          "Solution": "در تنظیمات عادی propertyهای عمومیِ قابل‌پشتیبانی محور serialization هستند و fieldها به‌طور پیش‌فرض وارد نمی‌شوند؛ IncludeFields یا attribute می‌تواند قرارداد را تغییر دهد. naming policy و attribute نام JSON را تعیین می‌کنند و پیش‌فرض web با serializer عمومی یکسان نیست. deserialize موفق یعنی متن طبق قرارداد قابل‌خواندن بوده، نه اینکه مبلغ، شناسه یا invariant دامنه معتبر است. باید validation و تنظیمات null یا اعضای الزامی را آگاهانه اعمال کرد.",
+          "SolutionCode": "",
+          "Explanation": "1. پیش‌فرض property و field را درست بگوید.\n2. سیاست نام‌گذاری و تفاوت تنظیمات را بشناسد.\n3. قابل‌خواندن‌بودن JSON را از اعتبار دامنه جدا کند.",
+          "Hint": "قالب معتبر داده الزاماً دادهٔ معتبر کسب‌وکار نیست."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "ms-di",
+          "ms-http",
+          "ms-timeprovider"
+        ],
+        "Activity": {
+          "Id": "C097",
+          "Title": "آزمون‌پذیری زمان و وابستگی بیرونی",
+          "Kind": "explain",
+          "Prompt": "متدی مستقیماً DateTime.UtcNow را می‌خواند و درخواست HTTP واقعی می‌فرستد. برای تست قطعی انقضای ده‌دقیقه‌ای چه تغییر کوچکی می‌دهی؟ مرزهای زمانی و شکست ارتباط را چگونه می‌آزمایی؟",
+          "Code": "",
+          "Solution": "زمان را از TimeProvider یا قرارداد ساعت کوچک تزریق می‌کنیم و ارتباط بیرونی را از client یا handler قابل‌جایگزینی می‌گیریم. تست، ساعت کنترل‌شده و پاسخ HTTP ساختگی می‌دهد، بدون وابستگی به شبکهٔ واقعی یا sleep. نقاط کمی قبل از ده دقیقه، دقیقاً مرز و بعد از آن را طبق قرارداد انقضا می‌سنجیم؛ timeout، cancellation و پاسخ ناموفق نیز نتیجهٔ مشخص دارند. فقط وابستگی‌های مؤثر جدا می‌شوند و نیاز به framework اضافی نیست.",
+          "SolutionCode": "",
+          "Explanation": "1. ساعت و ارتباط بیرونی قابل‌کنترل پیشنهاد کند.\n2. سه مرز قبل، روی و بعد از انقضا را طبق قرارداد تست کند.\n3. به sleep یا شبکهٔ واقعی برای قطعی‌بودن تست متکی نباشد.",
+          "Hint": "منبع ناپایداری را کنترل کن، نه اینکه تست را کندتر کنی."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-core",
+          "ms-aot",
+          "ms-json"
+        ],
+        "Activity": {
+          "Id": "C098",
+          "Title": "Native AOT، trimming و source generator",
+          "Kind": "explain",
+          "Prompt": "Native AOT چه تغییری در زمان کامپایل و استقرار ایجاد می‌کند؟ برای کتابخانه‌ای که نوع‌ها را با reflection کشف می‌کند چه محدودیتی باید بررسی شود؟ source generator چه کمکی می‌تواند بکند؟",
+          "Code": "",
+          "Solution": "Native AOT هنگام publish کد بومیِ ویژهٔ مقصد می‌سازد و اجرای برنامه به JIT تکیه نمی‌کند. شروع و حافظه می‌توانند بهتر شوند، اما سازگاری و اندازه باید سنجیده شوند. کشف پویا، metadata موردنیاز trimming و تولید کد اجرایی در زمان اجرا محدودیت دارند؛ reflection به‌طور مطلق ممنوع نیست. source generator می‌تواند اطلاعات معلوم زمان ساخت، مثل قرارداد serialization، را به کد تولیدشده تبدیل کند و نیاز به کشف پویا را کاهش دهد.",
+          "SolutionCode": "",
+          "Explanation": "1. کامپایل هنگام publish و هدف بومی را توضیح دهد.\n2. reflection را با بررسی حفظ metadata و محدودیت پویایی بسنجد.\n3. کار source generator در زمان ساخت را از JIT جدا کند.",
+          "Hint": "اطلاعات معلوم زمان ساخت را می‌توان پیشاپیش به کد تبدیل کرد."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "متوسط",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "ms-logging"
+        ],
+        "Activity": {
+          "Id": "C099",
+          "Title": "لاگ ساختاریافته برای عیب‌یابی C#",
+          "Kind": "explain",
+          "Prompt": "در ILogger چرا قالب ثابت با placeholder مثل OrderId می‌تواند از string interpolation مفیدتر باشد؟ برای یک exception چه اطلاعاتی ثبت می‌کنی و چگونه از افشای رمز یا token جلوگیری می‌کنی؟",
+          "Code": "",
+          "Solution": "قالب ثابت مانند \"Order {OrderId} failed\" مقدارها را با نام ساختاریافته به provider می‌دهد و جست‌وجو و گروه‌بندی را بهتر می‌کند؛ interpolation معمول پیام نهایی را از قبل می‌سازد. exception را در overload مربوط به‌عنوان exception می‌دهیم تا stack و زنجیره حفظ شود. شناسهٔ عملیات و context لازم را ثبت می‌کنیم، ولی secret، token و payload حساس را حذف یا طبق سیاست ماسک می‌کنیم و از ثبت تکراری بی‌فایده در هر لایه پرهیز می‌کنیم.",
+          "SolutionCode": "",
+          "Explanation": "1. مزیت قالب ثابت و فیلد نام‌دار را توضیح دهد.\n2. ثبت خود exception برای حفظ مسیر را پیشنهاد کند.\n3. دادهٔ لازم را از secret و اطلاعات حساس جدا کند.",
+          "Hint": "لاگ باید قابل‌جست‌وجو باشد و فقط دادهٔ لازم را نگه دارد."
+        }
+      },
+      {
+        "Category": "سناریوهای عملی و عیب‌یابی",
+        "Level": "پیشرفته",
+        "SourceIds": [
+          "li-advanced",
+          "li-overview",
+          "li-core",
+          "ms-starvation",
+          "ms-async",
+          "ms-linq"
+        ],
+        "Activity": {
+          "Id": "C100",
+          "Title": "تحلیل یک سرویس کند با .Result و ToList",
+          "Kind": "explain",
+          "Prompt": "در مسیر یک درخواست سرور، داده با GetItemsAsync().Result خوانده می‌شود؛ بعد از ToList همهٔ داده‌ها، فیلتر اعمال می‌شود و محاسبهٔ سنگین داخل Task.Run قرار دارد. اولویت بررسی و اصلاح تو چیست؟ بدون اندازه‌گیری وعدهٔ سرعت نده.",
+          "Code": "",
+          "Solution": "ابتدا latency، CPU، صف ThreadPool، اندازهٔ داده و زمان وابستگی‌ها را اندازه می‌گیرم. .Result را در زنجیرهٔ async با await و عبور cancellation جایگزین می‌کنم. اگر منبع و provider اجازه دهند، فیلتر و projection را پیش از materialization می‌برم؛ برای دادهٔ لازم از قبل در حافظه ادعای کاهش انتقال ندارم. Task.Run ظرفیت CPU تازه نمی‌سازد؛ بار محاسباتی را profile و هم‌زمانی را متناسب محدود می‌کنم. نتیجه با بار نماینده و صحت خروجی دوباره سنجیده می‌شود.",
+          "SolutionCode": "",
+          "Explanation": "1. با شواهد شروع و blocking را با await سرتاسری اصلاح کند.\n2. انتقال فیلتر را به امکان منبع و provider مشروط کند.\n3. CPU و Task.Run را با محدودیت ظرفیت و آزمون مجدد بسنجد.",
+          "Hint": "برای هر اصلاح، گلوگاه و معیار موفقیت مشخص کن."
+        }
+      }
+    ]
+  }
+]

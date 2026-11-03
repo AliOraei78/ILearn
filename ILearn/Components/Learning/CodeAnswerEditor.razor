@@ -1,0 +1,14 @@
+<label for="draft" class="code-answer-label">پاسخ تو · <bdi>@Technology</bdi></label>
+<div class="code-editor">
+ @if(CodeAnswer){<div class="code-lines" aria-hidden="true">@string.Join("\n", Enumerable.Range(1, Value.Count(c => c == '\n') + 1))</div>}
+ <textarea id="draft" class="@(CodeAnswer ? "code" : "")" dir="@(CodeAnswer ? "ltr" : "rtl")" readonly="@ReadOnly" spellcheck="false" maxlength="16000" aria-describedby="code-room-help" value="@Value" @oninput="Changed"></textarea>
+</div>
+<p id="code-room-help" class="muted">@if(CodeAnswer){<span>Tab: چهار فاصله؛ Shift+Tab: کاهش تورفتگی؛ خروج از کادر: Escape و سپس Tab. </span>}پاسخ به‌صورت خودکار ذخیره می‌شود؛ کد اینجا اجرا نمی‌شود.</p>
+<p class="muted code-answer-count">@Value.Length از ۱۶۰۰۰ نویسه</p>
+@code {
+ [Parameter] public string Value { get; set; } = "";
+ [Parameter] public string Technology { get; set; } = "";
+ [Parameter] public bool CodeAnswer { get; set; } = true;
+ [Parameter] public bool ReadOnly { get; set; }
+ [Parameter] public EventCallback<ChangeEventArgs> Changed { get; set; }
+}

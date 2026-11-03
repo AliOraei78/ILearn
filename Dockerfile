@@ -7,7 +7,7 @@ COPY ILearn.Infrastructure/ ILearn.Infrastructure/
 RUN dotnet restore ILearn/ILearn.csproj
 COPY ILearn/ ILearn/
 RUN dotnet publish ILearn/ILearn.csproj -c Release -o /out --no-restore /p:UseAppHost=false
-RUN test -f /out/wwwroot/_framework/blazor.web.js && test -f /out/Content/catalog.txt && test -f /out/Content/VerificationEmail.html
+RUN test -f /out/wwwroot/_framework/blazor.web.js && test -f /out/Content/catalog.txt && test -s /out/Content/csharp-v2.json && test -s /out/Content/code-room.json && test -s /out/Content/interviews.json && test -f /out/Content/VerificationEmail.html
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

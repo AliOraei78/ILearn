@@ -27,7 +27,7 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
         checks.push('published lobby contains S01 through S10');
         await page.goto(base + '/');
         await expect(page.locator('a[href="/login"],a[href="/register"]')).toHaveCount(0);
-        await expect(page.getByRole('link', { name: 'برگشت به لابی', exact: true })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'برگشت به آموزشگاه', exact: true })).toBeVisible();
         await page.screenshot({ path: 'verification/ux-live-authenticated-desktop.png', fullPage: true });
         await page.setViewportSize({ width: 390, height: 844 });
         await page.screenshot({ path: 'verification/ux-live-authenticated-mobile.png', fullPage: true });

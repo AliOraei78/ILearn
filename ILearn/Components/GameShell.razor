@@ -1,0 +1,28 @@
+<div class="game-shell">
+ @if(Player is not null){<PlayerBar Player="Player" Xp="Xp" />}
+ <div class="game-body">
+  <aside class="game-sidebar" aria-label="منوی بازی" @onkeydown="MenuKeyDown">
+   <p class="sidebar-caption">مسیر یادگیری</p>
+   <button class="sidebar-toggle" @ref="menuToggle" aria-expanded="@(menuOpen ? "true" : "false")" aria-controls="game-navigation" @onclick="()=>menuOpen=!menuOpen">بخش‌های بازی</button>
+   <nav id="game-navigation" class="@(menuOpen ? "is-open" : "")" aria-label="بخش‌های بازی" @onclick="()=>menuOpen=false">
+    <NavLink href="/lobby">آموزشگاه و کارگاه</NavLink>
+    <NavLink href="/code-room">کُد روم</NavLink>
+    <NavLink href="/interview">شبیه‌ساز مصاحبه</NavLink>
+   </nav>
+  </aside>
+  <div class="game-content">@ChildContent</div>
+ </div>
+</div>
+@code {
+ [Parameter] public Player? Player { get; set; }
+ [Parameter] public int Xp { get; set; }
+ [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; } = null!;
+ bool menuOpen;
+ ElementReference menuToggle;
+ async Task MenuKeyDown(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+ {
+  if(e.Key!="Escape"||!menuOpen)return;
+  menuOpen=false;
+  await menuToggle.FocusAsync(preventScroll:true);
+ }
+}

@@ -21,9 +21,23 @@ public sealed class MiniGameState
 {
  public List<int> History {get;set;}=[];
  public Dictionary<string,int> Marks {get;set;}=[];
+ public List<int[]> Trials {get;set;}=[];
+ public List<List<string>> Undo {get;set;}=[];
+ public List<List<int>> PathUndo {get;set;}=[];
+ public int Found {get;set;}=-1;
+ public int Removed {get;set;}=-1;
 }
 public static class MiniGames
 {
+ public static bool ValidState(Activity a,MiniGameState s,IEnumerable<string> input)
+ {
+  if(a.Game is not {} g)return false;
+  if(a.Kind=="mission")return s.History.Count<=g.Limit&&Node(a,s)>=0&&Node(a,s)<g.Nodes.Length;
+  if(a.Kind is "concept" or "experiment")return s.History.Count<=g.Limit&&s.History.Distinct().Count()==s.History.Count&&s.History.All(i=>i>=0&&i<(a.Kind=="concept"?a.Options.Length:g.Results.Length));
+  if(a.Kind=="budget")return Puzzles.Numbers(input,out var values)&&values.Distinct().Count()==values.Length&&values.All(i=>i>=0&&i<g.Costs.Length&&i<g.Covers.Length);
+  if(a.Kind=="deduction")return s.Marks.All(pair=>pair.Value is >=0 and <=2&&pair.Key.Split(':') is [var r,var c]&&int.TryParse(r,out int row)&&int.TryParse(c,out int column)&&row>=0&&row<a.Rows.Length&&column>=0&&column<a.Options.Length);
+  return a.Kind=="assessment";
+ }
  public static int Node(Activity a, MiniGameState s)
  {
   int node=0;
@@ -49,7 +63,7 @@ public static class MiniGames
  public static bool Check(Activity a,MiniGameState s,IEnumerable<string> input)
  {
   var values=input.ToArray(); var g=a.Game;
-  if(g is null) return false;
+  if(g is null || !ValidState(a,s,values)) return false;
   switch(a.Kind) {
    case "concept": return s.History.Count<=g.Limit && s.History.Distinct().Count()==s.History.Count && s.History.All(i=>i>=0&&i<a.Options.Length) && s.History.Any(i=>a.Answers.Contains(i.ToString()));
    case "experiment": return s.History.Count>0 && s.History.Count<=g.Limit && s.History.Distinct().Count()==s.History.Count && s.History.All(i=>i>=0&&i<g.Results.Length) && a.Check(values);

@@ -7,6 +7,8 @@ const { execFileSync } = require('node:child_process');
 const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
 const { server: smtp, messages } = require('./test-smtp.cjs')();
 const base = process.env.ILEARN_AUDIT_URL || 'http://127.0.0.1:5084';
+const database = process.env.ILEARN_AUDIT_DATABASE || 'ilearn_ui_audit';
+if(!['ilearn_ui_audit','ilearn_csharp_v2'].includes(database))throw new Error('Use an isolated audit database.');
 const baseline = process.argv.includes('--baseline');
 // Retain the original four-chapter account/UI regression; curriculum-flow.cjs covers all ten chapters.
 const lessons = JSON.parse(fs.readFileSync(path.join(__dirname, '../ILearn/Content/lessons.json'), 'utf8')).filter(l => ['S05', 'S06', 'S07', 'S08'].includes(l.Id));
@@ -32,8 +34,8 @@ const model = http.createServer(async (request, response) => {
 smtp.on('connection', socket => socket.on('error', error => { if (error.code !== 'ECONNRESET') errors.push(error.message); }));
 
 (async () => {
-    await new Promise(resolve => smtp.listen(2528, '127.0.0.1', resolve));
-    await new Promise(resolve => model.listen(11435, '127.0.0.1', resolve));
+    await new Promise(resolve => smtp.listen(Number(process.env.ILEARN_AUDIT_SMTP_PORT||2528), '127.0.0.1', resolve));
+    await new Promise(resolve => model.listen(Number(process.env.ILEARN_AUDIT_MODEL_PORT||11435), '127.0.0.1', resolve));
     const browser = await chromium.launch({ headless: true, channel: process.env.ILEARN_AUDIT_BROWSER || 'chrome' });
     const context = await browser.newContext({ viewport: { width: 1366, height: 900 } });
     const page = await context.newPage();
@@ -44,7 +46,12 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
     watchPage(page);context.on('page',watchPage);
     const click = name => page.getByRole('button', { name, exact: true }).click();
     // Every SQL mutation below is restricted to this disposable database and the account created by this run.
-    const sql = statement => execFileSync('docker', ['exec', 'ilearn-postgres-1', 'psql', '-v', 'ON_ERROR_STOP=1', '-U', 'ilearn', '-d', 'ilearn_ui_audit', '-c', statement], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    const sql = statement => execFileSync('docker', ['exec', 'ilearn-postgres-1', 'psql', '-v', 'ON_ERROR_STOP=1', '-U', 'ilearn', '-d', database, '-c', statement], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    const archived = async (id,target=page) => {
+        const button=target.getByRole('button',{name:new RegExp('^'+id+' ·')});
+        if(!await button.isVisible())await target.getByText('آرشیو مسیر قبلی؛ حفظ پیشرفت و امتیاز',{exact:true}).click();
+        await button.click();
+    };
     const record = name => { checks.push(name); console.log('PASS ' + name); };
     const screenshot = async name => {
         if (screenshots.has(name)) return;
@@ -107,18 +114,18 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await expect(page.getByText('تکمیل ثبت شد:', { exact: false })).toBeVisible();
     };
     const selectLesson = async lesson => {
-        await click('بازگشت به لابی');
+        await click('بازگشت به آموزشگاه');
         await page.getByRole('button', { name: /C# جامع/ }).click();
-        await page.getByRole('button', { name: new RegExp('^' + lesson.Id + ' ·') }).click();
-        await expect(page.locator('nav').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
+        await archived(lesson.Id);
+        await expect(page.locator('nav[aria-label="چالش‌های جلسه"]').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
         if (await page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }).count()) {
             await measure(lesson.Id + ' introduction', [{ width: 320, height: 568 }, { width: 1366, height: 900 }]);
             await click('شروع چالش‌ها');
         }
-        await expect(page.locator('nav')).toBeVisible();
+        await expect(page.locator('nav[aria-label="چالش‌های جلسه"]')).toBeVisible();
     };
     const navigate = async (lesson, index) => {
-        await page.locator('nav button').nth(index).click();
+        await page.locator('nav[aria-label="چالش‌های جلسه"] button').nth(index).click();
         await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[index].Title);
     };
     try {
@@ -162,7 +169,7 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await page.goto(base + '/');
         await expect(page.getByRole('link',{name:'ورود به حساب',exact:true})).toHaveCount(0);
         await expect(page.getByRole('link',{name:'ساخت حساب کاربری',exact:true})).toHaveCount(0);
-        await expect(page.getByRole('link',{name:'برگشت به لابی',exact:true})).toBeVisible();
+        await expect(page.getByRole('link',{name:'برگشت به آموزشگاه',exact:true})).toBeVisible();
         await measure('signed-in introduction'); await enlarged('signed-in introduction');
         await page.setViewportSize({width:390,height:844}); await screenshot('signed-in-introduction-mobile');
         await page.setViewportSize({width:1440,height:900}); await screenshot('signed-in-introduction-desktop');
@@ -172,7 +179,7 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await measure('chapter list');
         await page.locator('summary').click();
         await measure('chapter roadmap');
-        await page.getByRole('button', { name: /^S05 ·/ }).click();
+        await archived('S05');
         await click('شروع چالش‌ها');
         await click('چالش بعد');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);await expect(page.locator('#activity-title')).toBeFocused();
         await click('چالش قبل');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);await expect(page.locator('#activity-title')).toBeFocused();
@@ -181,7 +188,7 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await page.goForward(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
         await page.reload(); await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
         await page.goto(base+'/lobby');await click('ادامه آخرین چالش');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
-        await click('فهرست فصل‌ها');await expect(page.getByRole('heading',{name:'کدوم فصل رو بازی کنیم؟',exact:true})).toBeVisible();
+        await click('فهرست فصل‌ها');await expect(page.getByRole('heading',{name:'مسیر C# از صفر تا پیشرفته',exact:true})).toBeVisible();
         await page.goBack();await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
         record('Back/Forward, reload, resume and contextual chapter list preserve the activity');
         await page.goto(base+'/lobby?lesson=S05&activity=not-a-number');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);
@@ -279,10 +286,10 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
                 await expect(page.getByRole('heading', { name: 'پاسخ مرجع درس', exact: true })).toBeVisible();
                 assert.equal(modelRequests,requestsBeforeReference,'reference answer must not contact AI');
                 await click('توضیح ساده‌تر با هوش مصنوعی');
-                await expect(page.locator('aside [role=status]')).toContainText('توضیح مدل:');
+                await expect(page.locator('#reference-answer [role=status]')).toContainText('توضیح مدل:');
                 if (!['explain', 'workshop'].includes(activity.Kind)) { await click('یک راهنمایی'); await click('بستن راهنمایی'); }
                 await measure(`${lesson.Id}/${activity.Id}/completed-reference`, [{ width: 280, height: 653 }, { width: 390, height: 844 }, { width: 1366, height: 900 }]);
-                if (!baseline) { await click('بستن پاسخ کامل'); await expect(page.locator('aside')).toHaveCount(0); }
+                if (!baseline) { await click('بستن پاسخ کامل'); await expect(page.locator('#reference-answer')).toHaveCount(0); }
                 record(`${lesson.Id}/${activity.Id}: solve, completion, reference, hint and layout`);
             }
         }
@@ -311,6 +318,9 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await expect(page.locator('.work .feedback[role=status]')).toContainText('69');
         await expect(page.locator('.work .feedback[role=status]')).toHaveClass(/error/);
         await measure('AI insufficient grade');
+        await click('ثبت شخصی تکمیل');
+        await expect(page.locator('.work .feedback[role=status]')).toHaveText('تکمیل با ارزیابی شخصی ثبت شد.');
+        await expect(page.locator('.work .feedback[role=status]')).not.toHaveClass(/error/);
         modelMode = 'success';
         await click('بررسی پاسخ با هوش مصنوعی');
         await expect(page.locator('.work .feedback[role=status]')).toContainText('100');
@@ -345,12 +355,12 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
             sql(`UPDATE progress SET data=jsonb_set(data,'{Positions,S06}','999'),revision=revision+1 WHERE profile_id=(SELECT id FROM profiles WHERE email='${email}')`);
             await page.goto(base+'/lobby'); await expect(page.getByRole('heading', { name: 'موضوع‌ها', exact: true })).toBeVisible();
             await page.getByRole('button', { name: /C# جامع/ }).click();
-            await page.getByRole('button', { name: /^S06 ·/ }).click();
+            await archived('S06');
             await expect(page.locator('#activity-title')).toHaveText(lessons[1].Activities.at(-1).Title);
             sql(`UPDATE progress SET data=jsonb_set(jsonb_set(data,'{Positions,S05}','3'),'{Entries,csharp/S05/order,Answers}','["bad","1","2","3"]'),revision=revision+1 WHERE profile_id=(SELECT id FROM profiles WHERE email='${email}')`);
             await page.goto(base+'/lobby'); await expect(page.getByRole('heading', { name: 'موضوع‌ها', exact: true })).toBeVisible();
             await page.getByRole('button', { name: /C# جامع/ }).click();
-            await page.getByRole('button', { name: /^S05 ·/ }).click();
+            await archived('S05');
             await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[3].Title);
             await expect(page.locator('.order-row')).toHaveCount(4);
             record('stale saved chapter position and malformed ordering recover without losing progress');
@@ -359,8 +369,8 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
             await navigate(lessons[0], 7);
             await expect(page.locator('main [role=alert]')).toHaveCount(0);
             await peer.getByRole('button', { name: /C# جامع/ }).click();
-            await peer.getByRole('button', { name: /^S05 ·/ }).click();
             await expect(peer.locator('main [role=alert]')).toContainText('تب دیگه');
+            await expect(peer.getByRole('heading',{name:'موضوع‌ها',exact:true})).toBeVisible();
             await expect(peer.getByText('ذخیره شد', { exact: true })).toHaveCount(0);
             await peer.close();
             record('concurrent-tab save conflict refuses overwrite and does not announce a successful save');

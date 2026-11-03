@@ -1,4 +1,4 @@
- <p>قدم @(Step+1) از @Activity.Rows.Length: <bdi>@Activity.Rows[Step]</bdi></p>
- <div class="options">@for(int j=0;j<Activity.Options.Length;j++){var choice=j;<label class="option"><input type="radio" name="trace" checked="@(Value==j.ToString())" @onchange="()=>Selected.InvokeAsync(choice.ToString())"/>@Activity.Options[j]</label>}</div>
+ <p role="status">قدم @(Step+1) از @Activity.Rows.Length: <bdi>@Activity.Rows[Step]</bdi></p>
+ <div class="options" @key="Step">@for(int j=0;j<Activity.Options.Length;j++){var choice=j;<label class="option"><input type="radio" name="trace" checked="@(Value==j.ToString())" @onchange="()=>Selected.InvokeAsync((Step,choice.ToString()))"/><bdi>@Activity.Options[j]</bdi></label>}</div>
  <div class="toolbar"><button disabled="@(Step==0)" @onclick="()=>StepChanged.InvokeAsync(Step-1)">قدم قبل</button><button disabled="@(Step==Activity.Rows.Length-1)" @onclick="()=>StepChanged.InvokeAsync(Step+1)">قدم بعد</button></div>
-@code { [Parameter,EditorRequired] public Activity Activity {get;set;}=null!; [Parameter] public int Step {get;set;} [Parameter] public string Value {get;set;}=""; [Parameter] public EventCallback<int> StepChanged {get;set;} [Parameter] public EventCallback<string> Selected {get;set;} }
+@code { [Parameter,EditorRequired] public Activity Activity {get;set;}=null!; [Parameter] public int Step {get;set;} [Parameter] public string Value {get;set;}=""; [Parameter] public EventCallback<int> StepChanged {get;set;} [Parameter] public EventCallback<(int Row,string Value)> Selected {get;set;} }

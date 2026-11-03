@@ -2,17 +2,37 @@ namespace ILearn.Application.Learning;
 
 public static class LearningService
 {
-    public static int Xp(IEnumerable<Lesson> lessons, Progress progress) => lessons.Sum(l => l.Activities.Where(a => progress.Entries.GetValueOrDefault($"csharp/{l.Id}/{a.Id}")?.Complete == true).Sum(a => a.Xp));
+    public static int Xp(IEnumerable<Lesson> lessons, Progress progress, IEnumerable<CodeExercise>? codeExercises = null) =>
+        lessons.Sum(l => l.Activities.Where(a => progress.Entries.GetValueOrDefault($"csharp/{l.Id}/{a.Id}")?.Complete == true).Sum(a => a.Xp)) +
+        (codeExercises?.Where(exercise => progress.Entries.GetValueOrDefault(exercise.Key)?.Complete == true).Sum(exercise => exercise.Xp) ?? 0);
     public static void Start(Progress progress, string lesson) => progress.IntroductionsRead.Add("csharp/" + lesson);
+    public static string CurrentFeedback(Activity activity, Entry entry)
+    {
+        if(activity.IsAi)return entry.Feedback;
+        // Saved verdicts can outlive an edit to the lesson's explanation or hint.
+        if(entry.Feedback.StartsWith("درست بود. ",StringComparison.Ordinal))return "درست بود. "+activity.Explanation;
+        if(entry.Feedback.StartsWith("هنوز درست نیست. ",StringComparison.Ordinal))return "هنوز درست نیست. "+activity.Hint;
+        return entry.Feedback;
+    }
     public static (Lesson Lesson, int Position)? NextReview(IEnumerable<Lesson> lessons, Progress progress)
     {
         foreach (var lesson in lessons) { var index = lesson.Activities.FindIndex(a => progress.Entries.GetValueOrDefault($"csharp/{lesson.Id}/{a.Id}")?.NeedsReview == true); if (index >= 0) return (lesson, index); }
         return null;
     }
-    public static void Complete(Entry entry) { if (string.IsNullOrWhiteSpace(entry.Draft)) return; entry.Complete = true; entry.Source = "ثبت شخصی"; entry.NeedsReview = false; }
+    public static void Complete(Entry entry) { if (string.IsNullOrWhiteSpace(entry.Draft)) return; entry.Complete = true; entry.Source = "ثبت شخصی"; entry.NeedsReview = entry.FeedbackError = false; entry.Feedback = "تکمیل با ارزیابی شخصی ثبت شد."; }
     public static void Check(Activity activity, Entry entry, IEnumerable<string> values, int clues)
     {
         var input = values.ToArray();
+        if (activity.Puzzle is not null)
+        {
+            var issue = Puzzles.Missing(activity, entry.GameState, input);
+            if (issue is not null) { entry.FeedbackError = true; entry.Feedback = issue; return; }
+            var solved = Puzzles.Check(activity, entry.GameState, input);
+            entry.FeedbackError = entry.NeedsReview = !solved;
+            entry.Feedback = solved ? "درست بود. " + activity.Explanation : "هنوز درست نیست. " + activity.Hint;
+            if (solved) { entry.Complete = true; entry.Source = "پاسخ‌نامه"; }
+            return;
+        }
         var game = activity.Game;
         var node = game is not null && activity.Kind == "mission" ? MiniGames.Node(activity, entry.GameState) : -1;
         var missing = activity.Kind switch

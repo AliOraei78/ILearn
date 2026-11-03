@@ -1,13 +1,14 @@
 ﻿@page "/not-found"
 @layout MainLayout
+@attribute [ExcludeFromInteractiveRouting]
 @* A rejected POST must be able to render this read-only error page. *@
 @attribute [Microsoft.AspNetCore.Antiforgery.RequireAntiforgeryToken(false)]
 
 <PageTitle>@(InvalidRequest?"درخواست معتبر نیست":"صفحه پیدا نشد") | ILearn</PageTitle>
 <header><Brand /><h1>@(InvalidRequest?"درخواست معتبر نیست":"صفحه پیدا نشد")</h1></header>
 <main class="work account-panel">
- <p>@(InvalidRequest?"درخواست یا فرم معتبر نیست. صفحه را دوباره باز کن و از همان صفحه تلاش کن.":"نشانی این صفحه وجود ندارد. از معرفی بازی یا لابی ادامه بده.")</p>
- <a class="button-link" href="@(InvalidRequest?"/lobby":"/")">@(InvalidRequest?"بازگشت به لابی":"بازگشت به معرفی بازی")</a>
+ <p>@(InvalidRequest?"درخواست یا فرم معتبر نیست. صفحه را دوباره باز کن و از همان صفحه تلاش کن.":"نشانی این صفحه وجود ندارد. از معرفی بازی یا آموزشگاه ادامه بده.")</p>
+ <a class="button-link" href="@(InvalidRequest?"/lobby":"/")">@(InvalidRequest?"بازگشت به آموزشگاه":"بازگشت به معرفی بازی")</a>
 </main>
 @code {
  [CascadingParameter] public HttpContext? Context {get;set;}

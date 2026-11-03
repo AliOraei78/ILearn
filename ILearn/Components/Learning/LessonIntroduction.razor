@@ -1,2 +1,10 @@
- <section class="work"><h2 tabindex="-1">آماده‌سازی جلسه @Lesson.Id</h2><div class="summary">@Lesson.Summary</div><button class="primary" @onclick="Start">@(Started?"ادامه چالش‌ها":"شروع چالش‌ها")</button></section>
-@code { [Parameter,EditorRequired] public Lesson Lesson {get;set;}=null!; [Parameter] public bool Started {get;set;} [Parameter] public EventCallback Start {get;set;} }
+<section class="work" aria-labelledby="lesson-introduction-title">
+ <h2 id="lesson-introduction-title" tabindex="-1" @ref="title">پیش از شروع چالش‌ها</h2>
+ @if(!Lesson.Legacy){<p class="muted">فاز @Lesson.Phase · @Lesson.PhaseTitle</p><h3>هدف این واحد</h3><p>@Lesson.Objective</p>
+ <p>پیش‌نیازهای کلیدی: @if(Lesson.Prerequisites.Length==0){<span>نیازی به سابقهٔ برنامه‌نویسی نیست.</span>}@foreach(var prerequisite in Lesson.Prerequisites){<a class="prerequisite" href="@($"/lobby?lesson={prerequisite}&view=intro")"><bdi>@prerequisite</bdi></a>}</p>}
+ <div class="summary">@Lesson.Summary</div>
+ @if(Lesson.Example.Length>0){<h3>مثال هدایت‌شده</h3><pre tabindex="0">@Lesson.Example</pre><details><summary>نتیجهٔ مثال</summary><pre tabindex="0">@Lesson.ExampleOutput</pre></details>}
+ @if(Lesson.Topics.Length>0){<details><summary>مباحث این واحد</summary><p>@Lesson.Topics</p></details>}
+ <button class="primary" @onclick="Start">@(Started?"ادامه چالش‌ها":"شروع چالش‌ها")</button>
+</section>
+@code { ElementReference title;protected override async Task OnAfterRenderAsync(bool firstRender){if(firstRender)await title.FocusAsync(preventScroll:true);} [Parameter,EditorRequired] public Lesson Lesson {get;set;}=null!; [Parameter] public bool Started {get;set;} [Parameter] public EventCallback Start {get;set;} }

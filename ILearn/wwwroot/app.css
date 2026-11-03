@@ -68,3 +68,49 @@ form{display:flex;flex-direction:column;gap:12px;max-width:100%}input{min-height
 .account-action{display:flex;align-items:center;gap:14px;min-height:60px;padding:12px 16px;background:#24332c;border:1px solid #809489;box-shadow:3px 3px 0 #090f0c;color:#e9efe9;text-decoration:none;text-align:start;width:100%}.account-action svg{flex-shrink:0;color:#79cdb4}.account-action span{min-width:0;overflow-wrap:anywhere}.account-action small,.remember-choice small{display:block;font-size:.78rem;color:#b3c1b7;line-height:1.8;margin-top:3px}.account-action:hover{border-color:#79cdb4;box-shadow:3px 3px 0 #090f0c,inset 0 0 0 1px #79cdb4}.account-action:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #090f0c}.account-action.compact{display:inline-flex;width:auto;min-height:44px}.button-link{box-shadow:2px 2px 0 #090f0c}.button-link:hover{box-shadow:2px 2px 0 #090f0c,inset 0 0 0 1px currentColor}
 .remember-choice{display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 12px;border:1px solid #809489;background:#111916}.remember-choice input{width:20px;height:20px;min-height:20px;margin:0;accent-color:#79cdb4;flex-shrink:0}.remember-choice:has(input:checked){border-color:#79cdb4;box-shadow:inset 0 0 0 1px #79cdb4}.remember-choice:hover{border-style:dashed}
 @media(max-width:480px){.account-panel{padding:20px}.account-action{padding:12px}}
+.chapter-filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.chapter-filters input{width:100%}.prerequisite{display:inline-flex;align-items:center;min-height:44px;min-width:44px;padding:6px 10px;margin:4px;border:1px solid #809489}.pipeline-stages{padding-inline-start:24px}.pipeline-stages li{min-width:0}.test-results{padding-inline-start:24px}.activity-controls button[aria-pressed=true]{border-color:#79cdb4;box-shadow:inset 0 0 0 1px #79cdb4}.activity-controls input[type=range]{display:block;width:100%;min-height:44px;padding-inline:0;accent-color:#79cdb4}.activity-controls label[for=spectrum-value],.activity-controls label[for=spectrum-number]{display:block;margin-block:12px}.activity-controls #spectrum-number{width:100%}
+.puzzle-controls{border:0;padding:0;margin:0;min-width:0}
+.option>bdi{min-width:0}
+.summary,.feedback{overflow-wrap:anywhere}
+.work>:first-child{margin-block-start:0}
+h1:focus,h2[tabindex="-1"]:focus{outline:none}
+.activity-prompt{white-space:pre-line}
+.option bdi,.selected-option bdi{white-space:pre-wrap}
+.selected-option{margin:0;line-height:1.9}
+@media(max-width:600px){.chapter-filters{grid-template-columns:minmax(0,1fr)}}
+.game-shell .player-bar-inner{width:min(1400px,100%)}
+.game-body{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;width:min(1400px,100%);margin:auto;padding-inline:20px}
+.game-content{min-width:0}
+.game-sidebar{position:sticky;top:20px;align-self:start;margin-block:20px;background:#111916;border:1px solid #809489;padding:16px}
+.sidebar-caption{margin:0 0 16px;color:#b3c1b7;font-size:.85rem}
+.game-sidebar nav{display:grid;margin:0;gap:10px}
+.game-sidebar nav a{display:grid;gap:4px;align-content:center;min-height:48px;padding:12px;color:#e9efe9;border:1px solid transparent;text-decoration:none;line-height:1.9}
+.game-sidebar nav a:hover{border-color:#809489;background:#1c2723}
+.game-sidebar nav a:active{transform:translateY(1px)}
+.game-sidebar nav a.active{background:#243c33;border-color:#79cdb4;box-shadow:inset 0 0 0 1px #79cdb4}
+.game-sidebar small{font-size:.75rem;color:#b3c1b7}
+.sidebar-toggle{display:none;width:100%;text-align:start}
+.code-room-header,.code-room-main{width:100%;max-width:1120px}
+.code-room-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.code-room-filters label,.code-exercise-picker label{display:block;margin-bottom:10px}
+.code-room-filters select,.code-exercise-picker select{width:100%;min-width:0}
+.code-exercise-picker{margin-bottom:24px}
+.code-room-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+.code-room-workspace>.work{padding:20px}
+.code-room-workspace h2{margin-top:0}
+.code-room-question{white-space:pre-line}
+.code-room-meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-block:0 16px;font-size:.85rem;color:#b3c1b7}
+.code-room-source{max-height:560px;overflow:auto}
+.code-room-workspace .feedback{margin-bottom:0}
+label.code-answer-label{margin-top:0}
+.code-room-workspace .toolbar+label.code-answer-label{margin-top:20px}
+.code-editor{position:relative;direction:ltr}
+.code-editor textarea{min-height:320px;height:400px;resize:vertical;font:1rem/1.8 Consolas,monospace;padding:12px 12px 12px calc(4em + 12px);white-space:pre;overflow-wrap:normal;overflow:auto}
+.code-editor textarea[dir=rtl]{font-family:IRANSans,Tahoma,sans-serif;white-space:pre-wrap;padding:12px}
+.code-lines{position:absolute;inset:1px auto 1px 1px;width:4em;padding:12px 6px;overflow:hidden;white-space:pre;text-align:right;color:#b3c1b7;background:#1c2723;border-right:1px solid #809489;font:1rem/1.8 Consolas,monospace;pointer-events:none}
+.code-answer-count{text-align:end}
+.interview-navigation{justify-content:space-between;margin-block:0 20px}.interview-sources{padding-inline-start:20px}.interview-sources li{margin-block:12px}.interview-sources small{display:block}
+@media(min-width:1101px){.game-shell .player-bar-inner{grid-template-columns:64px minmax(0,1fr) minmax(0,1.3fr) auto}.game-shell .player-bar-actions{grid-column:auto;grid-row:auto}.game-shell .player-bar-progress{grid-column:auto;grid-row:auto}}
+@media(max-width:1100px){.code-room-workspace{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){.game-body{display:block;padding-inline:0}.game-sidebar{position:static;margin:14px 20px;padding:10px}.sidebar-caption{display:none}.sidebar-toggle{display:block}.game-sidebar nav{display:none;margin-top:12px}.game-sidebar nav.is-open{display:grid}.code-room-filters{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.game-sidebar{margin-inline:14px}.code-room-workspace>.work{padding:16px}.code-room-workspace{gap:16px}.interview-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.interview-navigation>span{grid-column:1/-1;grid-row:1;text-align:center}.interview-navigation button{width:100%}}

@@ -1,20 +1,20 @@
 @using ILearn.Components.Learning
 @page "/lobby"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @implements IAsyncDisposable
 @inject ICurriculum Content
 @inject PlayerStore Store
 @inject IReviewer Reviewer
 @inject ILogger<Home> Logger
 @inject NavigationManager Navigation
-<PageTitle>ILearn | کارگاه C#</PageTitle>
-@if(player is not null && progress is not null && !sessionExpired){<PlayerBar Player="@player" Xp="@Xp" />}
+<PageTitle>آموزشگاه و کارگاه | ILearn</PageTitle>
+<GameShell Player="@(sessionExpired ? null : player)" Xp="@Xp">
+<NavigationLock OnBeforeInternalNavigation="BeforeInternalNavigation" ConfirmExternalNavigation="@(draftVersion != savedDraftVersion)" />
 <header>
- <h1>لابی بازی</h1>
+ <h1>@if(screen==2){<bdi>@lesson.Id</bdi><span> · @lesson.Title</span>}else{@(screen==1?"فصل‌های C#":"آموزشگاه و کارگاه")}</h1>
  <p class="muted">یک مسئله، یک کشف، یک قدم جلوتر.</p>
  @if (progress is not null) {
- <div class="toolbar">@if(screen>0){<button @onclick="()=>Lobby(0)">بازگشت به لابی</button>}@if(screen==2){<button @onclick="()=>Lobby(1)">فهرست فصل‌ها</button>}@if(screen==0&&progress.HasStarted(lesson.Id)){<button class="primary" @onclick="()=>Navigate(position)">ادامه آخرین چالش</button>}<button @onclick="OpenReview">مرور اشتباه‌ها (@ReviewCount)</button></div>
+ <div class="toolbar">@if(screen>0){<button @onclick="()=>Lobby(0)">بازگشت به آموزشگاه</button>}@if(screen==2){<button @onclick="()=>Lobby(1)">فهرست فصل‌ها</button>}@if(screen==0&&progress.HasStarted(lesson.Id)){<button class="primary" @onclick="()=>Navigate(position)">ادامه آخرین چالش</button>}<button @onclick="OpenReview">مرور اشتباه‌ها (@ReviewCount)</button></div>
  @if(screen<2||showIntro){<p role="status" class="muted">@saveStatus</p>}
  }
 </header>
@@ -35,6 +35,8 @@
  <fieldset class="activity-controls" disabled="@(sessionExpired&&!activity.IsAi)" aria-label="پاسخ چالش">
  @if(activity.IsAi) {
  <WrittenActivity Activity="activity" Entry="entry" Busy="busy" ReadOnly="sessionExpired" Changed="DraftChanged" Review="AskAi" Complete="SelfComplete" Cancel="CancelReview" />
+ } else if(activity.Puzzle is not null) {
+ <PuzzleActivity @key="Key" Activity="activity" Entry="entry" Changed="()=>Save()" />
  } else if(activity.Game is not null) {
  <MiniGameActivity @key="Key" Activity="activity" Entry="entry" Changed="()=>Save()" />
  } else if(activity.Kind=="slots") {
@@ -42,7 +44,7 @@
  } else if(activity.Kind=="order") {
  <OrderingActivity Activity="activity" Order="order" Moved="x=>Move(x.Row,x.Delta)" />
  } else if(activity.Kind=="trace") {
- <TraceActivity Activity="activity" Step="step" StepChanged="StepChanged" Value="@SlotValue(step)" Selected="x=>SetSlot(step,x)" />
+ <TraceActivity Activity="activity" Step="step" StepChanged="StepChanged" Value="@SlotValue(step)" Selected="x=>SetSlot(x.Row,x.Value)" />
  } else {
  @if(activity.Kind=="detective"){<DetectiveActivity Activity="activity" Clues="clues" Opened="OpenClue" />}
  <ChoiceActivity Activity="activity" Entry="entry" Selected="Toggle" />
@@ -50,11 +52,12 @@
  </fieldset>
  @if(!activity.IsAi){<div class="toolbar"><button class="primary" disabled="@sessionExpired" @onclick="Check">ثبت جواب</button><button @onclick="()=>hint=!hint">@(hint?"بستن راهنمایی":"یک راهنمایی")</button></div>}
  @if(hint){<p class="feedback" role="status">@activity.Hint</p>}
- @if(!string.IsNullOrWhiteSpace(entry.Feedback)){<div class="@(entry.FeedbackError||entry.NeedsReview?"feedback error":"feedback")" role="status">@entry.Feedback</div>}
+ @if(!string.IsNullOrWhiteSpace(entry.Feedback)){<div class="@(entry.FeedbackError||entry.NeedsReview?"feedback error":"feedback")" role="status">@LearningService.CurrentFeedback(activity,entry)</div>}
  @if(entry.Complete && error is null){<p class="muted">امتیاز تکمیل ثبت شد: @entry.Source · تغییر پاسخ یا شروع مجدد، امتیاز قبلی را حذف نمی‌کند. تکرار این چالش XP اضافه نمی‌کند.</p>}
  </ActivityWorkspace>
- <div class="toolbar" style="margin-top:16px"><button disabled="@(position==0)" @onclick="()=>Navigate(position-1)">چالش قبل</button><button disabled="@(position==lesson.Activities.Count-1)" @onclick="()=>Navigate(position+1)">چالش بعد</button><span class="muted" role="status">@saveStatus</span></div>
+ <div class="toolbar" style="margin-top:16px"><button disabled="@(position==0)" @onclick="()=>Navigate(position-1)">چالش قبل</button><button disabled="@(position==lesson.Activities.Count-1)" @onclick="()=>Navigate(position+1)">چالش بعد</button>@if(position==lesson.Activities.Count-1 && NextLesson is { } next){<button class="primary" @onclick="()=>SelectLesson(next)">واحد بعد: @next.Id</button>}<span class="muted" role="status">@saveStatus</span></div>
  }
  }
 </main>
 <footer>محلی و شخصی · بدون زمان‌سنج · انتخاب ترتیب چالش‌ها آزاد است.</footer>
+</GameShell>

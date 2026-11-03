@@ -1,0 +1,193 @@
+@using ILearn.Domain.Learning
+@using ILearn.Domain.Progress
+@if (Activity.Puzzle is { } puzzle)
+{
+    <fieldset class="puzzle-controls" aria-busy="@(Saving?"true":"false")" aria-label="کنترل‌های بازی">
+    <p class="muted">@Instructions</p>
+    @if ((!Puzzles.ValidState(Activity, Entry.GameState) && Activity.Kind != "pipeline") || (Activity.Kind == "pipeline" && (Entry.GameState.History.Count > puzzle.Limit || Entry.GameState.History.Any(i => i < 0 || i >= Activity.Options.Length))))
+    {
+        <p class="feedback error" role="alert">وضعیت این دور معتبر نیست؛ با شروع مجدد، دور سالمی باز کن. تکمیل قبلی محفوظ است.</p>
+    }
+    else if (Activity.Kind == "counterexample")
+    {
+        <ChoiceActivity Activity="Activity" Entry="Entry" Selected="Choose" />
+        <button disabled="@(Entry.Answers.Count != 1)" @onclick="Test">آزمایش نمونه</button>
+        @foreach (var trial in Entry.GameState.Trials)
+        {
+            var sample = puzzle.Cases.First(c => c.Input.SequenceEqual(trial));
+            <div class="feedback"><strong>@Activity.Options[trial[0]]</strong><p>طبق ادعا: @sample.Expected</p><p>نتیجهٔ واقعی: @sample.Actual</p><p>@sample.Reason</p></div>
+        }
+    }
+    else if (Activity.Kind == "repair")
+    {
+        var repairCost=Puzzles.RepairCost(Activity,Entry.Answers);
+        <p role="status">جایگاه‌های تغییرکرده: @(repairCost==int.MaxValue?"پاسخ ناقص":repairCost.ToString()) از @puzzle.Limit حرکت مجاز</p>
+        <SlotActivity Activity="Activity" Value="SlotValue" Changed="x => Slot(x.Row, x.Value)" />
+        var configuration = Puzzles.Configuration(Activity, Entry.Answers);
+        var tested = Puzzles.Numbers(Entry.Answers, out var input) && Entry.GameState.Trials.Any(t => t.SequenceEqual(input));
+        <button disabled="@(repairCost==int.MaxValue)" @onclick="Test">آزمایش تعمیر</button>
+        <ul class="test-results">@for (int i = 0; i < puzzle.Tests.Length; i++) { <li>@puzzle.Tests[i]: @(!tested || configuration is null ? "آزمایش نشده" : configuration.Passed[i] ? "قبول" : "رد")</li> }</ul>
+        <p class="muted">نتایج، پاسخ‌نامهٔ تألیف‌شده‌اند؛ کد این صفحه اجرا نمی‌شود.</p>
+    }
+    else if (Activity.Kind is "simulation" or "pipeline")
+    {
+        var current = Puzzles.State(Activity, Entry.GameState.History);
+        <p class="feedback" role="status">وضعیت فعلی: @(current < 0 ? "زنجیره نامعتبر؛ ترتیب را اصلاح یا عملیات را حذف کن." : puzzle.States[current])</p>
+        <p>هدف: @string.Join(" / ", puzzle.Targets.Select(i => puzzle.States[i])) · حرکت @Entry.GameState.History.Count از @puzzle.Limit</p>
+        @if (Activity.Kind == "pipeline")
+        {
+            <ol class="pipeline-stages"><li>ورودی: @puzzle.States[puzzle.Start]</li>
+            @for (int i = 0; i < Entry.GameState.History.Count; i++)
+            {
+                var index = i; var stage = Puzzles.State(Activity, Entry.GameState.History.Take(i + 1));
+                <li><p>@Activity.Options[Entry.GameState.History[i]] · خروجی: @(stage < 0 ? "ترکیب نامعتبر" : puzzle.States[stage])</p>
+                <div class="toolbar"><button aria-label="@($"بالا بردن عملیات {i + 1}")" disabled="@(i == 0)" @onclick="() => MoveStage(index, -1)">بالا</button><button aria-label="@($"پایین بردن عملیات {i + 1}")" disabled="@(i == Entry.GameState.History.Count - 1)" @onclick="() => MoveStage(index, 1)">پایین</button><button aria-label="@($"حذف عملیات {i + 1}")" @onclick="() => RemoveStage(index)">حذف</button></div></li>
+            }</ol>
+        }
+        else
+        {
+            <ol>@foreach (var move in Entry.GameState.History) { <li>@Activity.Options[move]</li> }</ol>
+        }
+        <div class="options">@for (int i = 0; i < Activity.Options.Length; i++) { var move = i; <button disabled="@(!CanAppend(i))" @onclick="() => Record(move)">@Activity.Options[i]</button> }</div>
+        @if (Entry.GameState.History.Count >= puzzle.Limit) { <p role="status">به سقف مسیر رسیدی؛ یک قدم برگرد یا دور را دوباره شروع کن.</p> }
+    }
+    else if (Activity.Kind == "groups")
+    {
+        var solved = Puzzles.SolvedGroups(Activity, Entry.GameState);
+        var locked = solved.SelectMany(i => puzzle.Groups[i]).ToHashSet();
+        <p role="status">گروه‌های کشف‌شده: @solved.Length از @puzzle.Groups.Length · خطاهای آزمایش گروه: @Puzzles.GroupErrors(Activity, Entry.GameState) از @puzzle.Limit</p>
+        @foreach (var i in solved) { <p class="feedback"><strong>@puzzle.Labels[i]</strong>: @string.Join("، ", puzzle.Groups[i].Select(j => Activity.Options[j]))</p> }
+        <div class="options">@for (int i = 0; i < Activity.Options.Length; i++) { var card = i; <label class="option"><input type="checkbox" checked="@Entry.Answers.Contains(i.ToString())" disabled="@(locked.Contains(i) || Puzzles.GroupErrors(Activity, Entry.GameState) >= puzzle.Limit)" @onchange="() => Choose(card)" /><span><bdi>@Activity.Options[i]</bdi> @(locked.Contains(i) ? "(گروه پیدا شد)" : "")</span></label> }</div>
+        <button disabled="@(Entry.Answers.Count != puzzle.Groups[0].Length || Puzzles.GroupErrors(Activity, Entry.GameState) >= puzzle.Limit)" @onclick="Test">بررسی گروه</button>
+        @if (Puzzles.GroupErrors(Activity, Entry.GameState) >= puzzle.Limit) { <p class="feedback error">سهمیهٔ خطا تمام شد؛ گروه‌های کشف‌شده را مرور کن و دور را دوباره شروع کن.</p> }
+    }
+    else if (Activity.Kind == "questions")
+    {
+        <p>پرسش‌های آشکارشده: @Entry.GameState.History.Count از @puzzle.Limit</p>
+        <div class="options">@for (int i = 0; i < puzzle.Questions.Length; i++) { var question = i; <button disabled="@(Entry.GameState.History.Contains(i) || Entry.GameState.History.Count >= puzzle.Limit)" @onclick="() => Record(question)">@puzzle.Questions[i]</button> }</div>
+        @foreach (var q in Entry.GameState.History) { <p class="feedback">@puzzle.Questions[q]: @(puzzle.Traits[puzzle.Target][q] ? "بله" : "خیر")</p> }
+        @if (Entry.GameState.History.Count >= puzzle.Limit) { <p>سهمیهٔ پرسش تمام شد؛ انتخاب پاسخ نهایی همچنان باز است.</p> }
+        <ChoiceActivity Activity="Activity" Entry="Entry" Selected="Choose" />
+    }
+    else if (Activity.Kind == "contradiction")
+    {
+        @if (Entry.GameState.Found < 0)
+        {
+            <p>مرحلهٔ ۱: کوچک‌ترین مجموعهٔ متناقض را پیدا کن.</p>
+            <ChoiceActivity Activity="Activity" Entry="Entry" Selected="Choose" />
+            <button @onclick="FindConflict">بررسی تناقض</button>
+        }
+        else
+        {
+            var conflict = puzzle.Cases[Entry.GameState.Found];
+            <p class="feedback">مرحلهٔ ۱ حل شد. @conflict.Reason</p><p>مرحلهٔ ۲: با حذف یک عضو، سازگاری را برگردان.</p>
+            <div class="options">@foreach (var i in conflict.Input) { var card = i; <button aria-pressed="@(Entry.GameState.Removed == i ? "true" : "false")" @onclick="() => RemoveClaim(card)">حذف: @Activity.Options[i]</button> }</div>
+            @if (Entry.GameState.Removed >= 0) { <p role="status">مجموعهٔ باقی‌مانده: @string.Join("، ", conflict.Input.Where(i => i != Entry.GameState.Removed).Select(i => Activity.Options[i]))</p> }
+            <button @onclick="ReopenConflict">اصلاح مجموعهٔ انتخابی</button>
+        }
+    }
+    else if (Activity.Kind is "argument" or "analogy")
+    {
+        <SlotActivity Activity="Activity" Value="SlotValue" Changed="x => Slot(x.Row, x.Value)" />
+    }
+    else if (Activity.Kind == "constraints")
+    {
+        <OrderingActivity Activity="Activity" Order="Order" Moved="x => MoveOrder(x.Row, x.Delta)" />
+    }
+    else if (Activity.Kind == "domino")
+    {
+        <p>آغاز: @Activity.Options[puzzle.Start] · مقصد: @Activity.Options[puzzle.Target]</p>
+        <p>کارت‌های لازم: @string.Join("، ", puzzle.Required.Select(i => Activity.Options[i]))</p>
+        <ol><li>@Activity.Options[puzzle.Start]</li>@foreach (var i in Entry.GameState.History) { <li>@Activity.Options[i]</li> }</ol>
+        <div class="options">@for (int i = 0; i < Activity.Options.Length; i++) { var card = i; <button disabled="@(i == puzzle.Start || Entry.GameState.History.Contains(i) || Entry.GameState.History.Count >= puzzle.Limit)" @onclick="() => Record(card)">@Activity.Options[i]</button> }</div>
+    }
+    else if (Activity.Kind == "spectrum")
+    {
+        <p>@puzzle.Criterion</p><ul>@foreach (var anchor in puzzle.Anchors) { <li>@anchor</li> }</ul>
+        <label for="spectrum-value">جایگاه انتخابی، از @puzzle.Min تا @puzzle.Max، گام @puzzle.Step</label>
+        <input id="spectrum-value" type="range" min="@puzzle.Min" max="@puzzle.Max" step="@puzzle.Step" @bind:get="ScaleValue" @bind:set="(int value)=>SetScale(value.ToString())" @bind:event="oninput" />
+        <label for="spectrum-number">مقدار عددی</label><input id="spectrum-number" type="number" min="@puzzle.Min" max="@puzzle.Max" step="@puzzle.Step" @bind:get="ScaleText" @bind:set="SetScale" @bind:event="oninput" />
+        <p role="status">مقدار فعلی: @ScaleText · آزمایش @Entry.GameState.Trials.Count از @puzzle.Limit</p>
+        <button disabled="@(Entry.GameState.Trials.Count >= puzzle.Limit)" @onclick="Test">آزمایش جایگاه</button>
+        @foreach (var trial in Entry.GameState.Trials) { <p class="feedback">@trial[0]: @(trial[0] < puzzle.Low ? "پایین‌تر از بازه؛ مقدار را بیشتر کن." : trial[0] > puzzle.High ? "بالاتر از بازه؛ مقدار را کمتر کن." : "در بازهٔ معتبر است.")</p> }
+        @if (Entry.GameState.Trials.Count >= puzzle.Limit) { <p>سهمیه تمام شد؛ می‌توانی یکی از مقدارهای آزمایش‌شدهٔ معتبر را ثبت کنی یا دور را دوباره شروع کنی.</p> }
+    }
+    @if (Message.Length > 0) { <p class="feedback" role="status">@Message</p> }
+    @if (Saving) { <p class="muted" role="status">در حال ذخیرهٔ حرکت…</p> }
+    <div class="toolbar round-actions">
+        @if (Activity.Kind is "simulation" or "pipeline" or "domino") { <button disabled="@(Entry.GameState.PathUndo.Count == 0)" @onclick="UndoPath">برگشت آخرین حرکت</button> }
+        else if (Activity.Kind is not "questions") { <button disabled="@(Entry.GameState.Undo.Count == 0 || (Activity.Kind == "contradiction" && Entry.GameState.Found >= 0))" @onclick="Undo">برگشت آخرین انتخاب</button> }
+        <button @onclick="Restart">شروع مجدد دور</button>
+    </div>
+    </fieldset>
+}
+
+@code {
+    [Parameter, EditorRequired] public Activity Activity { get; set; } = null!;
+    [Parameter, EditorRequired] public Entry Entry { get; set; } = null!;
+    [Parameter] public EventCallback Changed { get; set; }
+    int pendingSaves;
+    bool Saving => pendingSaves > 0;
+    string Message = "";
+    List<int> Order => Puzzles.Numbers(Entry.Answers, out var values) && values.Order().SequenceEqual(Enumerable.Range(0, Activity.Options.Length)) ? values.ToList() : Enumerable.Range(0, Activity.Options.Length).Reverse().ToList();
+    int ScaleValue => Entry.Answers.Count == 1 && int.TryParse(Entry.Answers[0], out var n) ? n : Activity.Puzzle!.Min;
+    string ScaleText => Entry.Answers.FirstOrDefault() ?? Activity.Puzzle!.Min.ToString();
+    string Instructions => Activity.Kind switch {
+        "counterexample" => "یک ورودی بساز؛ ادعا و نتیجهٔ واقعی را مقایسه کن. هر ضدنمونهٔ معتبر پذیرفته می‌شود.",
+        "repair" => "بخش‌های قابل تغییر را اصلاح کن. با «آزمایش تعمیر» نتیجهٔ تست‌های همین نسخه را ببین. هزینه، تعداد جایگاه‌های متفاوت با نسخهٔ اولیه است؛ تعداد کلیک‌ها نیست.",
+        "simulation" => "با اقدام‌های مجاز از وضعیت آغاز به هدف برس. وضعیت از تاریخچهٔ اقدام‌ها بازسازی می‌شود.",
+        "pipeline" => "عملیات را اضافه، حذف و مرتب کن؛ خروجی هر مرحله را ببین. همهٔ زنجیره‌های معتبر پذیرفته می‌شوند.",
+        "groups" => $"هر بار {Activity.Puzzle!.Groups[0].Length} کارت هم‌گروه انتخاب کن. نام گروه پس از کشف آشکار می‌شود.",
+        "questions" => "با پاسخ پرسش‌های بله/خیر، خودت نامزدهای ناسازگار را تشخیص بده و هدف ثابت این دور را حدس بزن.",
+        "contradiction" => "ابتدا تناقض حداقلی را کشف کن؛ سپس یک گزاره را برای اصلاح حذف کن.",
+        "argument" => "ادعا، شاهد و دلیل را به هم وصل کن؛ سپس «ثبت جواب» را بزن. پرشدن جایگاه‌ها بدون رابطهٔ معتبر کافی نیست.",
+        "analogy" => "رابطهٔ جفت مرجع را انتخاب کن و همان رابطه را با جهت درست در جفت دوم بساز؛ سپس «ثبت جواب» را بزن.",
+        "constraints" => "همهٔ قطعه‌ها را دقیقاً یک بار بچین؛ سپس «ثبت جواب» را بزن. هر ترتیبی که وابستگی‌های مسئله را رعایت کند معتبر است.",
+        "domino" => "کارت بعدی را به زنجیره وصل کن. اتصال جهت دارد؛ کارت تکراری مجاز نیست.",
+        "spectrum" => "با معیار عددی داده‌شده جایگاه را برآورد کن. راهنمایی آزمایش، جهت اصلاح را نشان می‌دهد.",
+        _ => ""
+    };
+    protected override void OnParametersSet()
+    {
+        if (Activity.Kind == "groups")
+        {
+            var locked = Puzzles.SolvedGroups(Activity, Entry.GameState).SelectMany(i => Activity.Puzzle!.Groups[i]).Select(i => i.ToString()).ToHashSet();
+            Entry.Answers.RemoveAll(locked.Contains);
+            if (Entry.GameState.Undo.Any(snapshot => snapshot.Any(locked.Contains))) Entry.GameState.Undo.Clear();
+        }
+        if (Entry.Answers.Count != 0) return;
+        if (Activity.Kind == "repair") Entry.Answers = Activity.Puzzle!.Initial.Select(i => i.ToString()).ToList();
+        if (Activity.Kind == "constraints") Entry.Answers = Order.Select(i => i.ToString()).ToList();
+        if (Activity.Kind == "spectrum") Entry.Answers = [Activity.Puzzle!.Min.ToString()];
+    }
+    void Snapshot() { Entry.GameState.Undo.Add(Entry.Answers.ToList()); if (Entry.GameState.Undo.Count > 30) Entry.GameState.Undo.RemoveAt(0); }
+    void SnapshotPath(IEnumerable<int> path) { Entry.GameState.PathUndo.Add(path.ToList());if(Entry.GameState.PathUndo.Count>30)Entry.GameState.PathUndo.RemoveAt(0); }
+    async Task Persist() { Entry.Feedback = ""; pendingSaves++; try { await Changed.InvokeAsync(); } finally { pendingSaves--; } }
+    bool CanAppend(int i) => Puzzles.State(Activity, Entry.GameState.History.Append(i)) >= 0;
+    async Task Choose(int i) { Snapshot(); var value = i.ToString(); if (!Activity.Multiple) Entry.Answers.Clear(); if (!Entry.Answers.Remove(value)) Entry.Answers.Add(value); Message = ""; await Persist(); }
+    string SlotValue(int row) => Entry.Answers.ElementAtOrDefault(row) ?? "";
+    async Task Slot(int row, string value) { Snapshot(); while (Entry.Answers.Count < Activity.Rows.Length) Entry.Answers.Add(""); Entry.Answers[row] = value; Message = ""; await Persist(); }
+    async Task Record(int i) { var previous=Entry.GameState.History.ToList();var recorded=Puzzles.Record(Activity, Entry.GameState, i);if(recorded&&Activity.Kind!="questions")SnapshotPath(previous);Message = recorded ? "حرکت ثبت شد." : "این اتصال یا اقدام در وضعیت فعلی مجاز نیست."; await Persist(); }
+    async Task Test()
+    {
+        var recorded = Puzzles.Try(Activity, Entry.GameState, Entry.Answers);
+        Message = recorded ? "آزمایش ثبت شد؛ نتیجه را ببین و تصمیم بعدی را بگیر." : "این آزمایش تکراری، ناقص یا خارج از سهمیه و دامنه است؛ سهمیهٔ تازه مصرف نشد.";
+        if (recorded && Activity.Kind == "groups")
+        {
+            var latest = Entry.GameState.Trials[^1]; var puzzle = Activity.Puzzle!;
+            if (puzzle.Groups.Any(g => g.Order().SequenceEqual(latest.Order()))) { Entry.Answers.Clear(); Entry.GameState.Undo.Clear(); Message = "گروه درست کشف و قفل شد."; }
+            else Message = puzzle.Groups.Any(g => g.Count(latest.Contains) == g.Length - 1) ? "یک کارت فاصله؛ یک عضو را عوض کن." : "این کارت‌ها یک گروه نیستند؛ ارتباط آن‌ها را دوباره بررسی کن.";
+        }
+        await Persist();
+    }
+    async Task FindConflict() { Message = Puzzles.FindConflict(Activity, Entry.GameState, Entry.Answers) ? "تناقض حداقلی پیدا شد؛ حالا اصلاح کن." : "این مجموعه متناقضِ حداقلی نیست؛ کارت اضافه یا ناسازگار را بررسی کن."; await Persist(); }
+    async Task RemoveClaim(int i) { Entry.GameState.Removed = i; Message = ""; await Persist(); }
+    async Task ReopenConflict() { Entry.GameState.Found = Entry.GameState.Removed = -1; Message = ""; await Persist(); }
+    async Task Undo() { if (Entry.GameState.Undo.Count == 0) return; Entry.Answers = Entry.GameState.Undo[^1]; Entry.GameState.Undo.RemoveAt(Entry.GameState.Undo.Count - 1); Message = "انتخاب برگشت؛ آزمایش‌ها و سهمیهٔ مصرف‌شده محفوظ‌اند."; await Persist(); }
+    async Task UndoPath() { if (Entry.GameState.PathUndo.Count == 0) return; Entry.GameState.History=Entry.GameState.PathUndo[^1];Entry.GameState.PathUndo.RemoveAt(Entry.GameState.PathUndo.Count-1); Message = "آخرین تغییر مسیر برگشت."; await Persist(); }
+    async Task MoveOrder(int row, int delta) { Snapshot(); var order = Order; (order[row], order[row + delta]) = (order[row + delta], order[row]); Entry.Answers = order.Select(i => i.ToString()).ToList(); await Persist(); }
+    async Task MoveStage(int row, int delta) { var moves=Entry.GameState.History.ToList();if(row<0||row>=moves.Count||row+delta<0||row+delta>=moves.Count)return;SnapshotPath(moves); (moves[row], moves[row + delta]) = (moves[row + delta], moves[row]); Entry.GameState.History = moves; Message = "ترتیب تغییر کرد؛ خروجی‌ها دوباره محاسبه شدند."; await Persist(); }
+    async Task RemoveStage(int row) { if(row<0||row>=Entry.GameState.History.Count)return;SnapshotPath(Entry.GameState.History);Entry.GameState.History.RemoveAt(row); Message = "عملیات حذف شد."; await Persist(); }
+    async Task SetScale(string value) { Snapshot(); Entry.Answers = [value]; Message = ""; await Persist(); }
+    async Task Restart() { Entry.GameState = new(); Entry.Answers.Clear(); OnParametersSet(); Message = "دور تازه شروع شد؛ تکمیل و امتیاز قبلی محفوظ‌اند."; await Persist(); }
+}

@@ -5,6 +5,15 @@ public class MiniGameTests
 {
  static List<Lesson> Lessons => JsonSerializer.Deserialize<List<Lesson>>(File.ReadAllText(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,"../../../../ILearn/Content/lessons.json"))))!;
  static Activity Game(string kind)=>Lessons.Single(l=>l.Id=="S08").Activities.Single(a=>a.Kind==kind);
+ [Theory][InlineData("9:9",2)][InlineData("broken",0)][InlineData("0:9",-1)]
+ public void CorruptDeductionMarksCannotAwardCompletion(string key,int value)
+ {
+  var activity=new Activity{Kind="deduction",Rows=["row"],Options=["choice"],Answers=["0:0"],Game=new()};
+  var entry=new Entry();entry.GameState.Marks["0:0"]=1;entry.GameState.Marks[key]=value;
+  Assert.False(MiniGames.ValidState(activity,entry.GameState,[]));
+  LearningService.Check(activity,entry,[],0);
+  Assert.False(entry.Complete);Assert.True(entry.NeedsReview);
+ }
  [Fact] public void ChapterHasEightActivitiesAndHundredXp(){var lesson=Lessons.Single(l=>l.Id=="S08");Assert.Equal(8,lesson.Activities.Count);Assert.Equal(100,lesson.Activities.Sum(a=>a.Xp));Assert.Equal(6,lesson.Activities.Count(a=>a.Game is not null));}
  [Fact] public void GuessLimitAndDuplicates(){var a=Game("concept");var s=new MiniGameState();Assert.False(MiniGames.Record(a,s,-1));Assert.True(MiniGames.Record(a,s,0));Assert.False(MiniGames.Record(a,s,0));Assert.False(MiniGames.Check(a,s,[]));Assert.True(MiniGames.Record(a,s,2));Assert.True(MiniGames.Check(a,s,[]));Assert.False(MiniGames.Record(a,s,3));s=new();foreach(int i in new[]{0,1,3,4})Assert.True(MiniGames.Record(a,s,i));Assert.False(MiniGames.Record(a,s,2));}
  [Fact] public void ExperimentRequiresObservationAndCapsBudget(){var a=Game("experiment");var s=new MiniGameState();Assert.False(MiniGames.Check(a,s,a.Answers));foreach(int i in new[]{0,1,2})Assert.True(MiniGames.Record(a,s,i));Assert.False(MiniGames.Record(a,s,0));Assert.False(MiniGames.Record(a,s,3));Assert.True(MiniGames.Check(a,s,a.Answers));Assert.False(MiniGames.Check(a,s,["0"]));}

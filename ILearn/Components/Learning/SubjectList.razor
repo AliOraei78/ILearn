@@ -1,3 +1,3 @@
 @inject ICurriculum Content
-<section class="work"><h2>موضوع‌ها</h2><ol class="subject-list"><li><button @onclick="Selected"><strong><bdi>C#</bdi> جامع - مقدماتی تا پیشرفته</strong><span class="muted">@Content.Lessons.Count فصل آماده برای بازی؛ از اولین کد تا رکوردها</span></button></li></ol></section>
+<section class="work"><h2>موضوع‌ها</h2><ol class="subject-list"><li><button @onclick="Selected"><strong><bdi>C#</bdi> جامع - مقدماتی تا پیشرفته</strong><span class="muted">@Content.Lessons.Count(l=>!l.Legacy) واحد در ۱۱ فاز؛ از اولین برنامه تا async، حافظه و طراحی</span></button></li></ol></section>
 @code { [Parameter] public EventCallback Selected {get;set;} }

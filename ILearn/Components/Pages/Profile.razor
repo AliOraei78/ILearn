@@ -1,11 +1,10 @@
 @page "/profile"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject PlayerStore Store
 @inject NavigationManager Navigation
 <PageTitle>پروفایل من | ILearn</PageTitle>
-@if(player is not null && !sessionExpired){<PlayerBar Player="@player" Xp="@xp" />}
-<header><h1>پروفایل من</h1><a class="account-action compact" href="/lobby"><PixelIcon Kind="back" /><span>بازگشت به لابی</span></a></header>
+<GameShell Player="@(sessionExpired ? null : player)" Xp="@xp">
+<header><h1>پروفایل من</h1><a class="account-action compact" href="/lobby"><PixelIcon Kind="back" /><span>بازگشت به آموزشگاه</span></a></header>
 <main>
 @if(error is not null){<div role="alert" class="feedback error" tabindex="-1" @ref="errorNotice"><p>@error</p>@if(sessionExpired){<a class="button-link" href="@LoginUrl" data-enhance-nav="false">ورود دوباره به حساب</a>}</div>}
 @if(player is null){<p role="status">@(error is null?"داریم پروفایلت رو می‌خونیم…":"بارگذاری متوقف شد؛ صفحه را دوباره باز کن.")</p>}
@@ -21,6 +20,7 @@ else {
  <button class="primary" disabled="@sessionExpired">ذخیره مشخصات</button></form></section>
  <h2>کاراکترت رو انتخاب کن</h2><p role="status">@status</p><div class="avatar-grid">@for(int i=1;i<=48;i++){var id=$"avatar-{i:00}";<button disabled="@sessionExpired" aria-label="@($"کاراکتر {i}")" aria-pressed="@(player.Avatar==id?"true":"false")" @onclick="()=>Choose(id)"><Avatar Id="@id" /></button>}</div>}
 </main><footer>انتخاب کاراکتر روی پیشرفتت اثری نداره.</footer>
+</GameShell>
 @code {
  Player? player; string? error; string status="";int xp;
  readonly SemaphoreSlim avatarSaves = new(1,1);
@@ -33,7 +33,7 @@ else {
  [SupplyParameterFromQuery(Name="message")] public string? Detail {get;set;}
  [SupplyParameterFromQuery(Name="error")] public string? AccountError {get;set;}
  [Inject] public ICurriculum Content {get;set;}=null!;
- protected override async Task OnInitializedAsync(){try{player=await Store.Profile();var progress=await Store.Load();xp=LearningService.Xp(Content.Lessons,progress);}catch(UnauthorizedAccessException){RequireLogin();}catch{error="پروفایل باز نشد. اتصال دیتابیس رو بررسی کن.";}}
+ protected override async Task OnInitializedAsync(){try{player=await Store.Profile();var progress=await Store.Load();xp=LearningService.Xp(Content.Lessons,progress,Content.CodeExercises);}catch(UnauthorizedAccessException){RequireLogin();}catch{error="پروفایل باز نشد. اتصال دیتابیس رو بررسی کن.";}}
  async Task Choose(string id)
  {
   var request=++avatarRequest;status="در حال ذخیرهٔ کاراکتر…";

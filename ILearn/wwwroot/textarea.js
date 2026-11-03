@@ -24,6 +24,7 @@ document.addEventListener("keydown", event => {
         nextEnd = Math.max(nextStart, end + changes.reduce((a, b) => a + b, 0));
     } else nextStart = nextEnd = start + 4;
     if (text.slice(from, to) === replacement) return;
+    if (field.maxLength >= 0 && text.length - (to - from) + replacement.length > field.maxLength) return;
     field.setSelectionRange(from, to);
     // shortcut: insertText preserves native undo; setRangeText covers browsers without it.
     const inserted = document.execCommand("insertText", false, replacement);
@@ -32,3 +33,8 @@ document.addEventListener("keydown", event => {
     field.dispatchEvent(new Event("input", { bubbles: true }));
 });
 document.addEventListener("focusout", event => escapeArmed.delete(event.target));
+document.addEventListener("scroll", event => {
+    if (!(event.target instanceof HTMLTextAreaElement)) return;
+    const lines = event.target.closest(".code-editor")?.querySelector(".code-lines");
+    if (lines) lines.scrollTop = event.target.scrollTop;
+}, true);
