@@ -1,0 +1,7 @@
+<Router AppAssembly="typeof(App).Assembly" AdditionalAssemblies="new[] { typeof(ILearn.Components.Pages.Home).Assembly }">
+ <Found Context="routeData">
+  <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+  <FocusOnNavigate RouteData="routeData" Selector="h1" />
+ </Found>
+ <NotFound><LayoutView Layout="typeof(MainLayout)"><main><h1>این صفحه پیدا نشد</h1><a class="button-link" href="/lobby">بازگشت به آموزشگاه</a></main></LayoutView></NotFound>
+</Router>

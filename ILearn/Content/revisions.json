@@ -20,20 +20,6 @@
     "Prompt": "تعداد کالا باید بیشتر از صفر باشه. کد زیر صفر رو هم قبول می‌کنه. کدوم ورودی این اشتباه رو نشون می‌ده؟",
     "Solution": "ورودی صفر اشتباه رو نشون می‌ده. شرط quantity >= 0 صفر رو قبول می‌کنه، ولی تعداد باید مثبت باشه. شرط درست quantity > 0 است."
   },
-  "S05/explain1": {
-    "Prompt": "ref متغیری رو می‌گیره که از قبل مقدار داره. out برای تحویل دادن یک مقدار تازه است. تفاوتشون رو با زبان خودت و یک مثال برای هرکدوم بگو.",
-    "Solution": "برای ref باید متغیر رو از قبل مقداردهی کنیم؛ مثلاً متد مقدار یک شمارنده رو زیاد می‌کنه. برای out مقدار قبلی لازم نیست؛ مثلاً TryParse نتیجهٔ تبدیل متن به عدد رو تحویل می‌ده. متد باید پارامتر out رو پیش از برگشت عادی مقداردهی کنه."
-  },
-  "S05/explain2": {
-    "Prompt": "کد یک مجموعهٔ params در C# 13 و تابع محلی دارد. چرا AddBonus می‌تواند bonus را بخواند؟ برای overload کردن یک متد آیا فقط تغییر نوع خروجی کافی است؟ تفاوت overload و تابع محلی را بگو.",
-    "Solution": "params IEnumerable<int> در C# 13 چند عدد را در یک مجموعهٔ قابل پیمایش می‌گیرد؛ اینجا Sum جمع ۲ و ۳، یعنی ۵ را می‌دهد. AddBonus داخل Example تعریف شده و bonus همان محدوده را می‌خواند؛ نتیجه ۸ است. overload چند متد هم‌نام با امضای پارامتر متفاوت است؛ فقط تغییر خروجی یا فقط تفاوت ref و out کافی نیست. تابع محلی دربارهٔ محل تعریف است و داخل متد دیگری زندگی می‌کند.",
-    "SolutionCode": "Console.WriteLine(Example());\nConsole.WriteLine(Labels.Show(4));\nConsole.WriteLine(Labels.Show(\"Key\"));\n\nstatic int Example()\n{\n    int bonus = 3;\n    int AddBonus(int amount) => amount + bonus;\n    return AddBonus(Sum(2, 3));\n}\nstatic int Sum(params IEnumerable<int> values)\n{\n    int total = 0;\n    foreach (int value in values) total += value;\n    return total;\n}\nstatic class Labels\n{\n    public static string Show(int value) => value.ToString();\n    public static string Show(string value) => value;\n}"
-  },
-  "S05/workshop": {
-    "Prompt": "یک متد به نام TryCalculateTotal بنویس که قیمت price و تعداد quantity رو بگیره. اگر قیمت منفی یا تعداد صفر و منفی بود، total رو صفر کن و false بده. در بقیهٔ حالت‌ها حاصل‌ضرب رو در total بذار و true بده. قیمت صفر مجازه. فرض کن حاصل‌ضرب در decimal جا می‌شه.",
-    "Solution": "اول ورودی‌های نامعتبر رو رد می‌کنیم. دقت کن قیمت صفر مجازه، پس شرط قیمت باید price < 0 باشه. پارامتر out در هر مسیر مقدار می‌گیره.",
-    "SolutionCode": "bool TryCalculateTotal(decimal price, int quantity, out decimal total)\n{\n    total = 0;\n    if (price < 0 || quantity <= 0) return false;\n    total = price * quantity;\n    return true;\n}"
-  },
   "S06/compiler": {
     "Prompt": "Price داخل کلاس private است؛ یعنی فقط داخل همون کلاس قابل استفاده است. اگر بیرون کلاس بخوایم بخونیمش، چه اتفاقی می‌افته؟",
     "Solution": "کد کامپایل نمی‌شه. private اجازهٔ دسترسی مستقیم از بیرون کلاس رو نمی‌ده."
@@ -55,20 +41,6 @@
     "Prompt": "نام خالی و مبلغ منفی باید رد بشن؛ مبلغ صفر باید قبول بشه. کوچک‌ترین مجموعهٔ تست رو انتخاب کن که هر سه حالت رو جدا بررسی کنه.",
     "Solution": "سه تست انتخاب کن: نام خالی با مبلغ معتبر، مبلغ منفی با نام معتبر، و مبلغ صفر با نام معتبر. هر تست فقط یک قانون رو بررسی می‌کنه."
   },
-  "S06/explain1": {
-    "Prompt": "فرض کن موجودی نباید منفی بشه. اگر همه بتونند property موجودی رو مستقیم تغییر بدن، چه مشکلی پیش میاد؟ راه بهتر چیه؟",
-    "Solution": "با set عمومی، بیرون کلاس می‌تونیم موجودی رو منفی کنیم و بررسی‌های کلاس دور زده می‌شن. بهتره set خصوصی باشه و تغییر از متدی مثل برداشت انجام بشه. اون متد اول مبلغ و موجودی رو بررسی می‌کنه، بعد مقدار رو تغییر می‌ده."
-  },
-  "S06/explain2": {
-    "Prompt": "سازنده موقع ساختن شیء اجرا می‌شه. چطور کمک می‌کنه شیء از همون اول وضعیت درستی داشته باشه؟ آیا ورودیِ سازندهٔ اصلی کلاس خودبه‌خود یک property عمومی می‌شه؟",
-    "Solution": "سازنده ورودی نامعتبر را همان اول رد می‌کند تا شیء ناقص ساخته نشود. پارامتر سازندهٔ اصلی در class خودبه‌خود property عمومی نمی‌شود؛ Name را خودمان تعریف کرده‌ایم. در مثال، null یا نام خالی خطا می‌دهد. این شکل از C# 12 در دسترس است؛ در record موقعیتی، تولید property قاعدهٔ دیگری دارد که در S10 می‌بینیم.",
-    "SolutionCode": "Console.WriteLine(new Player(\"A\").Name);\n\npublic class Player(string name)\n{\n    public string Name { get; } = string.IsNullOrEmpty(name)\n        ? throw new ArgumentException(nameof(name))\n        : name;\n}"
-  },
-  "S06/workshop": {
-    "Prompt": "یک کلاس Order بساز. سازنده نام غیرخالی بگیره. Total از بیرون فقط خواندنی باشه. متد AddItem قیمت و تعداد بگیره؛ قیمت منفی و تعداد صفر یا منفی رو با استثنا رد کنه. بقیهٔ مبلغ‌ها رو به Total اضافه کنه. قیمت صفر مجازه و فرض کن حاصل‌ضرب در decimal جا می‌شه.",
-    "Solution": "نام رو در سازنده بررسی می‌کنیم. نوشتن Total خصوصی است. AddItem قبل از تغییر مبلغ، ورودی‌ها رو بررسی می‌کنه.",
-    "SolutionCode": "public class Order\n{\n    public string Name { get; }\n    public decimal Total { get; private set; }\n    public Order(string name)\n    {\n        if (string.IsNullOrEmpty(name)) throw new ArgumentException(nameof(name));\n        Name = name;\n    }\n    public void AddItem(decimal price, int quantity)\n    {\n        if (price < 0) throw new ArgumentOutOfRangeException(nameof(price));\n        if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));\n        Total += price * quantity;\n    }\n}"
-  },
   "S07/trace": {
     "Prompt": "هر فراخوانی چه متنی برمی‌گردونه؟ برای متد virtual که با override بازنویسی شده، نوع واقعی شیء رو نگاه کن.",
     "Solution": "به‌ترتیب Vip، Base و Vip. override رفتار نوع واقعی شیء رو اجرا می‌کنه. وقتی عضو با new پنهان شده، نوع متغیری که باهاش صدا می‌زنیم مهم می‌شه."
@@ -88,20 +60,6 @@
   "S07/domino": {
     "Prompt": "اگر در Vip به‌جای override بنویسیم new، نتیجهٔ کدوم فراخوانی‌ها عوض می‌شه؟ همهٔ موارد درست رو انتخاب کن.",
     "Solution": "فراخوانی‌هایی که با مرجع Policy انجام می‌شن تغییر می‌کنند؛ چون بعد از new عضو پایه رو انتخاب می‌کنند. فراخوانی از مرجع Vip همچنان عضو فرزند رو می‌گیره."
-  },
-  "S07/explain1": {
-    "Prompt": "با زبان خودت نقش نوع متغیر و نوع واقعی شیء را در override و new مقایسه کن. VTable را مثل یک فهرست رفتار توضیح بده؛ آیا باید فرض کنیم JIT همیشه همان شکل فراخوانی را نگه می‌دارد؟",
-    "Solution": "در فراخوانی مجازیِ override، نوع واقعی شیء تعیین می‌کند کدام رفتار اجرا شود. new در مثال این فصل فقط عضو هم‌نام تازه‌ای می‌سازد و نوع مرجع در انتخاب آن مهم است. VTable تصویر ساده‌ای از نگاشت عضو مجازی به پیاده‌سازی هر نوع است. CLR اطلاعات نوع واقعی را دارد؛ JIT می‌تواند فراخوانی را مستقیم یا درون‌گذاری کند، پس رفتار زبان ثابت است ولی جزئیات اجرای آن الزاماً یکسان نیست."
-  },
-  "S07/explain2": {
-    "Prompt": "چرا از abstract مستقیم شیء نمی‌سازیم و sealed چه چیزی را می‌بندد؟ در پاسخ مرجع، فرزند با base.Name() رفتار پایه را گسترش می‌دهد. sealed override چه فرقی با sealed class دارد؟",
-    "Solution": "abstract یک پایهٔ غیرقابل‌ساختِ مستقیم است؛ فرزند قابل‌ساخت باید عضوهای abstract را تکمیل کند. sealed class جلوی ارث‌بری از کل کلاس را می‌گیرد. sealed override فقط بازنویسی دوبارهٔ همان عضو را می‌بندد؛ کلاس می‌تواند هنوز فرزند داشته باشد. base.Name() مستقیماً پیاده‌سازی پایه را می‌گیرد. مثال Base+Vip چاپ می‌کند؛ رفتار پایه حذف نشده، گسترش یافته است.",
-    "SolutionCode": "Policy policy = new Vip();\nConsole.WriteLine(policy.Name());\n\nabstract class Policy\n{\n    public virtual string Name() => \"Base\";\n}\nclass Vip : Policy\n{\n    public sealed override string Name() => base.Name() + \"+Vip\";\n}\nsealed class FinalVip : Vip { }"
-  },
-  "S07/workshop": {
-    "Prompt": "یک پایهٔ abstract به نام DiscountPolicy با متد decimal Apply(decimal amount) بساز. RegularDiscount همون مبلغ رو بده؛ VipDiscount ده درصد تخفیف بده. هر دو مبلغ منفی رو با استثنا رد کنند. دو نمونه رو با متغیر از نوع پایه صدا بزن.",
-    "Solution": "پایه فقط قرارداد Apply رو مشخص می‌کنه. هر فرزند رفتار خودش رو با override می‌نویسه. صفر معتبره و مبلغ منفی رد می‌شه.",
-    "SolutionCode": "public abstract class DiscountPolicy\n{\n    public abstract decimal Apply(decimal amount);\n}\npublic class RegularDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount;\n    }\n}\npublic class VipDiscount : DiscountPolicy\n{\n    public override decimal Apply(decimal amount)\n    {\n        if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));\n        return amount * 0.9m;\n    }\n}\n// در یک متد:\n// DiscountPolicy regular = new RegularDiscount();\n// DiscountPolicy vip = new VipDiscount();\n// Console.WriteLine(regular.Apply(100m));\n// Console.WriteLine(vip.Apply(100m));"
   },
   "S08/concept": {
     "Prompt": "مفهوم پنهان را با حداکثر چهار حدس پیدا کن. ویژگی‌های هر حدس با پاسخ مقایسه می‌شوند.",
@@ -132,15 +90,5 @@
     "Prompt": "Store دو متد صریح Run برای IReader و IWriter دارد و Run عمومی ندارد. هر مرجع را به نتیجه وصل کن.",
     "Solution": "Store به خطای کامپایل، IReader به Read و IWriter به Write وصل می‌شود.",
     "SolutionCode": ""
-  },
-  "S08/explain": {
-    "Prompt": "چرا مصرف‌کننده‌ای که فقط می‌خواند بهتر است IReader دریافت کند؟ ارتباط آن را با جداسازی قراردادها در ۳ تا ۵ جمله توضیح بده.",
-    "Solution": "قرارداد کوچک وابستگی مصرف‌کننده را به نیاز واقعی محدود می‌کند. پیاده‌سازی‌های متفاوت می‌توانند جایگزین شوند و عضو نامرتبط به مصرف‌کننده تحمیل نمی‌شود.",
-    "SolutionCode": ""
-  },
-  "S08/workshop": {
-    "Prompt": "IReader با string Read() و IWriter با void Write(string text) تعریف کن. MemoryStore هر دو را صریح پیاده کند، متن را در فیلد خصوصی با مقدار اولیه رشته خالی نگه دارد. ورودی Write را غیر null فرض کن. یک مصرف‌کننده بنویس که فقط IReader دریافت کند و نمونهٔ استفاده از هر دو قرارداد را نشان بده.",
-    "Solution": "دو interface مستقل و دو پیاده‌سازی صریح لازم‌اند. مصرف‌کننده فقط IReader می‌شناسد.",
-    "SolutionCode": "public interface IReader { string Read(); }\npublic interface IWriter { void Write(string text); }\npublic sealed class MemoryStore : IReader, IWriter\n{\n    private string value = \"\";\n    string IReader.Read() => value;\n    void IWriter.Write(string text) => value = text;\n}\npublic static class Reports\n{\n    public static string ReadReport(IReader source) => source.Read();\n    public static string Example()\n    {\n        var store = new MemoryStore();\n        ((IWriter)store).Write(\"report\");\n        return ReadReport((IReader)store);\n    }\n}"
   }
 }

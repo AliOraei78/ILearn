@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeFrameworkVersion>10.0.14</RuntimeFrameworkVersion>
+    <RootNamespace>ILearn</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <CompressionEnabled>false</CompressionEnabled>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <EmccMaximumHeapSize>268435456</EmccMaximumHeapSize>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="10.0.14" />
+    <ProjectReference Include="../ILearn.Application/ILearn.Application.csproj" />
+    <ProjectReference Include="../ILearn.Infrastructure/ILearn.Infrastructure.csproj" />
+    <ProjectReference Include="../ILearn.Presentation/ILearn.Presentation.csproj" />
+    <Content Include="../ILearn/wwwroot/app.css;../ILearn/wwwroot/interaction.css;../ILearn/wwwroot/brand.svg;../ILearn/wwwroot/avatars.js;../ILearn/wwwroot/textarea.js" Link="wwwroot/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../ILearn/wwwroot/fonts/*.woff2" Link="wwwroot/fonts/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="../ILearn/Content/*.json;../ILearn/Content/catalog.txt" LogicalName="Content.%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

@@ -1,6 +1,6 @@
-using ILearn.Infrastructure.Accounts;
-using ILearn.Infrastructure.Learning;
+using ILearn.Infrastructure.Server;
 using ILearn.Infrastructure.Reviewing;
+using ILearn.Presentation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 namespace ILearn.Configuration;
@@ -15,13 +15,16 @@ public static class Services
 
         var keyDirectory = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "keys");
         Directory.CreateDirectory(keyDirectory);
-        var protection = builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(keyDirectory));
+        if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(keyDirectory, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        // Pre-audit tickets must reauthenticate under the stronger password policy.
+        var protection = builder.Services.AddDataProtection().SetApplicationName("ILearn.Security.v2").PersistKeysToFileSystem(new DirectoryInfo(keyDirectory));
         if (OperatingSystem.IsWindows()) protection.ProtectKeysWithDpapi();
-        builder.Services.AddSingleton<Curriculum>();
+        builder.Services.AddServerInfrastructure(builder.Configuration);
         builder.Services.AddAuthentication("Cookies").AddCookie(o =>
         {
             o.LoginPath = "/login";
             o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict;
+            o.Cookie.SecurePolicy = builder.Configuration.GetValue("Security:AllowLocalHttp", builder.Environment.IsDevelopment()) ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
             o.ExpireTimeSpan = TimeSpan.FromDays(7); o.SlidingExpiration = false;
             o.Events.OnValidatePrincipal = async context =>
             {
@@ -33,17 +36,16 @@ public static class Services
         });
         builder.Services.AddAuthorization();
         builder.Services.AddCascadingAuthenticationState();
-        builder.Services.AddSingleton(Npgsql.NpgsqlDataSource.Create(builder.Configuration.GetConnectionString("ILearn") ?? "Host=localhost;Port=5441;Database=ilearn;Username=ilearn"));
-        builder.Services.AddSingleton<SchemaInitializer>();
-        builder.Services.AddSingleton<PostgresAccounts>();
-        builder.Services.AddSingleton<IAccounts>(sp => sp.GetRequiredService<PostgresAccounts>());
-        builder.Services.AddSingleton<IEmailSender, EmailSender>();
-        builder.Services.AddSingleton<IEmailVerification, EmailVerification>();
-        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
         builder.Services.AddScoped<ICurrentPlayer, CurrentPlayer>();
         builder.Services.AddScoped<PlayerStore>();
-        builder.Services.AddSingleton<ICurriculum>(sp => sp.GetRequiredService<Curriculum>());
-        builder.Services.AddTransient<IReviewer>(sp => sp.GetRequiredService<Reviewer>());
+        builder.Services.AddSingleton(new LearningUiOptions());
+        builder.Services.AddScoped<IReviewer, WebReviewer>();
+        builder.Services.AddSingleton<System.Threading.RateLimiting.PartitionedRateLimiter<Guid>>(_ =>
+            System.Threading.RateLimiting.PartitionedRateLimiter.CreateChained(
+                System.Threading.RateLimiting.PartitionedRateLimiter.Create<Guid, Guid>(id =>
+                    System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(id, _ => new() { PermitLimit = 10, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 })),
+                System.Threading.RateLimiting.PartitionedRateLimiter.Create<Guid, Guid>(id =>
+                    System.Threading.RateLimiting.RateLimitPartition.GetConcurrencyLimiter(id, _ => new() { PermitLimit = 2, QueueLimit = 0 }))));
         builder.Services.AddRateLimiter(o =>
         {
             o.RejectionStatusCode = 429;
@@ -57,8 +59,7 @@ public static class Services
                 return System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "local", _ => new() { PermitLimit = 60, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 });
             });
         });
-        builder.Services.AddHttpClient<Reviewer>(client => client.Timeout = TimeSpan.FromSeconds(90));
-        if (Convert.FromBase64String(builder.Configuration["Auth:CodeKey"] ?? throw new InvalidOperationException("Auth:CodeKey is required.")).Length < 32) throw new InvalidOperationException("Auth:CodeKey requires at least 32 random bytes.");
-
+        builder.Services.AddHttpClient<Reviewer>(client => client.Timeout = TimeSpan.FromSeconds(90))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
     }
 }

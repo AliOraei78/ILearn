@@ -1,0 +1,47 @@
+<div class="search-picker" @onkeydown="KeyDown">
+ <label for="@Id">@Label</label>
+ <button id="@Id" class="picker-toggle" type="button" aria-expanded="@(open ? "true" : "false")" aria-controls="@(Id + "-panel")" @ref="toggle" @onclick="Toggle">
+  <LearningText Text="@(Items.FirstOrDefault(item => item.Key == Value).Value ?? "انتخاب کن")" Inline="true" /><span aria-hidden="true">⌄</span>
+ </button>
+ @if(open){
+  <div id="@(Id + "-panel")" class="picker-panel">
+   <label for="@(Id + "-search")">جست‌وجو در @Label</label>
+   <input id="@(Id + "-search")" type="search" @ref="searchInput" value="@search" @oninput="Search" />
+   <p class="muted" role="status">@Number(Matches.Count) نتیجه</p>
+   <div class="picker-results" role="group" aria-label="@Label">
+    @foreach(var item in Matches.Skip(page * PageSize).Take(PageSize)){
+     <button type="button" aria-current="@(item.Key == Value ? "true" : null)" @onclick="() => Choose(item.Key)"><LearningText Text="@item.Value" Inline="true" /></button>
+    }
+   </div>
+   @if(Matches.Count == 0){<p>نتیجه‌ای پیدا نشد؛ عبارت کوتاه‌تری بنویس.</p>}
+   @if(Matches.Count > PageSize){
+    <nav class="picker-pages" aria-label="صفحه‌های نتایج">
+     <button type="button" disabled="@(page == 0)" @onclick="() => page--">قبلی</button>
+     <span>صفحهٔ @Number(page + 1) از @Number((Matches.Count + PageSize - 1) / PageSize)</span>
+     <button type="button" disabled="@((page + 1) * PageSize >= Matches.Count)" @onclick="() => page++">بعدی</button>
+    </nav>
+   }
+  </div>
+ }
+</div>
+@code {
+ const int PageSize = 7;
+ [Parameter, EditorRequired] public string Id { get; set; } = "";
+ [Parameter, EditorRequired] public string Label { get; set; } = "";
+ [Parameter] public string Value { get; set; } = "";
+ [Parameter] public IReadOnlyList<KeyValuePair<string, string>> Items { get; set; } = [];
+ [Parameter] public EventCallback<string> Selected { get; set; }
+ bool open, focusSearch;
+ string search = "";
+ int page;
+ ElementReference toggle, searchInput;
+ static string Normalize(string value) => value.Replace('ي', 'ی').Replace('ك', 'ک');
+ static string Number(int value) => string.Concat(value.ToString().Select(c => c is >= '0' and <= '9' ? (char)('۰' + c - '0') : c));
+ List<KeyValuePair<string, string>> Matches => Items.Where(item => Normalize(item.Value).Contains(Normalize(search.Trim()), StringComparison.OrdinalIgnoreCase)).ToList();
+ protected override void OnParametersSet() => page = Math.Clamp(page, 0, Math.Max(0, (Matches.Count - 1) / PageSize));
+ void Toggle() { open = !open; if(open) { search = ""; page = Math.Max(0, Items.ToList().FindIndex(item => item.Key == Value)) / PageSize; focusSearch = true; } }
+ void Search(ChangeEventArgs e) { search = e.Value?.ToString() ?? ""; page = 0; }
+ async Task Choose(string value) { open = false; await Selected.InvokeAsync(value); await toggle.FocusAsync(); }
+ async Task KeyDown(KeyboardEventArgs e) { if(e.Key == "Escape" && open) { open = false; await toggle.FocusAsync(); } }
+ protected override async Task OnAfterRenderAsync(bool firstRender) { if(focusSearch) { focusSearch = false; await searchInput.FocusAsync(); } }
+}

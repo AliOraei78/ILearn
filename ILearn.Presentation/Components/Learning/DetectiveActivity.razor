@@ -1,0 +1,2 @@
+ <p>دو سرنخ را باز کن، سپس علت را انتخاب کن.</p><div class="toolbar">@for(int i=0;i<Activity.Clues.Length;i++){var clue=i;<button disabled="@(Clues.Contains(i)||Clues.Count>=2)" aria-pressed="@(Clues.Contains(i)?"true":"false")" @onclick="()=>Opened.InvokeAsync(clue)">سرنخ @(i+1)</button>}</div>@foreach(var clue in Clues.Order()){<p class="feedback">@Activity.Clues[clue]</p>}
+@code { [Parameter,EditorRequired] public Activity Activity {get;set;}=null!; [Parameter] public HashSet<int> Clues {get;set;}=[]; [Parameter] public EventCallback<int> Opened {get;set;} }

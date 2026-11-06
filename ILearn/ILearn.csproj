@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <RuntimeFrameworkVersion>10.0.14</RuntimeFrameworkVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
@@ -11,8 +12,13 @@
 
 
   <ItemGroup>
+    <Content Remove="App_Data/**;appsettings.Local.json;appsettings.*.Local.json" />
+    <None Remove="App_Data/**;appsettings.Local.json;appsettings.*.Local.json" />
     <None Update="Content/VerificationEmail.html" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="PreserveNewest" />
-    <ProjectReference Include="../ILearn.Application/ILearn.Application.csproj" /><ProjectReference Include="../ILearn.Infrastructure/ILearn.Infrastructure.csproj" />
+    <ProjectReference Include="../ILearn.Application/ILearn.Application.csproj" />
+    <ProjectReference Include="../ILearn.Infrastructure/ILearn.Infrastructure.csproj" />
+    <ProjectReference Include="../ILearn.Infrastructure.Server/ILearn.Infrastructure.Server.csproj" />
+    <ProjectReference Include="../ILearn.Presentation/ILearn.Presentation.csproj" />
     <None Update="Content/**/*.txt" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>ILearn</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <ProjectReference Include="../ILearn.Application/ILearn.Application.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="10.0.14" />
+  </ItemGroup>
+</Project>

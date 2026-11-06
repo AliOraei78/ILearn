@@ -13,26 +13,27 @@ public sealed class InterviewTests
     static Curriculum Load() => new(new TestEnvironment());
 
     [Fact]
-    public void CSharpHasOneHundredDistinctAuthoredQuestionsWithSelectionAndTechnicalSources()
+    public void CSharpPreservesAllTopicsAsFocusedQuestionsWithSelectionAndTechnicalSources()
     {
         var bank = Assert.Single(Load().Interviews);
         Assert.Equal("csharp", bank.Id);
         Assert.Equal("C#", bank.Title);
         Assert.Equal("2026-11-03", bank.ReviewedOn);
         Assert.Contains("گزینش تحریری", bank.SelectionNote);
-        Assert.Equal(Enumerable.Range(1, 100).Select(i => $"C{i:000}"), bank.Questions.Select(q => q.Activity.Id));
-        Assert.Equal(100, bank.Questions.Select(q => q.Activity.Title).Distinct().Count());
-        Assert.Equal(100, bank.Questions.Select(q => q.Activity.Prompt).Distinct().Count());
+        Assert.Equal(Enumerable.Range(1, 100).Select(i => $"C{i:000}"), bank.Questions.Select(q => q.Activity.Id.Split('-')[0]).Distinct());
+        Assert.Equal(bank.Questions.Count, bank.Questions.Select(q => q.Activity.Id).Distinct().Count());
+        Assert.Equal(bank.Questions.Count, bank.Questions.Select(q => q.Activity.Prompt).Distinct().Count());
         Assert.Equal(10, bank.Questions.Select(q => q.Category).Distinct().Count());
-        Assert.All(bank.Questions.GroupBy(q => q.Category), group => Assert.Equal(10, group.Count()));
+        Assert.All(bank.Questions.GroupBy(q => q.Category), group => Assert.Equal(10, group.Select(q => q.Activity.Id.Split('-')[0]).Distinct().Count()));
         Assert.Equal(new[] { "متوسط", "مقدماتی", "پیشرفته" }.Order(), bank.Questions.Select(q => q.Level).Distinct().Order());
         Assert.All(bank.Questions, question =>
         {
             var activity = question.Activity;
             Assert.Equal("explain", activity.Kind);
-            Assert.True(activity.Prompt.Length >= 70, activity.Id);
-            Assert.True(activity.Solution.Length >= 170, activity.Id);
-            Assert.Equal(3, activity.Explanation.Split('\n').Length);
+            Assert.InRange(activity.Prompt.Length, 10, 250);
+            Assert.NotEmpty(activity.Solution);
+            Assert.Equal("text", activity.AnswerFormat);
+            Assert.Equal(activity.Solution, activity.Explanation);
             Assert.NotEmpty(activity.Hint);
             Assert.Empty(activity.Answers);
             Assert.Empty(activity.Options);
@@ -87,7 +88,7 @@ public sealed class InterviewTests
             Assert.Equal("interview", data.GetProperty("template").GetString());
             Assert.Contains("مصاحبهٔ تشریحی", data.GetProperty("templateDescription").GetString());
         }
-        Assert.Equal(100, handler.Calls);
+        Assert.Equal(Load().Interviews[0].Questions.Count, handler.Calls);
     }
 
     sealed class CaptureHandler : HttpMessageHandler

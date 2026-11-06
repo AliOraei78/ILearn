@@ -1,9 +1,0 @@
-<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" fill-rule="evenodd" d="@Path" /></svg>
-@code {
- [Parameter] public string Kind {get;set;}="account";
- string Path=>Kind switch{
- "key"=>"M2 4h8v8H2zM4 6v4h4V6zM10 7h8v3h-2v4h-2v-4h-2v2h-2z",
- "back"=>"M10 2h2v2h2v2h2v2h2v4h-2v2h-2v2h-2v2h-2v-6H2V8h8z",
- _=>"M6 2h8v8H6zM4 12h12v2h2v4H2v-4h2z"
- };
-}

@@ -1,6 +1,10 @@
 # ILearn
 
-کارگاه C# با Blazor Server، .NET 10 و ذخیرهٔ مستقل PostgreSQL برای هر حساب.
+ممیزی و اصلاح امنیت وب و Android: [راهنمای امنیت](SECURITY.md) و [گزارش آزمون ۵ نوامبر ۲۰۲۶](verification/security-delivery-2026-11-05.md). خروجی انتشار مستقیم، فایل‌های خصوصی `App_Data` را بسته‌بندی نمی‌کند؛ اتصال برنامه به PostgreSQL با نقش کم‌اختیار است.
+
+نسخهٔ Android با ساخت پروفایل و ذخیرهٔ محلی، همهٔ محتوای آفلاین و هوش مصنوعی حفظ‌شده اضافه شده است. بررسی AI به اینترنت و کلید شخصی OpenRouter نیاز دارد. خروجی نصب `artifacts/ILearn-offline.apk` است. [ساخت و استفاده](ILearn.Android/README.md) و [گزارش بررسی موبایل](verification/android-delivery.md).
+
+کارگاه C# با Blazor Server، runtime حداقل .NET 10.0.14 و ذخیرهٔ مستقل PostgreSQL برای هر حساب. بستهٔ مستقل Windows runtime وصله‌شده را همراه دارد؛ ساخت Docker از SDK 10.0.403 استفاده می‌کند.
 
 سایدبار بازی شامل «آموزشگاه و کارگاه»، «کُد روم» و «شبیه‌ساز مصاحبه» است. محتوای لابی در آموزشگاه باقی است و نشانی `/lobby` حفظ شده است.
 
@@ -24,12 +28,15 @@ S01 تا S10 با ۸۰ چالش و ۱۰۰۰ XP در آرشیو باقی ماند
 
 - `ILearn.Domain`: مدل‌ها و قواعد مستقل از میزبان.
 - `ILearn.Application`: قرارداد سرویس‌ها، هویت جاری و قواعد یادگیری.
-- `ILearn.Infrastructure`: PostgreSQL، راه‌اندازی schema، SMTP، محتوای فایل و OpenRouter.
-- `ILearn`: رابط Blazor، مؤلفه‌های تمرین، endpointهای حساب و composition root.
+- `ILearn.Infrastructure`: بارگذاری و اعتبارسنجی JSON محتوا و اتصال OpenRouter؛ قابل استفاده در وب و WebAssembly.
+- `ILearn.Infrastructure.Server`: PostgreSQL، راه‌اندازی schema، SMTP و بارگذاری فایل از میزبان وب.
+- `ILearn.Presentation`: کتابخانهٔ Razor مشترک؛ صفحه‌های آموزشگاه، کُد روم، مصاحبه و مؤلفه‌های تمرین.
+- `ILearn`: میزبان Blazor Server، صفحه‌های حساب، endpointهای حساب و composition root.
+- `ILearn.Offline`: میزبان WebAssembly، پروفایل و ذخیرهٔ محلی؛ مبنای بستهٔ Android.
 - `ILearn.Tests`: تست قواعد، محتوا، بازبینی AI و جهت وابستگی‌ها.
 - `verification`: ابزار حساب تست، SMTP محلی و بررسی مرورگر.
 
-وابستگی لایه‌های داخلی به میزبان و دیتابیس ممنوع است. تراکنش‌های حساب و قفل‌های PostgreSQL در Infrastructure باقی می‌مانند. وضعیت نمایش لابی در code-behind و ورودی تمرین‌ها در مؤلفه‌های مستقل است.
+وابستگی لایه‌های داخلی به میزبان و دیتابیس ممنوع است. تراکنش‌های حساب و قفل‌های PostgreSQL در Infrastructure.Server هستند. وضعیت نمایش لابی در code-behind و ورودی تمرین‌ها در مؤلفه‌های مستقل است. [قواعد معماری و مسیر وابستگی‌ها](ARCHITECTURE.md) با تست‌های معماری کنترل می‌شوند.
 
 ## اجرا و بررسی
 

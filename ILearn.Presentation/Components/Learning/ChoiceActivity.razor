@@ -1,0 +1,2 @@
+ <div class="options">@for(int i=0;i<Activity.Options.Length;i++){var choice=i;<label class="option"><input type="@(Activity.Multiple?"checkbox":"radio")" name="answer" checked="@Entry.Answers.Contains(i.ToString())" @onchange="()=>Selected.InvokeAsync(choice)"/><LearningText Text="@Activity.Options[i]" Inline="true" /></label>}</div>
+@code { [Parameter,EditorRequired] public Activity Activity {get;set;}=null!; [Parameter,EditorRequired] public Entry Entry {get;set;}=null!; [Parameter] public EventCallback<int> Selected {get;set;} }

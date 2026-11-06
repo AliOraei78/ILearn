@@ -5,6 +5,7 @@
 <PageTitle>بازیابی یا تکمیل حساب | ILearn</PageTitle>
 <header><Brand /><h1>برگرد به بازی</h1></header>
 <main class="work account-panel"><h2>بازیابی یا تکمیل حساب</h2><p>ایمیل حسابت رو وارد کن. با کد تأیید می‌تونی رمز تازه‌ای بسازی یا ساخت حسابت رو تکمیل کنی.</p>
+@if(Weak){<p role="alert" class="feedback error">رمز قبلی کوتاه یا قابل‌حدس است. با تأیید ایمیل، یک رمز طولانی‌تر بساز؛ سیو حسابت محفوظ است.</p>}
 @if(Detail is not null||Error is not null){<p role="alert" class="feedback error">@(Detail??"ارسال انجام نشد؛ دوباره امتحان کن.")</p>}
 @if(string.IsNullOrWhiteSpace(Configuration["EmailSettings:Host"])){<p role="status" class="muted">ارسال ایمیل هنوز تنظیم نشده.</p>}
 <form method="post" action="/auth/forgot" data-enhance="false"><AntiforgeryToken /><label for="recovery-email">ایمیل حساب</label><input id="recovery-email" name="email" type="email" dir="ltr" required maxlength="254" autocomplete="email" /><button class="primary">ارسال کد تأیید</button></form>
@@ -12,4 +13,5 @@
 @code{
  [SupplyParameterFromQuery(Name="message")]public string? Detail{get;set;}
  [SupplyParameterFromQuery(Name="error")]public string? Error{get;set;}
+ [SupplyParameterFromQuery(Name="weak")]public bool Weak{get;set;}
 }

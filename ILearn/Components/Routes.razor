@@ -1,4 +1,4 @@
-﻿<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Pages.Home).Assembly }" NotFoundPage="typeof(Pages.NotFound)">
     <Found Context="routeData">
         <Microsoft.AspNetCore.Components.Authorization.AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"><NotAuthorized><p>برای ادامه <a href="/login" data-enhance-nav="false">وارد حسابت شو</a>.</p></NotAuthorized></Microsoft.AspNetCore.Components.Authorization.AuthorizeRouteView>
         @if (routeData.PageType != typeof(Pages.Login)

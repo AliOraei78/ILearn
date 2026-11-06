@@ -36,3 +36,9 @@ ILearn.Tests
 verification
 **/*.md
 ILearn.slnx
+.tools
+artifacts
+ILearn.Android
+ILearn.Offline
+**/*.jks
+**/*.keystore

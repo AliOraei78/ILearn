@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["interaction.css"]" />
     <link rel="stylesheet" href="@Assets["ILearn.styles.css"]" />
-    <ImportMap />
+    <ImportMap AdditionalAttributes="@(new Dictionary<string, object> { ["nonce"] = HttpContext.Items["CspNonce"]! })" />
     <HeadOutlet @rendermode="PageRenderMode" />
 </head>
 

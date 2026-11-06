@@ -1,0 +1,10 @@
+@page "/"
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@code {
+ protected override async Task OnInitializedAsync()
+ {
+  var profile=await JS.InvokeAsync<string?>("ilearnOffline.read","profile");
+  Navigation.NavigateTo(profile is null?"/profile":"/lobby",replace:true);
+ }
+}

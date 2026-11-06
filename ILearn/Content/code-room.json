@@ -1,142 +1,266 @@
 [
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R015", "LessonTitle": "خطا و اشکال‌زدایی اولیه", "Template": "repair",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R015",
+    "LessonTitle": "خطا و اشکال‌زدایی اولیه",
+    "Template": "repair",
     "Activity": {
-      "Id": "repair-sum", "Title": "آخرین خانه کجاست؟", "Kind": "workshop",
-      "Prompt": "این متد باید مجموع عضوهای آرایه را برگرداند، اما خطا می‌دهد. متد را اصلاح کن و در یک خط علت خطا را بنویس. آرایه null نیست و مجموع در محدوده int قرار دارد. آرایه خالی باید صفر بدهد.",
+      "Id": "repair-sum",
+      "Title": "آخرین خانه کجاست؟",
+      "Kind": "workshop",
+      "Prompt": "این متد باید مجموع عضوهای آرایه را برگرداند، اما خطا می‌دهد. فقط متد اصلاح‌شده را بنویس. آرایه null نیست و مجموع در محدوده int قرار دارد. آرایه خالی باید صفر بدهد.",
       "Code": "static int Sum(int[] values)\n{\n    int total = 0;\n    for (int i = 0; i <= values.Length; i++)\n        total += values[i];\n    return total;\n}",
-      "Explanation": "متد باید برای آرایه خالی صفر و برای هر آرایه غیر null مجموع همه عضوها را بدهد. اندیس نباید به values.Length برسد. علت خطای دسترسی خارج از آرایه توضیح داده شود. استفاده از حلقه یا راه‌حل معادل معتبر است. کنترل null و overflow خواسته نشده است.",
+      "Explanation": "متد باید برای آرایه خالی صفر و برای هر آرایه غیر null مجموع همه عضوها را بدهد. اندیس نباید به values.Length برسد. استفاده از حلقه یا راه‌حل معادل معتبر است. کنترل null و overflow خواسته نشده است.",
       "Hint": "بزرگ‌ترین اندیس مجاز را با تعداد عضوها مقایسه کن.",
       "Solution": "شرط حلقه باید i < values.Length باشد؛ تعداد عضوها خودش اندیس معتبر نیست.",
-      "SolutionCode": "static int Sum(int[] values)\n{\n    int total = 0;\n    for (int i = 0; i < values.Length; i++)\n        total += values[i];\n    return total;\n}"
+      "SolutionCode": "static int Sum(int[] values)\n{\n    int total = 0;\n    for (int i = 0; i < values.Length; i++)\n        total += values[i];\n    return total;\n}",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "sql", "Technology": "PostgreSQL", "LessonId": "grouping", "LessonTitle": "گروه‌بندی و شمارش", "Template": "optimize",
+    "Subject": "sql",
+    "Technology": "PostgreSQL",
+    "LessonId": "grouping",
+    "LessonTitle": "گروه‌بندی و شمارش",
+    "Template": "optimize",
     "Activity": {
-      "Id": "optimize-counts", "Title": "شمارش بدون زیرپرس‌وجوی تکراری", "Kind": "workshop",
-      "Prompt": "جدول products ستون category از نوع text و NOT NULL دارد. کوئری درست است، اما شمارش را در یک زیرپرس‌وجوی هم‌بسته بیان می‌کند. آن را با یک GROUP BY و بدون زیرپرس‌وجوی هم‌بسته بازنویسی کن. ستون‌های category و total و ترتیب صعودی category حفظ شوند. جدول می‌تواند خالی باشد. بهبود ساختار پردازش را کوتاه توضیح بده؛ زمان اجرای واقعی خواسته نشده است.",
+      "Id": "optimize-counts",
+      "Title": "شمارش بدون زیرپرس‌وجوی تکراری",
+      "Kind": "workshop",
+      "Prompt": "جدول products ستون category از نوع text و NOT NULL دارد. کوئری درست است، اما شمارش را در یک زیرپرس‌وجوی هم‌بسته بیان می‌کند. آن را با یک GROUP BY و بدون زیرپرس‌وجوی هم‌بسته بازنویسی کن. ستون‌های category و total و ترتیب صعودی category حفظ شوند. جدول می‌تواند خالی باشد. فقط کوئری لازم است.",
       "Code": "SELECT DISTINCT p.category,\n       (SELECT COUNT(*) FROM products q\n        WHERE q.category = p.category) AS total\nFROM products p\nORDER BY p.category;",
-      "Explanation": "خروجی برای هر category موجود دقیقاً یک ردیف با تعداد همه محصولات آن دسته باشد. نام ستون‌های category و total و ORDER BY category حفظ شود. جدول خالی خروجی خالی داشته باشد. یک GROUP BY و حذف زیرپرس‌وجوی هم‌بسته لازم است. توضیح به گروه‌بندی مستقیم به جای شمارش وابسته به ردیف اشاره کند؛ ادعای اندازه‌گیری سرعت لازم نیست.",
+      "Explanation": "خروجی برای هر category موجود دقیقاً یک ردیف با تعداد همه محصولات آن دسته باشد. نام ستون‌های category و total و ORDER BY category حفظ شود. جدول خالی خروجی خالی داشته باشد. یک GROUP BY و حذف زیرپرس‌وجوی هم‌بسته لازم است.",
       "Hint": "می‌توان همه عضوهای هر دسته را در همان گروه شمرد.",
       "Solution": "با گروه‌بندی مستقیم، منطق شمارش برای هر دسته یک‌بار بیان می‌شود.",
-      "SolutionCode": "SELECT category, COUNT(*) AS total\nFROM products\nGROUP BY category\nORDER BY category;"
+      "SolutionCode": "SELECT category, COUNT(*) AS total\nFROM products\nGROUP BY category\nORDER BY category;",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "redis", "Technology": "Redis", "LessonId": "strings", "LessonTitle": "رشته‌ها و شمارنده‌ها", "Template": "predict",
+    "Subject": "redis",
+    "Technology": "Redis",
+    "LessonId": "strings",
+    "LessonTitle": "رشته‌ها و شمارنده‌ها",
+    "Template": "predict",
     "Activity": {
-      "Id": "predict-counter", "Title": "ردیابی دو خواندن شمارنده", "Kind": "workshop",
-      "Prompt": "دستورها به ترتیب و بدون دخالت کاربر دیگری اجرا می‌شوند. انقضایی وجود ندارد و کلید visits ابتدا غایب است. خروجی دو GET را به ترتیب و مقدار نهایی کلید را بنویس. سپس اثر تغییر مقدار INCRBY از -2 به 3 را روی همان دو خروجی تعیین کن. هر دو حالت از وضعیت اولیه شروع می‌شوند.",
+      "Id": "predict-counter",
+      "Title": "ردیابی دو خواندن شمارنده",
+      "Kind": "workshop",
+      "Prompt": "کلید visits ابتدا غایب است؛ انقضا و دخالت کاربر دیگر وجود ندارد. فقط خروجی دو GET کد زیر را به ترتیب بنویس.",
       "Code": "SET visits 5\nINCR visits\nGET visits\nINCRBY visits -2\nGET visits",
-      "Explanation": "در حالت اصلی خروجی دو GET به ترتیب رشته‌های 6 و 4 و مقدار نهایی رشته 4 است. در حالت تغییر INCRBY به 3، دو GET به ترتیب 6 و 9 و مقدار نهایی 9 هستند. توضیح باید افزایش یک‌واحدی و سپس تغییر نسبی مقدار را درست بیان کند. نمایش مقدارها با یا بدون کوتیشن پذیرفته است.",
+      "Explanation": "خروجی دو GET به ترتیب 6 و 4 است.",
       "Hint": "INCRBY مقدار موجود را به اندازه عدد داده‌شده تغییر می‌دهد.",
-      "Solution": "حالت اصلی: GETها 6 و 4؛ مقدار نهایی 4. حالت تغییرکرده: GETها 6 و 9؛ مقدار نهایی 9.",
-      "SolutionCode": "original: [6, 4], final: 4\nmodified: [6, 9], final: 9"
+      "Solution": "خروجی دو GET به ترتیب 6 و 4 است.",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
     }
   },
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R011", "LessonTitle": "متد و تجزیهٔ مسئله", "Template": "implement",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R011",
+    "LessonTitle": "متد و تجزیهٔ مسئله",
+    "Template": "implement",
     "Activity": {
-      "Id": "implement-positive-count", "Title": "قرارداد شمارش مثبت‌ها", "Kind": "workshop",
+      "Id": "implement-positive-count",
+      "Title": "قرارداد شمارش مثبت‌ها",
+      "Kind": "workshop",
       "Prompt": "متد CountPositive(int[] values) را بنویس. خروجی تعداد عضوهای بزرگ‌تر از صفر است. صفر مثبت نیست؛ تکرار یک مقدار، چند عضو محسوب می‌شود. آرایه null نیست و نباید تغییر کند. آرایه خالی صفر می‌دهد.",
       "Code": "CountPositive(new[] { -2, 0, 3, 3 }) // 2\nCountPositive(Array.Empty<int>())   // 0",
       "Explanation": "متد CountPositive با ورودی int[] و خروجی int لازم است. فقط عضوهای > 0 شمرده شوند؛ صفر و منفی شمرده نشوند و عضوهای تکراری مستقل باشند. ورودی تغییر نکند و آرایه خالی صفر بدهد. هر پیاده‌سازی هم‌رفتار معتبر است؛ null خارج از دامنه است.",
       "Hint": "هر عضو به نتیجه صفر یا یک اضافه می‌کند.",
       "Solution": "همه عضوها را بررسی کن و فقط برای مقدار مثبت شمارنده را افزایش بده.",
-      "SolutionCode": "static int CountPositive(int[] values)\n{\n    int count = 0;\n    foreach (int value in values)\n        if (value > 0) count++;\n    return count;\n}"
+      "SolutionCode": "static int CountPositive(int[] values)\n{\n    int count = 0;\n    foreach (int value in values)\n        if (value > 0) count++;\n    return count;\n}",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R008", "LessonTitle": "تکرار", "Template": "complete",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R008",
+    "LessonTitle": "تکرار",
+    "Template": "complete",
     "Activity": {
-      "Id": "complete-even-condition", "Title": "فقط شرط گمشده", "Kind": "workshop",
+      "Id": "complete-even-condition",
+      "Title": "فقط شرط گمشده",
+      "Kind": "workshop",
       "Prompt": "کد باید مجموع عددهای زوج از صفر تا n، شامل خود n، را برگرداند. n بین صفر و 10000 است. فقط عبارت شرطی جای /* شرط */ را بنویس. سایر بخش‌ها ثابت‌اند.",
       "Code": "static int SumEven(int n)\n{\n    int total = 0;\n    for (int i = 0; i <= n; i++)\n        if (/* شرط */)\n            total += i;\n    return total;\n}",
       "Explanation": "پاسخ فقط یک عبارت شرطی معتبر برای زوج بودن i باشد، مثل i % 2 == 0. راه‌حل معادل مانند (i & 1) == 0 پذیرفته است. تغییر حلقه، دامنه یا نوشتن متد کامل با درخواست فقط قطعه گمشده سازگار نیست. شرط باید برای همه i در بازه درست باشد.",
       "Hint": "باقی‌مانده تقسیم یک عدد زوج بر دو چیست؟",
-      "Solution": "باقی‌مانده تقسیم i بر دو باید صفر باشد.", "SolutionCode": "i % 2 == 0"
+      "Solution": "باقی‌مانده تقسیم i بر دو باید صفر باشد.",
+      "SolutionCode": "i % 2 == 0",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "redis", "Technology": "Redis", "LessonId": "strings", "LessonTitle": "رشته‌ها و شمارنده‌ها", "Template": "reorder",
+    "Subject": "redis",
+    "Technology": "Redis",
+    "LessonId": "strings",
+    "LessonTitle": "رشته‌ها و شمارنده‌ها",
+    "Template": "reorder",
     "Activity": {
-      "Id": "reorder-counter", "Title": "اول بنویس، بعد بخوان", "Kind": "workshop",
+      "Id": "reorder-counter",
+      "Title": "اول بنویس، بعد بخوان",
+      "Kind": "workshop",
       "Prompt": "کلید counter ابتدا غایب است. هر قطعه را دقیقاً یک‌بار و بدون تغییر اجرا کن تا تنها GET مقدار 41 را بخواند و مقدار نهایی هم 41 باشد. کاربر دیگری یا انقضایی وجود ندارد. فقط ترتیب شماره قطعه‌ها را بنویس.",
       "Code": "1. GET counter\n2. INCR counter\n3. SET counter 40",
       "Explanation": "ترتیب باید 3، سپس 2، سپس 1 باشد. هر شماره دقیقاً یک‌بار بیاید. تغییر دستورها یا افزودن دستور مجاز نیست. این ترتیب مقدار 40 را می‌نویسد، به 41 افزایش می‌دهد و همان را می‌خواند.",
       "Hint": "خواندن باید بعد از آخرین تغییر باشد.",
-      "Solution": "ابتدا نوشتن 40، سپس افزایش و در پایان خواندن.", "SolutionCode": "3, 2, 1"
+      "Solution": "3, 2, 1",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
     }
   },
   {
-    "Subject": "sql", "Technology": "PostgreSQL", "LessonId": "filters", "LessonTitle": "فیلتر و داده ورودی", "Template": "find-input",
+    "Subject": "sql",
+    "Technology": "PostgreSQL",
+    "LessonId": "filters",
+    "LessonTitle": "فیلتر و داده ورودی",
+    "Template": "find-input",
     "Activity": {
-      "Id": "find-filter-data", "Title": "داده‌ای برای خروجی دقیق", "Kind": "workshop",
+      "Id": "find-filter-data",
+      "Title": "داده‌ای برای خروجی دقیق",
+      "Kind": "workshop",
       "Prompt": "جدول samples ابتدا خالی است. بدون تغییر SELECT، یک INSERT با حداقل چهار ردیف بنویس تا خروجی دقیقاً شناسه‌های 2 و 5 به همین ترتیب باشد. همه idها یکتا باشند. حداقل یک ردیف به دلیل score پایین و حداقل یک ردیف به دلیل active=false حذف شود. score عدد صحیح و غیر null است.",
       "Code": "CREATE TABLE samples (\n    id integer PRIMARY KEY,\n    score integer NOT NULL,\n    active boolean NOT NULL\n);\n\nSELECT id FROM samples\nWHERE score >= 10 AND active = true\nORDER BY id;",
       "Explanation": "پاسخ INSERT معتبر PostgreSQL برای جدول samples باشد. حداقل چهار id متمایز وجود داشته باشد. فقط ردیف‌های 2 و 5 هر دو شرط را پاس کنند. حداقل یک ردیف active=true و score<10 و حداقل یک ردیف active=false و score>=10 باشد تا هر شرط جدا اثر داشته باشد. SELECT و schema تغییر نکنند؛ هر داده سازگار پذیرفته است.",
       "Hint": "دو ردیف قبول و برای هر شرط یک مثال ردشده بساز.",
       "Solution": "2 و 5 قبول می‌شوند؛ 1 با امتیاز پایین و 3 با وضعیت غیرفعال کنار می‌روند.",
-      "SolutionCode": "INSERT INTO samples (id, score, active) VALUES\n(1, 9, true),\n(2, 10, true),\n(3, 20, false),\n(5, 12, true);"
+      "SolutionCode": "INSERT INTO samples (id, score, active) VALUES\n(1, 9, true),\n(2, 10, true),\n(3, 20, false),\n(5, 12, true);",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R019", "LessonTitle": "الگوریتم و سنجش درستی", "Template": "design-tests",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R019",
+    "LessonTitle": "الگوریتم و سنجش درستی",
+    "Template": "design-tests",
     "Activity": {
-      "Id": "test-age-boundaries", "Title": "دو مرز و دو همسایه", "Kind": "workshop",
+      "Id": "test-age-boundaries",
+      "Title": "دو مرز و دو همسایه",
+      "Kind": "workshop",
       "Prompt": "قرارداد متد می‌گوید سن‌های 18 تا 65، شامل هر دو مرز، مجازند. ورودی هر عدد صحیح است. چهار تست مستقل بنویس که دو مرز و نزدیک‌ترین عدد نامجاز هر طرف را پوشش بدهند. برای هر تست ورودی، خروجی bool مورد انتظار و دلیل را بنویس. کد متد را تغییر نده.",
       "Code": "static bool Eligible(int age) => age >= 18 && age <= 65;",
       "Explanation": "تست‌های ورودی 17 با false، 18 با true، 65 با true و 66 با false لازم‌اند. هر تست ورودی و انتظار صریح و دلیل مرتبط با مرز داشته باشد. قالب متنی ساخت‌یافته، assert یا چارچوب تست معتبر پذیرفته است. صرفاً تکرار کد متد یا نوشتن ورودی بدون انتظار کافی نیست.",
       "Hint": "برای هر مرز، خود مرز و عدد یک قدم بیرون آن را بررسی کن.",
-      "Solution": "17 نامجاز؛ 18 مجاز؛ 65 مجاز؛ 66 نامجاز. این چهار مورد خطای کوچک‌تر یا بزرگ‌تر بودن شرط مرزی را آشکار می‌کنند.",
-      "SolutionCode": "17 -> false // below minimum\n18 -> true  // minimum included\n65 -> true  // maximum included\n66 -> false // above maximum"
+      "Solution": "17 -> false // below minimum\n18 -> true  // minimum included\n65 -> true  // maximum included\n66 -> false // above maximum",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
     }
   },
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R017", "LessonTitle": "کار عملی با متن", "Template": "infer-rule",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R017",
+    "LessonTitle": "کار عملی با متن",
+    "Template": "infer-rule",
     "Activity": {
-      "Id": "infer-text-rule", "Title": "قانون نام‌گذاری را پیدا کن", "Kind": "workshop",
+      "Id": "infer-text-rule",
+      "Title": "قانون نام‌گذاری را پیدا کن",
+      "Kind": "workshop",
       "Prompt": "ورودی فقط حروف لاتین و فاصله ASCII دارد و null نیست. قانون از این عملیات ساخته شده: حذف فاصله‌های دو سر، تبدیل حروف به بزرگ، جایگزینی هر فاصله با _. هر عملیات حداکثر یک‌بار و با ترتیب دلخواه استفاده شده است. از نمونه‌ها رفتار را استنتاج کن و متد Normalize(string text) را بنویس. ترتیب‌های متفاوت با رفتار یکسان معتبرند.",
       "Code": "\" hi \"      => \"HI\"\n\"red fox\"   => \"RED_FOX\"\n\" a  b \"    => \"A__B\"\n\"   \"       => \"\"",
       "Explanation": "رفتار باید فاصله‌های دو سر را حذف کند، هر فاصله داخلی را جداگانه به underscore تبدیل کند و حروف لاتین را بزرگ کند. فاصله‌های داخلی متوالی نباید یکی شوند؛ ورودی فقط فاصله، خروجی خالی دارد. متد Normalize با ورودی و خروجی string لازم است. ترتیب‌های هم‌رفتار پذیرفته‌اند و بررسی null خواسته نشده است.",
       "Hint": "نمونه دارای دو فاصله داخلی، فرق جایگزینی و یکی‌کردن فاصله‌ها را روشن می‌کند.",
       "Solution": "ابتدا دو سر را Trim کن؛ سپس فاصله‌های باقی‌مانده را جایگزین و حروف را بزرگ کن.",
-      "SolutionCode": "static string Normalize(string text) =>\n    text.Trim().Replace(' ', '_').ToUpperInvariant();"
+      "SolutionCode": "static string Normalize(string text) =>\n    text.Trim().Replace(' ', '_').ToUpperInvariant();",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "sql", "Technology": "PostgreSQL", "LessonId": "grouping", "LessonTitle": "گروه‌بندی و شمارش", "Template": "translate",
+    "Subject": "sql",
+    "Technology": "PostgreSQL",
+    "LessonId": "grouping",
+    "LessonTitle": "گروه‌بندی و شمارش",
+    "Template": "translate",
     "Activity": {
-      "Id": "translate-sales", "Title": "از پیمایش به کوئری", "Kind": "workshop",
+      "Id": "translate-sales",
+      "Title": "از پیمایش به کوئری",
+      "Kind": "workshop",
       "Prompt": "جدول sales ستون‌های category از نوع text و amount از نوع numeric دارد؛ هر دو NOT NULL هستند. شبه‌کد را به یک SELECT در PostgreSQL تبدیل کن. فقط amountهای مثبت در جمع شرکت کنند. دسته‌ای که هیچ مبلغ مثبت ندارد در خروجی نیاید. نام ستون‌ها category و total و ترتیب صعودی category باشد. برای جدول خالی، خروجی خالی است.",
       "Code": "totals = empty map\nfor each sale in sales:\n    if sale.amount > 0:\n        totals[sale.category] += sale.amount\nreturn totals ordered by category",
       "Explanation": "SELECT باید WHERE amount > 0، گروه‌بندی بر category، SUM(amount) با نام total و ORDER BY category یا معادل معنایی آن داشته باشد. دسته فاقد مبلغ مثبت حذف شود. خروجی و نام ستون‌ها با قرارداد منطبق باشند. روش معادل معتبر است؛ صفر و مقدار منفی نباید جمع شوند.",
       "Hint": "فیلتر قبل از گروه‌بندی انجام می‌شود.",
       "Solution": "منطق پیمایش به فیلتر، گروه‌بندی و جمع در SQL تبدیل می‌شود.",
-      "SolutionCode": "SELECT category, SUM(amount) AS total\nFROM sales\nWHERE amount > 0\nGROUP BY category\nORDER BY category;"
+      "SolutionCode": "SELECT category, SUM(amount) AS total\nFROM sales\nWHERE amount > 0\nGROUP BY category\nORDER BY category;",
+      "AnswerFormat": "code"
     }
   },
   {
-    "Subject": "redis", "Technology": "Redis", "LessonId": "strings", "LessonTitle": "رشته‌ها و شمارنده‌ها", "Template": "extract-contract",
+    "Subject": "redis",
+    "Technology": "Redis",
+    "LessonId": "strings",
+    "LessonTitle": "رشته‌ها و شمارنده‌ها",
+    "Template": "extract-contract",
     "Activity": {
-      "Id": "contract-set-if-absent", "Title": "چه چیزی حفظ می‌شود؟", "Kind": "workshop",
+      "Id": "contract-set-if-absent",
+      "Title": "چه چیزی حفظ می‌شود؟",
+      "Kind": "workshop",
       "Prompt": "این دو دستور را برای هر دو وضعیت اولیه بررسی کن: کلید session:7 غایب است، یا از قبل یک مقدار رشته‌ای دلخواه دارد. TTL و کاربر هم‌زمان وجود ندارند. پیش‌شرط‌های بررسی، مقدار کلید و نتیجه SETNX در هر حالت، و اثر اجرای دوباره همین دو دستور را توضیح بده. هدف بیان قرارداد عمومی است؛ فقط یک مثال عددی کافی نیست.",
       "Code": "SETNX session:7 active\nGET session:7",
       "Explanation": "دامنه غیاب کلید یا مقدار رشته‌ای موجود، بدون TTL و تغییر هم‌زمان ذکر شود. اگر غایب باشد، SETNX عدد 1 برمی‌گرداند و GET رشته active را می‌خواند. اگر موجود باشد، SETNX عدد 0 برمی‌گرداند و مقدار قبلی عیناً حفظ می‌شود. در اجرای دوباره، کلید موجود است؛ SETNX صفر و GET همان مقدار ذخیره‌شده را می‌دهد. ادعای بازنویسی همیشگی یا پاسخ ثابت active برای کلید موجود غلط است.",
       "Hint": "بخش NX شرط نوشتن را به نبودن کلید وابسته می‌کند.",
-      "Solution": "قرارداد، نوشتن فقط در نبود کلید است. اجرای نخست در حالت غیاب مقدار active را می‌سازد؛ مقدار موجود را حفظ می‌کند. تکرار عملیات پس از ایجاد یا وجود کلید، مقدار را تغییر نمی‌دهد.", "SolutionCode": ""
+      "Solution": "قرارداد، نوشتن فقط در نبود کلید است. اجرای نخست در حالت غیاب مقدار active را می‌سازد؛ مقدار موجود را حفظ می‌کند. تکرار عملیات پس از ایجاد یا وجود کلید، مقدار را تغییر نمی‌دهد.",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
     }
   },
   {
-    "Subject": "csharp", "Technology": "C#", "LessonId": "R009", "LessonTitle": "آرایهٔ یک‌بعدی", "Template": "compare-solutions",
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R009",
+    "LessonTitle": "آرایهٔ یک‌بعدی",
+    "Template": "compare-solutions",
     "Activity": {
-      "Id": "compare-negative-search", "Title": "توقف در اولین شاهد", "Kind": "workshop",
+      "Id": "compare-negative-search",
+      "Title": "توقف در اولین شاهد",
+      "Kind": "workshop",
       "Prompt": "هدف تشخیص وجود حداقل یک عدد منفی در آرایه غیر null است. هر دو راه‌حل برای همه آرایه‌ها از جمله آرایه خالی باید درست بمانند. در سناریوی هدف، آرایه یک میلیون عضو دارد و عضو اول منفی است. هزینه را فقط تعداد عضوهای بررسی‌شده حساب کن. A یا B را انتخاب کن، تعداد بررسی در این سناریو را برای هر دو بگو و رفتار آرایه بدون عدد منفی را توضیح بده. اندازه‌گیری زمان لازم نیست.",
       "Code": "static bool A(int[] values)\n{\n    int count = 0;\n    foreach (int value in values)\n        if (value < 0) count++;\n    return count > 0;\n}\n\nstatic bool B(int[] values)\n{\n    foreach (int value in values)\n        if (value < 0) return true;\n    return false;\n}",
       "Explanation": "انتخاب B با دلیل توقف پس از اولین شاهد لازم است. A در سناریوی هدف یک میلیون عضو و B فقط یک عضو را بررسی می‌کند. در نبود عدد منفی، هر دو همه عضوها را بررسی و false برمی‌گردانند؛ برای آرایه خالی false هستند. ادعای اینکه B همیشه فقط یک عضو می‌خواند غلط است. پاسخ باید انتخاب و استدلال متکی به مدل هزینه صورت مسئله داشته باشد.",
       "Hint": "برای اثبات وجود، آیا لازم است تعداد همه شاهدها را بدانی؟",
-      "Solution": "B مناسب است: در سناریوی هدف یک بررسی در برابر یک میلیون بررسی A دارد. اگر عدد منفی نباشد هر دو کل آرایه را می‌خوانند و false می‌دهند؛ آرایه خالی نیز false است.", "SolutionCode": ""
+      "Solution": "B مناسب است: در سناریوی هدف یک بررسی در برابر یک میلیون بررسی A دارد. اگر عدد منفی نباشد هر دو کل آرایه را می‌خوانند و false می‌دهند؛ آرایه خالی نیز false است.",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
+    }
+  },
+  {
+    "Subject": "csharp",
+    "Technology": "C#",
+    "LessonId": "R015",
+    "LessonTitle": "خطا و اشکال‌زدایی اولیه",
+    "Template": "extract-contract",
+    "Activity": {
+      "Id": "repair-sum-reason",
+      "Title": "مرز اندیس آرایه",
+      "Kind": "explain",
+      "AnswerFormat": "text",
+      "Prompt": "چرا در حلقهٔ پیمایش آرایه، شرط i <= values.Length می‌تواند دسترسی نامعتبر بسازد؟",
+      "Solution": "اندیس معتبر از صفر تا Length-1 است؛ i برابر Length بیرون آرایه است.",
+      "Explanation": "اندیس Length معتبر نیست؛ آخرین اندیس Length-1 است.",
+      "Hint": "طول آرایه و آخرین اندیس یکی نیستند."
+    }
+  },
+  {
+    "Subject": "redis",
+    "Technology": "Redis",
+    "LessonId": "strings",
+    "LessonTitle": "رشته‌ها و شمارنده‌ها",
+    "Template": "predict",
+    "Activity": {
+      "Id": "predict-counter-variation",
+      "Title": "تغییر یک افزایش",
+      "Kind": "workshop",
+      "Prompt": "کلید visits ابتدا غایب است؛ انقضا و دخالت کاربر دیگر وجود ندارد. فقط خروجی دو GET کد زیر را به ترتیب بنویس.",
+      "Code": "SET visits 5\nINCR visits\nGET visits\nINCRBY visits 3\nGET visits",
+      "Explanation": "خروجی دو GET به ترتیب 6 و 9 است.",
+      "Hint": "INCRBY مقدار موجود را به اندازه عدد داده‌شده تغییر می‌دهد.",
+      "Solution": "خروجی دو GET به ترتیب 6 و 9 است.",
+      "SolutionCode": "",
+      "AnswerFormat": "text"
     }
   }
 ]

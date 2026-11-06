@@ -1,0 +1,98 @@
+@page "/profile"
+@using ILearn.Offline.Accounts
+@inject PlayerStore Store
+@inject OfflinePlayerRepository Repository
+@inject ICurriculum Content
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+<PageTitle>پروفایل آفلاین | ILearn</PageTitle>
+<GameShell Player="@(isNew?null:player)" Xp="xp">
+ <header><h1>@(isNew?"ساخت پروفایل محلی":"پروفایل من")</h1>@if(!isNew){<a class="button-link" href="/lobby">بازگشت به آموزشگاه</a>}</header>
+ <main class="offline-profile">
+  @if(error is not null){<p class="feedback error" role="alert">@error</p>}
+  @if(status.Length>0){<p class="feedback" role="status">@status</p>}
+  @if(player is not null){
+   <section class="work"><h2>بازیکن این دستگاه</h2>
+    <form @onsubmit="SaveName" @onsubmit:preventDefault>
+     <label for="profile-name">نام بازیکن</label><input id="profile-name" @bind="name" required maxlength="50" autocomplete="nickname" />
+     @if(isNew){<label for="profile-avatar">کاراکتر</label><div class="local-avatar-select"><Avatar Id="@player.Avatar" /><select id="profile-avatar" value="@player.Avatar" @onchange="e=>player=player with {Avatar=e.Value!.ToString()!}">@for(int i=1;i<=48;i++){<option value="@($"avatar-{i:00}")">کاراکتر @i</option>}</select></div>}
+     <button class="primary" type="submit">@(isNew?"ساخت پروفایل و شروع":"ذخیره نام")</button>
+    </form>
+    <p class="muted">نیازی به ایمیل و رمز نیست. پیشرفت این نسخه مستقل از حساب وب است.</p>
+   </section>
+  }
+  @if(!isNew){<section class="work" id="ai-settings"><h2>هوش مصنوعی</h2>
+   <p>بررسی پاسخ و توضیح درس به اینترنت و کلید شخصی OpenRouter نیاز دارند. درس‌ها و ذخیرهٔ پیشرفت آفلاین‌اند.</p>
+   <p class="muted">فقط با انتخاب دکمهٔ بررسی، متن تمرین و پاسخ تو برای OpenRouter ارسال می‌شود. مدل ثابت: <bdi>nvidia/nemotron-3.5-super-vl:free</bdi>؛ درخواست به مدل پولی یا جایگزین فرستاده نمی‌شود.</p>
+   <p role="status">@(hasApiKey?"کلید روی این دستگاه تنظیم شده است.":"هنوز کلیدی تنظیم نشده است؛ ثبت شخصی و پاسخ مرجع آماده‌اند.")</p>
+   <form @onsubmit="SaveKey" @onsubmit:preventDefault>
+    <label for="api-key">کلید OpenRouter</label><input id="api-key" type="password" dir="ltr" @bind="apiKeyDraft" autocomplete="off" spellcheck="false" maxlength="256" required aria-describedby="key-help" />
+    <p id="key-help" class="muted">کلید روی همین دستگاه رمزگذاری می‌شود و وارد فایل پشتیبان نمی‌شود.</p>
+    <div class="toolbar"><button type="submit">ذخیره کلید</button>@if(hasApiKey){<button type="button" @onclick="ClearKey">حذف کلید از دستگاه</button>}</div>
+   </form>
+   <p><a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener noreferrer">دریافت کلید از OpenRouter</a></p>
+  </section>}
+  <section class="work"><h2>پشتیبان پیشرفت</h2>
+   <p>پیش از حذف برنامه یا پاک‌کردن داده‌های آن، یک پشتیبان ذخیره کن. فایل شامل پاسخ‌ها، امتیاز و پروفایل است.</p>
+   <button @onclick="Export">ذخیره فایل پشتیبان</button>
+   <label for="backup-file">بازیابی از فایل پشتیبان</label><InputFile id="backup-file" accept=".json,application/json" OnChange="ReadBackup" />
+   @if(pendingBackup is not null){<div class="feedback"><p>سیو فعلی با محتوای فایل انتخاب‌شده جایگزین می‌شود. ابتدا از سیو فعلی پشتیبان بگیر.</p><div class="toolbar"><button @onclick="Restore">جایگزینی سیو با پشتیبان</button><button @onclick="()=>pendingBackup=null">انصراف</button></div></div>}
+  </section>
+  @if(player is not null&&!isNew){<h2>کاراکترت را انتخاب کن</h2><div class="avatar-grid">@for(int i=1;i<=48;i++){var id=$"avatar-{i:00}";<button aria-label="@($"کاراکتر {i}")" aria-pressed="@(player.Avatar==id?"true":"false")" @onclick="()=>Choose(id)"><Avatar Id="@id" /></button>}</div>}
+ </main>
+ <footer>درس و سیو آفلاین · بررسی هوش مصنوعی با اینترنت</footer>
+</GameShell>
+@code {
+ Player? player;
+ string name="", status="", apiKeyDraft="";
+ bool isNew, hasApiKey;
+ string? error, pendingBackup;
+ int xp;
+ protected override async Task OnInitializedAsync()
+ {
+  try { isNew=await JS.InvokeAsync<string?>("ilearnOffline.read","profile") is null; player=await Store.Profile(); name=isNew?"":player.Name; hasApiKey=await JS.InvokeAsync<bool>("ilearnOffline.hasApiKey"); xp=LearningService.Xp(Content.Lessons,await Store.Load(),Content.CodeExercises); }
+  catch { error="پروفایل یا سیو محلی باز نشد؛ می‌توانی از فایل پشتیبان بازیابی کنی."; }
+ }
+ async Task SaveName()
+ {
+  try { await Repository.SaveProfile(player! with {Name=name}); player=await Store.Profile(); error=null; status="نام ذخیره شد."; if(isNew)Navigation.NavigateTo("/lobby"); }
+  catch(Exception ex) { error=ex.Message; }
+ }
+ async Task Choose(string id)
+ {
+  if(isNew){player=player! with {Avatar=id};return;}
+  try { await Store.Avatar(id); player=await Store.Profile(); error=null; status="کاراکتر ذخیره شد."; }
+  catch { error="کاراکتر ذخیره نشد؛ دوباره امتحان کن."; }
+ }
+ async Task SaveKey()
+ {
+  try { await JS.InvokeVoidAsync("ilearnOffline.setApiKey",apiKeyDraft); apiKeyDraft=""; hasApiKey=true; error=null; status="کلید ذخیره شد. اکنون می‌توانی بررسی AI را با اینترنت انجام بدهی."; }
+  catch { apiKeyDraft=""; error="کلید معتبر نیست یا ذخیره نشد؛ کلید OpenRouter را بررسی کن."; }
+ }
+ async Task ClearKey()
+ {
+  try { await JS.InvokeVoidAsync("ilearnOffline.setApiKey",""); hasApiKey=false; apiKeyDraft=""; error=null; status="کلید از دستگاه حذف شد."; }
+  catch { error="حذف کلید انجام نشد؛ دوباره امتحان کن."; }
+ }
+ async Task Export()
+ {
+  try { await JS.InvokeVoidAsync("ilearnOffline.exportBackup"); error=null; status="فایل پشتیبان آماده است؛ آن را ذخیره کن."; }
+  catch { error="پشتیبان ساخته نشد؛ دوباره امتحان کن."; }
+ }
+ async Task ReadBackup(InputFileChangeEventArgs e)
+ {
+  pendingBackup=null; status="";
+  try {
+   using var reader=new StreamReader(e.File.OpenReadStream(32*1024*1024));
+   var json=await reader.ReadToEndAsync();
+   await JS.InvokeVoidAsync("ilearnOffline.validateBackup",json);
+   pendingBackup=json; error=null;
+  } catch { error="فایل پشتیبان معتبر نیست یا بیش از ۳۲ مگابایت است؛ سیو قبلی تغییر نکرد."; }
+ }
+ async Task Restore()
+ {
+  if(pendingBackup is null)return;
+  try { await JS.InvokeVoidAsync("ilearnOffline.restoreBackup",pendingBackup); Navigation.NavigateTo("/profile",forceLoad:true); }
+  catch { error="بازیابی انجام نشد؛ سیو قبلی محفوظ است."; }
+ }
+}

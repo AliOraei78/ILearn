@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://openrouter.ai/api/v1/chat/completions; worker-src 'self' blob:; base-uri 'self'; object-src 'none'; frame-src 'none'; form-action 'none'">
+ <meta name="referrer" content="no-referrer">
+ <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+ <meta name="theme-color" content="#141b19">
+ <base href="/">
+ <title>ILearn آفلاین</title>
+ <link rel="icon" href="brand.svg" type="image/svg+xml">
+ <link rel="stylesheet" href="app.css">
+ <link rel="stylesheet" href="interaction.css">
+ <link rel="stylesheet" href="offline.css">
+</head>
+<body>
+ <div id="app"><main class="startup" role="status"><img src="brand.svg" width="64" height="64" alt=""><h1>ILearn آفلاین</h1><p>در حال آماده‌کردن کارگاه…</p><p>همهٔ درس‌ها و سیو روی همین دستگاه‌اند.</p></main></div>
+ <div id="blazor-error-ui" role="alert">برنامه متوقف شد؛ سیو قبلی محفوظ است. <button id="offline-reload" type="button">باز کردن دوباره</button></div>
+ <script src="offline.js"></script>
+ <script src="textarea.js"></script>
+ <script src="avatars.js"></script>
+ <script src="_framework/blazor.webassembly.js"></script>
+</body>
+</html>

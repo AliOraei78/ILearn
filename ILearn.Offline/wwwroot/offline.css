@@ -1,0 +1,11 @@
+.startup { max-width: 36rem; margin: 15vh auto; padding: 24px; }
+.offline-note { margin: 0; padding: 8px 16px; background: #141b19; border-bottom: 1px solid #42594f; color: #b3c1b7; font-size: .875rem; }
+.offline-profile { max-width: 760px; }
+.offline-profile .work + .work { margin-top: 24px; }
+.offline-profile input[type=file] { max-width: 100%; padding: 8px; white-space: normal; }
+.offline-profile label { display: block; margin-block: 14px 8px; }
+.offline-profile bdi { overflow-wrap: anywhere; }
+.local-avatar-select { display: flex; gap: 16px; align-items: center; margin-block: 12px 20px; }
+.local-avatar-select canvas { flex-shrink: 0; }
+.local-avatar-select select { width: 100%; min-width: 0; }
+body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); }

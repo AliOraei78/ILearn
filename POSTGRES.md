@@ -2,7 +2,7 @@
 
 تنظیم فعلی ثبت‌نام با تأیید ایمیل است؛ راهنمای SMTP و آزمون‌ها در [EMAIL-SETUP.md](EMAIL-SETUP.md) آمده است. ورود به معرفی روی `/` و لابی روی `/lobby` است.
 
-`.env.example` را به `.env` کپی کن و رمز دیتابیس را تعیین کن. Docker Desktop باید روی Linux containers اجرا باشد.
+`.env.example` را به `.env` کپی کن. برای `ILEARN_DB_PASSWORD` و `ILEARN_APP_DB_PASSWORD` دو رمز تصادفی متفاوت تعیین کن. Docker Desktop باید روی Linux containers اجرا باشد.
 
 ```powershell
 docker compose up -d --build
@@ -10,10 +10,18 @@ docker compose up -d --build
 
 برنامه روی http://127.0.0.1:5081 باز می‌شود. حساب تازه از صفر شروع می‌کند. فایل progress.json قدیمی و پشتیبانش وارد حساب‌ها نمی‌شوند و حفظ می‌شوند.
 
-برای اجرای مستقیم، ConnectionStrings__ILearn را با Host=localhost;Port=5441;Database=ilearn;Username=ilearn و Password مطابق .env تنظیم کن.
+سرویس یک‌بارهٔ `database-setup` نقش `ilearn_app` را بدون مجوز مدیریت سرور می‌سازد و مالکیت جدول‌های ILearn را با حفظ داده به آن می‌دهد. این مرحله برای volume تازه و volume محلی قبلی قابل اجرا است. رمز مدیر فقط به PostgreSQL و همین مرحله داده می‌شود؛ برنامه فقط رمز نقش `ilearn_app` را دریافت می‌کند.
 
-حساب و سیو جدید در volume اختصاصی ilearn-postgres قرار دارند. پشتیبان سیو جدید را با pg_dump بگیر؛ کپی App_Data تنها برای فایل‌های قدیمی و کلیدهای کوکی کافی است.
+برای اجرای مستقیم، `ConnectionStrings__ILearn` را با `Host=localhost;Port=5441;Database=ilearn;Username=ilearn_app` و Password مطابق `ILEARN_APP_DB_PASSWORD` تنظیم کن. ابتدا نقش را با `deployment/init-database.sql` و دسترسی مدیر ایجاد کن.
+
+حالت تولید HTTPS را الزامی می‌کند؛ استثنای `Security:AllowLocalHttp=true` در Compose فقط همراه پورت متصل به `127.0.0.1` برای اجرای محلی است. راهنمای استقرار و پراکسی در [SECURITY.md](SECURITY.md) آمده است.
+
+حساب و سیو در volume اختصاصی `ilearn-postgres-v2` قرار دارند. image کمینهٔ PostgreSQL 18 روی Alpine، پس از اعمال وصله‌های بسته‌ها، با کاربر سیستم‌عامل postgres اجرا می‌شود؛ helper بلااستفادهٔ gosu حذف شده است.
+
+اگر volume قدیمی `ilearn-postgres` وجود دارد، پیش از `docker compose up`، در PowerShell اسکریپت `./deployment/Migrate-Postgres.ps1` را اجرا کن. این اسکریپت برنامه را موقتاً متوقف می‌کند، dump کامل با دسترسی محدود می‌گیرد، داده را به volume تازه انتقال می‌دهد و شمار و هش محتوای همهٔ جدول‌ها را مقایسه می‌کند. volume قبلی و dump برای بازگشت حفظ می‌شوند؛ فایل‌های خام کلاستر Debian نباید مستقیم به Alpine داده شوند.
+
+پشتیبان بعدی را با pg_dump بگیر؛ کپی App_Data تنها برای فایل‌های قدیمی و کلیدهای کوکی کافی است.
 
 هر ۱۰ امتیاز تجربه یک Level می‌دهد. نوار بالای بازی پیشرفت تا لقب بعدی را در هر ۲۰ Level نشان می‌دهد. پاسخ کامل، پیش‌نویس یا XP را تغییر نمی‌دهد. مدل می‌تواند اشتباه کند؛ پاسخ مرجع درس بدون مدل هم نمایش داده می‌شود.
 
-ساختار بازی‌ها در lessons.json است. revisions.json صورت سادهٔ سؤال‌ها و پاسخ‌های کامل را با همان شناسه‌ها اضافه می‌کند. ثبت‌نام با تأیید ایمیل انجام می‌شود؛ بازیابی خودکار رمز هنوز اضافه نشده است.
+ساختار بازی‌ها در lessons.json است. revisions.json صورت سادهٔ سؤال‌ها و پاسخ‌های کامل را با همان شناسه‌ها اضافه می‌کند. ثبت‌نام و بازیابی رمز هر دو به اثبات مالکیت ایمیل نیاز دارند.

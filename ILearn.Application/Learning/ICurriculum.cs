@@ -1,3 +1,9 @@
 namespace ILearn.Application.Learning;
 
-public interface ICurriculum { List<Lesson> Lessons { get; } List<CodeExercise> CodeExercises { get; } List<InterviewSubject> Interviews { get; } string[] Catalog { get; } }
+public interface ICurriculum
+{
+    IReadOnlyList<Lesson> Lessons { get; }
+    IReadOnlyList<CodeExercise> CodeExercises { get; }
+    IReadOnlyList<InterviewSubject> Interviews { get; }
+    IReadOnlyList<string> Catalog { get; }
+}

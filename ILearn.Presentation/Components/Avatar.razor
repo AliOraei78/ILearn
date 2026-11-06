@@ -1,0 +1,7 @@
+@inject IJSRuntime JS
+<canvas @ref="canvas" width="64" height="64" role="img" aria-label="کاراکتر پیکسلی بازیکن"></canvas>
+@code {
+ [Parameter] public string Id {get;set;} = "avatar-01";
+ ElementReference canvas;
+ protected override async Task OnAfterRenderAsync(bool firstRender) { await JS.InvokeVoidAsync("ilearnAvatar",canvas,Id); }
+}

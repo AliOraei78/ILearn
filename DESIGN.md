@@ -4,6 +4,8 @@ User direction: minimal Persian UI, one page, fixed dark theme, reusable control
 
 ENERGY 1 / RHYTHM 1 / MOTION 1.
 
+- Android reuses the same Razor controls, fonts and palette. First launch asks only for a local name and character. The player band distinguishes local saves from AI requests that need internet. Reference answers and personal completion stay available offline. Keyboard resize, system text scaling, Back navigation and Android's document picker follow platform behavior; no decorative motion is added.
+
 - On phones, interview question position has its own row above equally sized previous/next controls. This keeps the two navigation actions balanced when the count and labels cannot share a row; desktop keeps the existing inline navigation.
 
 - The 2026-11-03 full-app pass keeps the same identity and 44px controls. Code line numbers appear only for code, and their type and gutter scale with text size; prose keeps its full writing width. Technology selectors use LTR text, and the selected exercise names its chapter and describes its selector for assistive technology. Answer-bearing grading criteria appear after submission so opening a criterion cannot solve a fresh attempt. Mobile navigation closes with Escape and restores focus. Native interactive routing makes pending-save guards cover links and browser history, while public/account pages retain static rendering. Recovery reloads the current URL. Group discovery closes its selection undo history; contradiction stage two uses its explicit return action. These changes protect reading, writing and predictable state without changing the palette or dials.

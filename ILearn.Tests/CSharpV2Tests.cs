@@ -28,14 +28,14 @@ public class CSharpV2Tests
             Assert.True(lesson.Summary.Length>200,lesson.Id);Assert.NotEmpty(lesson.Example);Assert.NotEmpty(lesson.ExampleOutput);
             Assert.True(lesson.Activities.Count(a=>!a.IsAi)>=3,lesson.Id);
             Assert.Equal(lesson.Activities.Count,lesson.Activities.Select(a=>a.Id).Distinct().Count());
-            Assert.Single(lesson.Activities,a=>a.Kind=="workshop");
+            Assert.Contains(lesson.Activities,a=>a.Kind=="workshop");
             foreach(var a in lesson.Activities)
             {
                 Assert.NotEmpty(a.Prompt);Assert.NotEmpty(a.Solution);Assert.NotEmpty(a.Explanation);Assert.NotEmpty(a.Hint);
                 foreach(var file in a.ReferenceFiles){Assert.False(Path.IsPathRooted(file.Key));Assert.DoesNotContain("..",file.Key.Split('/'));Assert.NotEmpty(file.Value);}
                 if(a.Puzzle is not null)Puzzles.Validate(a);
                 else if(!a.IsAi && a.Kind!="mission")Assert.NotEmpty(a.Answers);
-                if(a.Kind=="workshop"){Assert.NotEmpty(a.SolutionCode);Assert.Contains("اجرا",a.Prompt);}
+                if(a.Kind=="workshop"){Assert.NotEmpty(a.SolutionCode);Assert.Equal("code",a.AnswerFormat);}
             }
         }
         Assert.Equal(Puzzles.Kinds.Order(),lessons.SelectMany(l=>l.Activities).Where(a=>a.Puzzle is not null).Select(a=>a.Kind).Distinct().Order());

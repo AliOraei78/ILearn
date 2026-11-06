@@ -21,7 +21,17 @@ async function measure(page, name, results, dimensions=core) {
                 const a=previous.getBoundingClientRect(),b=button.getBoundingClientRect();
                 if(Math.abs(a.top-b.top)<2&&Math.min(Math.abs(a.right-b.left),Math.abs(b.right-a.left))<7)issues.push('adjacent buttons without gap: '+button.textContent.trim().slice(0,30));
             }
-            const blocks=[...(document.querySelector('dialog[open]')||document).querySelectorAll('button,select,input:not([type=hidden]),textarea,h1,h2,h3,h4,p,label,pre,summary,th')].filter(visible).map(e=>({e,r:e.getBoundingClientRect()}));
+            const clippedRect = e => {
+                const box = e.getBoundingClientRect();
+                const r = {left:box.left,right:box.right,top:box.top,bottom:box.bottom};
+                for(let parent=e.parentElement;parent;parent=parent.parentElement) {
+                    const style=getComputedStyle(parent),p=parent.getBoundingClientRect();
+                    if(/auto|scroll|hidden|clip/.test(style.overflowX)){r.left=Math.max(r.left,p.left);r.right=Math.min(r.right,p.right);}
+                    if(/auto|scroll|hidden|clip/.test(style.overflowY)){r.top=Math.max(r.top,p.top);r.bottom=Math.min(r.bottom,p.bottom);}
+                }
+                return r;
+            };
+            const blocks=[...(document.querySelector('dialog[open]')||document).querySelectorAll('button,select,input:not([type=hidden]),textarea,h1,h2,h3,h4,p,label,pre,summary,th')].filter(visible).map(e=>({e,r:clippedRect(e)})).filter(({r})=>r.right>r.left&&r.bottom>r.top);
             for(let i=0;i<blocks.length;i++)for(let j=i+1;j<blocks.length;j++) {
                 const a=blocks[i],b=blocks[j];if(a.e.contains(b.e)||b.e.contains(a.e))continue;
                 if(Math.min(a.r.right,b.r.right)-Math.max(a.r.left,b.r.left)>1&&Math.min(a.r.bottom,b.r.bottom)-Math.max(a.r.top,b.r.top)>1)issues.push('overlap: '+a.e.tagName+'/'+b.e.tagName+' '+a.e.textContent.trim().slice(0,30));

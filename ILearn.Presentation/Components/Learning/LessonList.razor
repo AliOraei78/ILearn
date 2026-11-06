@@ -1,0 +1,27 @@
+<section class="work">
+    <h2>مسیر C# از صفر تا پیشرفته</h2>
+    <p>۱۲۳ واحد در ۱۱ فاز؛ ترتیب پیشنهادی از R001 است. انتخاب و مرور فصل‌ها آزاد است.</p>
+    <div class="chapter-filters">
+        <div class="slot"><label for="phase-filter">فاز یادگیری</label><select id="phase-filter" @bind="phase"><option value="0">همهٔ فازها</option>@foreach(var group in Roadmap.GroupBy(l=>l.Phase)){<option value="@group.Key">فاز @group.Key · @group.First().PhaseTitle</option>}</select></div>
+        <div class="slot"><label for="chapter-search">جست‌وجوی عنوان، کد یا مبحث</label><input id="chapter-search" type="search" @bind="query" @bind:event="oninput" maxlength="120" /></div>
+    </div>
+    <p class="muted" role="status">@Filtered.Count() واحد نمایش داده می‌شود.@if(HasQuery){<span> جست‌وجو در همهٔ فازها انجام شد.</span>}</p>
+    @if(!Filtered.Any()){<p class="feedback">فصلی پیدا نشد؛ عبارت جست‌وجو یا فاز را تغییر بده.</p>}
+    <ul class="chapters">@foreach(var ready in Filtered){<li @key="ready.Id">@ChapterButton(ready)</li>}</ul>
+    <details><summary>آرشیو مسیر قبلی؛ حفظ پیشرفت و امتیاز</summary><p>فصل‌های S مسیر قبلی‌اند. تکمیل آن‌ها به واحدهای R نسبت داده نمی‌شود و امتیاز قبلی محفوظ است.</p><ul class="chapters archive-chapters">@foreach(var ready in Content.Lessons.Where(l=>l.Legacy)){<li>@ChapterButton(ready)</li>}</ul></details>
+</section>
+@code {
+    [Parameter,EditorRequired] public ICurriculum Content {get;set;}=null!;
+    [Parameter,EditorRequired] public Progress Progress {get;set;}=null!;
+    [Parameter] public EventCallback<Lesson> Selected {get;set;}
+    int phase=1; string query="";
+    bool HasQuery=>!string.IsNullOrWhiteSpace(query);
+    IEnumerable<Lesson> Roadmap=>Content.Lessons.Where(l=>!l.Legacy);
+    IEnumerable<Lesson> Filtered=>Roadmap.Where(l=>HasQuery ? (l.Id+" "+l.Title+" "+l.Topics).Contains(query.Trim(),StringComparison.OrdinalIgnoreCase) : phase==0||l.Phase==phase);
+    protected override void OnInitialized(){phase=Roadmap.FirstOrDefault(l=>l.Id==Progress.Lesson)?.Phase??1;}
+    RenderFragment ChapterButton(Lesson ready)
+    {
+        var completed=ready.Activities.Count(a=>Progress.Entries.GetValueOrDefault($"csharp/{ready.Id}/{a.Id}")?.Complete==true);
+        return @<button @onclick="()=>Selected.InvokeAsync(ready)"><strong><bdi>@ready.Id</bdi> · @ready.Title</strong><span class="muted">@(ready.Legacy?"مسیر قبلی":"فاز "+ready.Phase) · @(completed==ready.Activities.Count?"تکمیل‌شده":Progress.HasStarted(ready.Id)?"ادامه فصل":"شروع فصل") · @completed از @ready.Activities.Count چالش</span></button>;
+    }
+}

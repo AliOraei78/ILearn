@@ -1,0 +1,32 @@
+@using System.Text.RegularExpressions
+@if(Inline){
+ <span class="learning-text" dir="@Direction(Text)">@Content(Text)</span>
+}else{
+ <div class="learning-text" dir="@Direction(Text)">
+  @foreach(var block in Regex.Split(Text, @"(```[^\n]*\n[\s\S]*?```)").Where(part => part.Length > 0)){
+   @if(block.StartsWith("```", StringComparison.Ordinal)){
+    <pre tabindex="0" dir="ltr"><code>@block[(block.IndexOf('\n') + 1)..^3].TrimEnd()</code></pre>
+   }else{
+    <span>@Content(block)</span>
+   }
+  }
+ </div>
+}
+@code {
+ [Parameter] public string Text { get; set; } = "";
+ [Parameter] public bool Inline { get; set; }
+ static string Direction(string value) => value.Any(c => c is >= '\u0600' and <= '\u06ff') ? "rtl" : "ltr";
+ static readonly Regex Latin = new(@"`[^`\n]+`|[0-9۰-۹]+٪|[-+.]?[A-Za-z0-9_]+(?:[.#-][A-Za-z0-9_]+|\([^\n\u0600-\u06ff]*?\)|<[^\n\u0600-\u06ff]+?>|\[[^\n\u0600-\u06ff]*?\]|[ \t]*(?:<=|>=|==|!=|=>|[<>+*/%&|^=-])[ \t]*[-+]?[A-Za-z0-9_]+|[,;:][ \t]*[A-Za-z0-9_]+|[+/#?!]|[ \t]+(?=[A-Za-z0-9_])[A-Za-z0-9_]+)*", RegexOptions.Compiled);
+ static RenderFragment Content(string value) => builder => {
+  var position = 0;
+  foreach(Match match in Latin.Matches(value)){
+   builder.AddContent(0, value[position..match.Index]);
+   builder.OpenElement(1, "bdi"); builder.AddAttribute(2, "dir", "ltr");
+   var text = match.Value.StartsWith('`') ? match.Value[1..^1] : match.Value;
+   if(text.EndsWith('٪')) text = string.Concat(text.Select(c => c is >= '0' and <= '9' ? (char)('۰' + c - '0') : c));
+   builder.AddContent(3, text);
+   builder.CloseElement(); position = match.Index + match.Length;
+  }
+  builder.AddContent(4, value[position..]);
+ };
+}

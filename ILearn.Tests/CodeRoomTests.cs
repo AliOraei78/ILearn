@@ -20,8 +20,10 @@ public sealed class CodeRoomTests
         foreach (var lesson in curriculum.Lessons.Where(lesson => !lesson.Legacy))
         {
             var practice = Assert.Single(curriculum.CodeExercises, exercise => exercise.Subject == "csharp" && exercise.LessonId == lesson.Id && exercise.Activity.Id == "workshop");
-            Assert.Same(lesson.Activities.Single(activity => activity.Kind == "workshop"), practice.Activity);
+            Assert.Same(lesson.Activities.Single(activity => activity.Id == "workshop"), practice.Activity);
             Assert.Equal("implement", practice.Template);
+            foreach (var stage in lesson.Activities.Where(activity => activity.Kind == "workshop"))
+                Assert.Contains(curriculum.CodeExercises, exercise => ReferenceEquals(exercise.Activity, stage));
         }
         Assert.All(curriculum.CodeExercises, exercise =>
         {

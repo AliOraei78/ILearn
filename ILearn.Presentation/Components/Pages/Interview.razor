@@ -1,0 +1,85 @@
+@page "/interview"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using ILearn.Components.Learning
+@implements IAsyncDisposable
+@inject PlayerStore Store
+@inject ICurriculum Content
+@inject IReviewer Reviewer
+@inject LearningUiOptions Experience
+@inject NavigationManager Navigation
+@inject ILogger<Interview> Logger
+<PageTitle>مصاحبه @(subject?.Title) | ILearn</PageTitle>
+<GameShell Player="@(sessionExpired ? null : player)" Xp="@Xp">
+<NavigationLock OnBeforeInternalNavigation="BeforeInternalNavigation" ConfirmExternalNavigation="@(stateVersion != savedVersion)" />
+<header class="code-room-header">
+ <h1>شبیه‌ساز مصاحبه</h1>
+ <p class="muted">سؤال را بخوان، پاسخ تشریحی بنویس و با بازخورد هوش مصنوعی اصلاحش کن.</p>
+</header>
+<main class="code-room-main">
+ @if(error is not null){
+  <div class="feedback error" role="alert" tabindex="-1" @ref="errorNotice">
+   <p>@error</p>
+   @if(sessionExpired){<a class="button-link" href="@LoginUrl" data-enhance-nav="false">ورود دوباره به حساب</a>}
+   else if(progress is null){<button @onclick="Reload">تلاش دوباره برای بارگذاری</button>}
+   else{<button @onclick="()=>Save()">تلاش دوباره برای ذخیره</button>}
+  </div>
+ }
+ @if(progress is null){<p role="status">@(error is null ? "در حال خواندن سؤال‌ها…" : "بارگذاری متوقف شد؛ دوباره تلاش کن.")</p>}
+ else {
+  <div class="code-room-filters">
+   <div><label for="interview-subject">موضوع مصاحبه</label><select id="interview-subject" dir="auto" value="@subject?.Id" @onchange="ChangeSubject">
+    @foreach(var item in Content.Interviews){<option value="@item.Id">@item.Title</option>}
+   </select></div>
+   <div><label for="interview-category">دستهٔ سؤال</label><select id="interview-category" value="@category" @onchange="ChangeCategory">
+    <option value="">همه دسته‌ها</option>
+    @foreach(var group in subject!.Questions.GroupBy(item=>item.Category)){<option value="@group.Key">@group.Key · @group.Count() سؤال</option>}
+   </select></div>
+   <div><label for="interview-level">سطح سؤال</label><select id="interview-level" value="@level" @onchange="ChangeLevel">
+    <option value="">همه سطح‌ها</option>
+    @foreach(var value in new[]{"مقدماتی","متوسط","پیشرفته"}){<option value="@value">@value</option>}
+   </select></div>
+  </div>
+  <p id="interview-progress" class="muted" role="status">@filtered.Count سؤال با این فیلترها · @subject!.Questions.Count(item=>progress.Entries.GetValueOrDefault(item.Key(subject.Id))?.Complete==true) از @subject.Questions.Count سؤال @(Experience.LocalProfile?"تکمیل‌شده":"تأییدشده") در <bdi>@subject.Title</bdi></p>
+  <details class="interview-research"><summary>دربارهٔ انتخاب سؤال‌ها و منابع</summary><p>@subject.SelectionNote</p><p class="muted">تاریخ بررسی محتوای این مجموعه: <bdi>@subject.ReviewedOn</bdi></p></details>
+  @if(question is null){
+   <section class="work"><h2>سؤالی با این فیلترها پیدا نشد</h2><p>دسته یا سطح دیگری انتخاب کن.</p><button @onclick="ClearFilters">نمایش همه سؤال‌های این موضوع</button></section>
+  }
+  else {
+   <div class="code-exercise-picker"><SearchPicker Id="interview-question" Label="انتخاب سؤال" Value="@question.Activity.Id" Items="@QuestionOptions" Selected="@(id => ChangeQuestion(new ChangeEventArgs { Value = id }))" /><p id="selected-interview-question" class="selected-option">سؤال انتخاب‌شده: <LearningText Text="@question.Activity.Title" Inline="true" /></p></div>
+   <nav class="interview-navigation" aria-label="جابه‌جایی میان سؤال‌های مصاحبه">
+    <button disabled="@(QuestionIndex==0)" @onclick="()=>Move(-1)">سؤال قبلی</button>
+    <span>سؤال @(QuestionIndex+1) از @filtered.Count</span>
+    <button disabled="@(QuestionIndex==filtered.Count-1)" @onclick="()=>Move(1)">سؤال بعدی</button>
+   </nav>
+   <div class="code-room-workspace interview-workspace" @key="question.Key(subject.Id)">
+    <section class="work" aria-labelledby="interview-question-title">
+     <p class="code-room-meta"><bdi>@question.Activity.Id</bdi><span>@question.Category</span><span>@question.Level</span></p>
+     <h2 id="interview-question-title">@question.Activity.Title</h2>
+     <p class="code-room-question"><LearningText Text="@question.Activity.Prompt" Inline="true" /></p>
+     @if(question.Activity.Code.Length>0){<pre tabindex="0"><code>@question.Activity.Code</code></pre>}
+     <details><summary>راهنمای پاسخ</summary><p><LearningText Text="@question.Activity.Hint" Inline="true" /></p></details>
+     <details><summary>معیار ارزیابی پاسخ</summary><p class="summary">@(entry!.Feedback.Length>0 ? question.Activity.Explanation : "پاسخ باید مفهوم خواسته‌شده، دلیل و مثال مرتبط را پوشش بدهد. معیار دقیق، چون شامل پاسخ است، پس از ثبت برای بررسی نمایش داده می‌شود.")</p></details>
+     <details><summary>پاسخ مرجع</summary><p class="summary"><LearningText Text="@question.Activity.Solution" Inline="true" /></p>@if(question.Activity.SolutionCode.Length>0){<pre tabindex="0"><code>@question.Activity.SolutionCode</code></pre>}</details>
+     <details><summary>منابع این سؤال</summary>@if(Experience.LocalProfile){<p class="muted">متن درس و پاسخ مرجع داخل برنامه است؛ باز کردن پیوندهای منابع در مرورگر به اینترنت نیاز دارد.</p>}<ul class="interview-sources">
+      @foreach(var source in subject.Sources.Where(item=>question.SourceIds.Contains(item.Id))){<li><a href="@source.Url" target="_blank" rel="noopener noreferrer">@source.Title</a><small class="muted"> @(source.Role=="selection" ? "مبنای انتخاب موضوع" : "مرجع صحت فنی")</small></li>}
+     </ul></details>
+    </section>
+    <section class="work" aria-labelledby="interview-answer-title" aria-busy="@(busy ? "true" : "false")">
+     <h2 id="interview-answer-title">پاسخ تو و بازخورد</h2>
+     <CodeAnswerEditor Value="@entry!.Draft" Technology="@subject.Title" CodeAnswer="false" ReadOnly="@sessionExpired" Changed="DraftChanged" />
+     <div class="toolbar">
+      <button class="primary" disabled="@(busy||sessionExpired||string.IsNullOrWhiteSpace(entry.Draft))" @onclick="AskAi">بررسی پاسخ با هوش مصنوعی</button>
+      @if(Experience.LocalProfile){<button disabled="@(busy||sessionExpired||string.IsNullOrWhiteSpace(entry.Draft))" @onclick="SelfComplete">ثبت شخصی تکمیل</button>}
+      @if(busy){<button @onclick="CancelReview">لغو بررسی</button><span role="status">در حال بررسی پاسخ…</span>}
+     </div>
+     @if(Experience.LocalProfile){<p class="muted">بررسی AI به اینترنت و کلید نیاز دارد. <a href="/profile#ai-settings">تنظیمات هوش مصنوعی</a></p>}
+     @if(entry.Feedback.Length>0){<div class="@(entry.FeedbackError ? "feedback error" : "feedback")" role="status"><LearningText Text="@entry.Feedback" /></div>}
+     @if(entry.Complete){<p class="muted">@(entry.Source=="ثبت شخصی"?"تکمیل این سؤال با ارزیابی شخصی ثبت شده است.":"این سؤال با «"+entry.Source+"» تکمیل شده است.")</p>}
+     <p class="muted" role="status">@saveStatus</p>
+    </section>
+   </div>
+  }
+ }
+</main>
+<footer>@(Experience.LocalProfile?"AI به اینترنت نیاز دارد و ممکن است اشتباه کند. ثبت شخصی به معنی تأیید هوش مصنوعی نیست؛ پاسخ مرجع برای خودارزیابی آماده است.":"بازخورد شامل نمرهٔ تخمینی، ایرادها و راهنمای اصلاح است. تکمیل با تطبیق پاسخ مرجع یا بررسی مدل ثبت می‌شود؛ مدل ممکن است اشتباه کند.")</footer>
+</GameShell>

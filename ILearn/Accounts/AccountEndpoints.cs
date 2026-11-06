@@ -17,11 +17,16 @@ public static class AccountEndpoints
     {
         app.MapPost("/auth/{action}", async (string action, HttpContext context, IAccounts database, IEmailVerification verification, IDataProtectionProvider protection) =>
         {
+            if (!context.Request.HasFormContentType) return Results.BadRequest();
+            IFormCollection form;
+            try { await context.RequestServices.GetRequiredService<IAntiforgery>().ValidateRequestAsync(context); form = await context.Request.ReadFormAsync(); }
+            catch (AntiforgeryValidationException) { return Results.BadRequest(); }
+            catch (BadHttpRequestException ex) { return Results.StatusCode(ex.StatusCode); }
+            catch (InvalidDataException) { return Results.BadRequest(); }
             if (context.User.Identity?.IsAuthenticated != true && action is "profile" or "logout") return Results.LocalRedirect(action == "profile" ? "/login?returnUrl=/profile" : "/login");
             if (context.User.Identity?.IsAuthenticated == true && action is "login" or "register") return Results.LocalRedirect("/lobby");
-            if (!await context.RequestServices.GetRequiredService<IAntiforgery>().IsRequestValidAsync(context)) return Results.BadRequest();
             if (action == "logout") { await database.RevokeSession(context.User.Session()); await context.SignOutAsync(); return Results.LocalRedirect("/login"); }
-            var form = await context.Request.ReadFormAsync(); var destination = action switch { "register" => "/register", "verify" or "resend" => "/verify", "forgot" => "/forgot-password", "password" => "/set-password", "profile" => "/profile", _ => "/login" };
+            var destination = action switch { "register" => "/register", "verify" or "resend" => "/verify", "forgot" => "/forgot-password", "password" => "/set-password", "profile" => "/profile", _ => "/login" };
             IResult Failure(string query) => Results.LocalRedirect(destination + "?" + query + (action == "login" ? "&returnUrl=" + Uri.EscapeDataString(ReturnDestination(form["returnUrl"])) : ""));
             try
             {
@@ -50,7 +55,12 @@ public static class AccountEndpoints
                 if (action == "login")
                 {
                     var email = form["email"].ToString(); if (email.Length <= 254) context.Response.Cookies.Append("ILearn.LoginEmail", protection.CreateProtector("ILearn.LoginEmail").Protect(email), new CookieOptions { HttpOnly = true, Secure = context.Request.IsHttps, SameSite = SameSiteMode.Strict, Path = "/", MaxAge = TimeSpan.FromMinutes(15) });
-                    var player = await database.Login(email, form["password"].ToString(), context.Connection.RemoteIpAddress?.ToString() ?? "local"); if (player is null) return Failure("error=credentials"); await SignIn(context, database, player, form["remember"] == "true"); context.Response.Cookies.Delete("ILearn.LoginEmail"); return Results.LocalRedirect(ReturnDestination(form["returnUrl"]));
+                    var password = form["password"].ToString();
+                    var player = await database.Login(email, password, context.Connection.RemoteIpAddress?.ToString() ?? "local");
+                    if (player is null) return Failure("error=credentials");
+                    try { PasswordPolicy.Validate(password); }
+                    catch (ArgumentException) { return Results.LocalRedirect("/forgot-password?weak=true"); }
+                    await SignIn(context, database, player, form["remember"] == "true"); context.Response.Cookies.Delete("ILearn.LoginEmail"); return Results.LocalRedirect(ReturnDestination(form["returnUrl"]));
                 }
                 return Results.NotFound();
             }

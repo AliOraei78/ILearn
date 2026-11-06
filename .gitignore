@@ -26,10 +26,16 @@
 *.p12
 *.pem
 *.key
+*.jks
+*.keystore
 coverage/
 *.coverage
 *.coveragexml
 node_modules/
+.tools/
+artifacts/
+ILearn.Android/build/
+ILearn.Android/keys/
 __pycache__/
 .DS_Store
 Thumbs.db
@@ -38,5 +44,6 @@ Thumbs.db
 verification/*.png
 verification/*.jpg
 verification/*.json
+verification/android-*.xml
 verification/email-preview.html
 verification/cleanup-approved-accounts.sql
