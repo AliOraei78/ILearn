@@ -37,7 +37,7 @@ domino("زنجیرهٔ قرارداد عددی", "مسیر از الگوریتم
 "خروجی‌ها 5،4.0 یا معادل عددی 4،و 0 باشند. T.Zero و عملیات از constraint بیایند؛ overflow با checked پنهان نشود.")
 
 unit(48,
-"delegate قرارداد یک فراخوانی شامل پارامترها و خروجی است. method group نام متد سازگار را به delegate تبدیل می‌کند. Func خروجی دارد، Action خروجی ندارد و Predicate<T> یک bool برای T برمی‌گرداند. multicast چند delegate را به ترتیب فراخوانی می‌کند؛ برای delegate دارای خروجی، نتیجهٔ آخرین فراخوانیِ کامل‌شده برمی‌گردد. اگر یکی exception بدهد، بدون رسیدگی مستقل ادامهٔ فهرست تضمین نمی‌شود. invocation list امکان مشاهدهٔ تک‌تک handlerها را می‌دهد، اما سیاست خطا باید صریح باشد. constraint Delegate برای نوع‌های delegate است و هر رفتار قابل اجرا را خودکار امن یا بدون capture نمی‌کند.",
+"delegate قرارداد یک فراخوانی شامل پارامترها و خروجی است. method group نام متد سازگار را به delegate تبدیل می‌کند. Func خروجی دارد، Action خروجی ندارد و Predicate<T> یک bool برای T برمی‌گرداند. multicast چند delegate را به ترتیب فراخوانی می‌کند؛ برای delegate دارای خروجی، فقط وقتی همهٔ فراخوانی‌ها موفق باشند نتیجهٔ آخر برمی‌گردد. اگر یکی exception بدهد، فراخوانی مستقیم متوقف می‌شود و خطا به فراخواننده می‌رسد. invocation list امکان مشاهدهٔ تک‌تک handlerها را می‌دهد، اما سیاست خطا باید صریح باشد. constraint Delegate برای نوع‌های delegate است و هر رفتار قابل اجرا را خودکار امن یا بدون capture نمی‌کند.",
 'Func<int,int> operation=Double;\nConsole.WriteLine(operation(4));\nstatic int Double(int n)=>n*2;', '8',
 ("multicast از دو Func<int> با خروجی 1 و 2 و بدون خطا چه برمی‌گرداند؟", "2، خروجی آخرین delegate", "آرایهٔ خودکار [1,2]", "همیشه مجموع 3", "multicast نتیجه‌های میانی را جمع نمی‌کند؛ برای تجمیع باید invocation list را صریح پردازش کرد."),
 simulation("دو فراخوانی، یک خروجی", "ترتیب invocation list ثابت است: اول 1، سپس 2. فراخوانی‌ها را کامل کن.", ["اجرای handler بعدی", "بازگرداندن مجموع فرضی"], ["هنوز خروجی نیست","handler اول=1","handler دوم=2، نتیجهٔ نهایی=2","قرارداد غلط"], [[1,3],[2,3],[-1,-1],[-1,-1]], [2], limit=2),
@@ -65,11 +65,11 @@ simulation("عمر مشترک", "ابتدا handler مشترک است. هدف: �
 
 unit(51,
 "covariance اجازه می‌دهد producer نوع خاص‌تر در جای producer پایه مصرف شود؛ contravariance جهت consumer را برعکس می‌کند. out و in در اعلان interface یا delegate جهت مجاز پارامتر نوع را بیان می‌کنند و با out/ref پارامتر متد یکی نیستند. این تبدیل‌های variance برای reference typeهاست و مثلاً IEnumerable<int> خودکار IEnumerable<object> نمی‌شود. نوعی که هم تولید و هم مصرف می‌کند معمولاً invariant می‌ماند؛ List<Cat> را نمی‌توان List<Animal> کرد. covariance قدیمی آرایه می‌تواند در نوشتن نوع ناسازگار ArrayTypeMismatchException بدهد. ایمنی compile-time generic را با این رفتار آرایه اشتباه نگیر.",
-'IEnumerable<string> names=new[]{"A"};\nIEnumerable<object> objects=names;\nConsole.WriteLine(objects.First());', 'A',
+'IEnumerable<string> names=new[]{"A"};\nIEnumerable<object> objects=names;\nforeach (object item in objects)\n    Console.WriteLine(item);', 'A',
 ("چرا List<Cat> معمولاً List<Animal> نیست؟", "مصرف‌کننده می‌توانست Dog به لیست Cat اضافه کند.", "چون Cat هرگز Animal نیست.", "چون تمام generics فقط value type می‌پذیرند.", "ظرف mutable هم تولید و هم مصرف می‌کند؛ covariance آزاد، نوشتن نوع نامعتبر را ممکن می‌کرد."),
 analogy("جهت producer", "جفت مرجع: Cat به Animal با رابطهٔ «خاص به عام». همان جهت را برای producer فقط‌خواندنی حفظ کن.", ["خاص به عام", "عام به خاص", "IEnumerable<Cat>", "IEnumerable<Animal>", "List<Animal>", "List<Cat>"], [[0,2,3]]),
 "تبدیل IEnumerable<string> به IEnumerable<object> و Action<object> به Action<string> را تست کن. تبدیل List<string> به List<object> را در نمونهٔ منفی build کن.",
-'IEnumerable<string> source=new[]{"A"};IEnumerable<object> output=source;\nConsole.WriteLine(output.First());\nAction<object> consume=Console.WriteLine;Action<string> textConsumer=consume;\ntextConsumer("B");',
+'IEnumerable<string> source=new[]{"A"};IEnumerable<object> output=source;\nforeach (object item in output) Console.WriteLine(item);\nAction<object> consume=Console.WriteLine;Action<string> textConsumer=consume;\ntextConsumer("B");',
 "A و B چاپ شوند. جهت consumer برعکس producer توضیح داده و محدودیت reference typeها ثبت شود.")
 
 unit(52,
@@ -101,7 +101,7 @@ argument("علت شکست را نگه دار", "اعتبارسنجی دادهٔ 
 
 unit(55,
 "جزء قابل استفادهٔ مجدد باید یک قرارداد واقعی را حل کند. موتور قوانین کوچک می‌تواند predicateهای نوع‌دار را روی داده اجرا کند و نتیجهٔ قابل توضیح بدهد. generic ایمنی نوع، delegate رفتار تعویض‌پذیر و event اعلان تغییر را می‌دهد؛ ترکیب همهٔ این‌ها فقط با مصرف مشخص ارزش دارد. extension برای راحتی مصرف است و نباید وضعیت اصلی را مخفی کند. subscriber مالک عمر دارد و پس از unsubscribe نباید فراخوانی شود. برای نگهداری چند قانون هنوز آرایه کافی است. پیش از تعمیم بیشتر، تست با دو نوع داده و یک وابستگی fake لازم است.",
-'Func<int,bool>[] rules={n=>n>0,n=>n<10};\nConsole.WriteLine(rules.All(rule=>rule(5)));', 'True',
+'Func<int, bool>[] rules = { n => n >= 2, n => n <= 6 };\nConsole.WriteLine(Passes(5, rules));\n\nstatic bool Passes(int value, Func<int, bool>[] rules)\n{\n    foreach (var rule in rules)\n        if (!rule(value))\n            return false;\n\n    return true;\n}', 'True',
 ("برای اثبات قابل استفاده بودن موتور قوانین چه بررسی مفیدتر است؟", "دو نوع داده و رفتارهای تعویض‌پذیر با همان قرارداد", "افزودن ده type parameter بدون مصرف", "فقط تست نام کلاس", "تعمیم باید در مصرف واقعی و تست ایمنی نوع دیده شود؛ تعداد abstraction معیار کیفیت نیست."),
 budget("جزء حداقلی", "موتور باید نوع‌امن، رفتارپذیر و بدون اشتراک رهاشده باشد.", ["Rule<T> با Func<T,bool>", "مالک unsubscribe", "تست دو نوع داده", "reflection دلخواه"], [1,1,1,5], [["نوع","رفتار"],["عمر"],["اثبات"],[]], ["نوع","رفتار","عمر","اثبات"], 3, [0,1,2]),
 "RuleSet<T> با آرایهٔ predicate بساز. برای int و string استفاده کن. رویداد Evaluated یک بار اعلام شود و handler جداشده دوباره صدا نخورد؛ خطای predicate پنهان نشود.",

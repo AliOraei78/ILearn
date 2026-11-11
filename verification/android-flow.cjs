@@ -4,6 +4,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { execFileSync } = require('node:child_process');
 const { chromium, expect: baseExpect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
+const openChallenges = require('./teaching-navigation.cjs');
 const expect=baseExpect.configure({timeout:30000});
 const adb = process.env.ILEARN_ADB || 'C:/Users/ASUS/AppData/Local/Android/Sdk/platform-tools/adb.exe';
 const serial = 'emulator-5556', app = 'ir.ilearn.offline', base = 'https://appassets.androidplatform.net';
@@ -119,7 +120,7 @@ async function keyboard() {
         await click('بخش‌های بازی');await expect(page.locator('#game-navigation')).toBeVisible();
         run('shell','input','keyevent','4');await expect(page.locator('.sidebar-toggle')).toHaveAttribute('aria-expanded','false');
         record('APK launches and creates a local profile in airplane mode; Android Back closes mobile menu');
-        await go('/lobby?lesson=R001');await click('شروع چالش‌ها');
+        await go('/lobby?lesson=R001');await openChallenges(page, expect);
         await expect(page.locator('#activity-title')).toBeVisible();
         const first=JSON.parse(fs.readFileSync(path.join(__dirname,'../ILearn/Content/csharp-v2.json'),'utf8'))[0].Activities[0];
         for(const answer of first.Answers)await page.locator('.options input').nth(Number(answer)).check();await click('ثبت جواب');

@@ -123,7 +123,7 @@
       "Id": "find-filter-data",
       "Title": "داده‌ای برای خروجی دقیق",
       "Kind": "workshop",
-      "Prompt": "جدول samples ابتدا خالی است. بدون تغییر SELECT، یک INSERT با حداقل چهار ردیف بنویس تا خروجی دقیقاً شناسه‌های 2 و 5 به همین ترتیب باشد. همه idها یکتا باشند. حداقل یک ردیف به دلیل score پایین و حداقل یک ردیف به دلیل active=false حذف شود. score عدد صحیح و غیر null است.",
+      "Prompt": "جدول samples ابتدا خالی است. بدون تغییر SELECT، یک INSERT با حداقل چهار ردیف بنویس تا خروجی دقیقاً شناسه‌های 2 و 5 به همین ترتیب باشد. همه idها یکتا باشند. حداقل یک ردیف فعال با score کمتر از ۱۰ و یک ردیف غیرفعال با score دست‌کم ۱۰ بگذار تا اثر هر شرط جدا دیده شود. score عدد صحیح و غیر null است.",
       "Code": "CREATE TABLE samples (\n    id integer PRIMARY KEY,\n    score integer NOT NULL,\n    active boolean NOT NULL\n);\n\nSELECT id FROM samples\nWHERE score >= 10 AND active = true\nORDER BY id;",
       "Explanation": "پاسخ INSERT معتبر PostgreSQL برای جدول samples باشد. حداقل چهار id متمایز وجود داشته باشد. فقط ردیف‌های 2 و 5 هر دو شرط را پاس کنند. حداقل یک ردیف active=true و score<10 و حداقل یک ردیف active=false و score>=10 باشد تا هر شرط جدا اثر داشته باشد. SELECT و schema تغییر نکنند؛ هر داده سازگار پذیرفته است.",
       "Hint": "دو ردیف قبول و برای هر شرط یک مثال ردشده بساز.",
@@ -203,7 +203,7 @@
       "Code": "SETNX session:7 active\nGET session:7",
       "Explanation": "دامنه غیاب کلید یا مقدار رشته‌ای موجود، بدون TTL و تغییر هم‌زمان ذکر شود. اگر غایب باشد، SETNX عدد 1 برمی‌گرداند و GET رشته active را می‌خواند. اگر موجود باشد، SETNX عدد 0 برمی‌گرداند و مقدار قبلی عیناً حفظ می‌شود. در اجرای دوباره، کلید موجود است؛ SETNX صفر و GET همان مقدار ذخیره‌شده را می‌دهد. ادعای بازنویسی همیشگی یا پاسخ ثابت active برای کلید موجود غلط است.",
       "Hint": "بخش NX شرط نوشتن را به نبودن کلید وابسته می‌کند.",
-      "Solution": "قرارداد، نوشتن فقط در نبود کلید است. اجرای نخست در حالت غیاب مقدار active را می‌سازد؛ مقدار موجود را حفظ می‌کند. تکرار عملیات پس از ایجاد یا وجود کلید، مقدار را تغییر نمی‌دهد.",
+      "Solution": "اگر کلید غایب باشد، SETNX عدد 1 می‌دهد و GET مقدار active را می‌خواند. اگر کلید از قبل موجود باشد، SETNX عدد 0 می‌دهد و GET همان مقدار قبلی را می‌خواند. در اجرای دوباره، کلید در هر دو حالت موجود است و SETNX عدد 0 می‌دهد. GET همان مقداری را می‌خواند که اجرای اول در کلید باقی گذاشته است.",
       "SolutionCode": "",
       "AnswerFormat": "text"
     }
@@ -252,13 +252,13 @@
     "Template": "predict",
     "Activity": {
       "Id": "predict-counter-variation",
-      "Title": "تغییر یک افزایش",
+      "Title": "پیدا کردن افزایش گمشده",
       "Kind": "workshop",
-      "Prompt": "کلید visits ابتدا غایب است؛ انقضا و دخالت کاربر دیگر وجود ندارد. فقط خروجی دو GET کد زیر را به ترتیب بنویس.",
-      "Code": "SET visits 5\nINCR visits\nGET visits\nINCRBY visits 3\nGET visits",
-      "Explanation": "خروجی دو GET به ترتیب 6 و 9 است.",
-      "Hint": "INCRBY مقدار موجود را به اندازه عدد داده‌شده تغییر می‌دهد.",
-      "Solution": "خروجی دو GET به ترتیب 6 و 9 است.",
+      "Prompt": "بعد از SET و INCR، باید GET مقدار ۸ را برگرداند. به‌جای علامت سؤال فقط عدد لازم را بنویس.",
+      "Code": "SET seats 4\nINCR seats\nINCRBY seats ?\nGET seats",
+      "Explanation": "به‌جای ? عدد 3 می‌آید. SET مقدار 4 را می‌گذارد، INCR آن را به 5 می‌رساند و INCRBY seats 3 باعث می‌شود GET مقدار 8 را برگرداند.",
+      "Hint": "مقدار درست قبل از INCRBY را پیدا کن و فاصلهٔ آن را تا ۸ به‌دست بیاور.",
+      "Solution": "به‌جای ? عدد 3 می‌آید. SET مقدار 4 را می‌گذارد، INCR آن را به 5 می‌رساند و INCRBY seats 3 باعث می‌شود GET مقدار 8 را برگرداند.",
       "SolutionCode": "",
       "AnswerFormat": "text"
     }

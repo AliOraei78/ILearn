@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
+const openChallenges = require('./teaching-navigation.cjs');
 const { server: smtp, messages } = require('./test-smtp.cjs')();
 const base = process.env.ILEARN_AUDIT_URL || 'http://127.0.0.1:5084';
 const database = process.env.ILEARN_AUDIT_DATABASE || 'ilearn_ui_audit';
@@ -117,12 +118,12 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await click('بازگشت به آموزشگاه');
         await page.getByRole('button', { name: /C# جامع/ }).click();
         await archived(lesson.Id);
-        await expect(page.locator('nav[aria-label="چالش‌های جلسه"]').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
-        if (await page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }).count()) {
+        const introduction = page.locator('#lesson-introduction-title');
+        await expect(page.locator('#activity-title').or(introduction)).toBeVisible();
+        if (await introduction.isVisible()) {
             await measure(lesson.Id + ' introduction', [{ width: 320, height: 568 }, { width: 1366, height: 900 }]);
-            await click('شروع چالش‌ها');
         }
-        await expect(page.locator('nav[aria-label="چالش‌های جلسه"]')).toBeVisible();
+        await openChallenges(page, expect);
     };
     const navigate = async (lesson, index) => {
         await page.locator('nav[aria-label="چالش‌های جلسه"] button').nth(index).click();
@@ -180,7 +181,7 @@ smtp.on('connection', socket => socket.on('error', error => { if (error.code !==
         await page.locator('summary').click();
         await measure('chapter roadmap');
         await archived('S05');
-        await click('شروع چالش‌ها');
+        await openChallenges(page, expect);
         await click('چالش بعد');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[1].Title);await expect(page.locator('#activity-title')).toBeFocused();
         await click('چالش قبل');await expect(page.locator('#activity-title')).toHaveText(lessons[0].Activities[0].Title);await expect(page.locator('#activity-title')).toBeFocused();
         record('next/previous activity moves keyboard focus into the new question');

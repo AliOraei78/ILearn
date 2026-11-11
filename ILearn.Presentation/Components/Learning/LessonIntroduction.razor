@@ -1,10 +1,118 @@
 <section class="work" aria-labelledby="lesson-introduction-title">
- <h2 id="lesson-introduction-title" tabindex="-1" @ref="title">پیش از شروع چالش‌ها</h2>
- @if(!Lesson.Legacy){<p class="muted">فاز @Lesson.Phase · @Lesson.PhaseTitle</p><h3>هدف این واحد</h3><p><LearningText Text="@Lesson.Objective" Inline="true" /></p>
- <p>پیش‌نیازهای کلیدی: @if(Lesson.Prerequisites.Length==0){<span>نیازی به سابقهٔ برنامه‌نویسی نیست.</span>}@foreach(var prerequisite in Lesson.Prerequisites){<a class="prerequisite" href="@($"/lobby?lesson={prerequisite}&view=intro")"><bdi>@prerequisite</bdi></a>}</p>}
- <div class="summary"><LearningText Text="@Lesson.Summary" Inline="true" /></div>
- @if(Lesson.Example.Length>0){<h3>مثال هدایت‌شده</h3><pre tabindex="0">@Lesson.Example</pre><details><summary>نتیجهٔ مثال</summary><pre tabindex="0">@Lesson.ExampleOutput</pre></details>}
- @if(Lesson.Topics.Length>0){<details><summary>مباحث این واحد</summary><p><LearningText Text="@Lesson.Topics" Inline="true" /></p></details>}
- <button class="primary" @onclick="Start">@(Started?"ادامه چالش‌ها":"شروع چالش‌ها")</button>
+    <h2 id="lesson-introduction-title" tabindex="-1" @ref="title">پیش از شروع چالش‌ها</h2>
+    @if (!Lesson.Legacy)
+    {
+        <p class="muted">فاز @Lesson.Phase · @Lesson.PhaseTitle</p>
+        <h3>هدف این فصل</h3>
+        <p><LearningText Text="@Lesson.Objective" Inline="true" /></p>
+    }
+    @if (Lesson.Prerequisites.Length > 0)
+    {
+        <p>پیش‌نیازهای کلیدی
+            @foreach (var prerequisite in Lesson.Prerequisites)
+            {
+                <a class="prerequisite" href="@($"/lobby?lesson={prerequisite}&view=intro")"><bdi>@prerequisite</bdi></a>
+            }
+        </p>
+    }
+    else
+    {
+        <p>نیازی به سابقهٔ برنامه‌نویسی نیست.</p>
+    }
+
+    <section aria-labelledby="teaching-session-title">
+        <p class="muted" id="teaching-session-count">جلسه @(Position + 1) از @Lesson.Sessions.Length</p>
+        <h3 id="teaching-session-title"><LearningText Text="@Session.Title" Inline="true" /></h3>
+        <p><strong>بعد از این جلسه</strong> <LearningText Text="@Session.Goal" Inline="true" /></p>
+        <div class="summary"><LearningText Text="@Session.Text" /></div>
+        <aside class="feedback" aria-label="خطای رایج">
+            <strong>یک اشتباه رایج</strong>
+            <LearningText Text="@Session.CommonMistake" />
+        </aside>
+        <fieldset class="activity-controls">
+            <legend>خودسنجی</legend>
+            <p><LearningText Text="@Session.Question" Inline="true" /></p>
+            <div class="options">
+                @for (var index = 0; index < Session.Options.Length; index++)
+                {
+                    var option = index;
+                    <label class="option">
+                        <input type="radio" name="teaching-answer" checked="@(selected == option)" @onchange="() => Select(option)" />
+                        <LearningText Text="@Session.Options[option]" Inline="true" />
+                    </label>
+                }
+            </div>
+        </fieldset>
+        <div class="toolbar">
+            <button type="button" disabled="@(selected is null)" @onclick="() => checkedAnswer = true">بررسی پاسخ</button>
+        </div>
+        <div role="status">
+            @if (checkedAnswer)
+            {
+                var correct = selected == Session.CorrectOption;
+                <div class="@(correct ? "feedback" : "feedback error")">
+                    <strong>@(correct ? "پاسخت درست است." : "پاسخ درست این است.")</strong>
+                    @if (!correct)
+                    {
+                        <p><LearningText Text="@Session.Options[Session.CorrectOption]" Inline="true" /></p>
+                    }
+                    <LearningText Text="@Session.Feedback" />
+                </div>
+            }
+        </div>
+        @if (Session.Practice is { } practice)
+        {
+            <section aria-labelledby="teaching-practice-title">
+                <h4 id="teaching-practice-title">تمرین مستقل</h4>
+                <LearningText Text="@practice.Prompt" />
+                <details>
+                    <summary>معیار بررسی پاسخ</summary>
+                    <LearningText Text="@practice.Criteria" />
+                </details>
+            </section>
+        }
+    </section>
+
+    @if (Lesson.Topics.Length > 0)
+    {
+        <details><summary>مباحث این فصل</summary><p><LearningText Text="@Lesson.Topics" Inline="true" /></p></details>
+    }
+    <nav aria-label="جلسه‌های آموزش">
+        @if (Position > 0)
+        {
+            <button type="button" @onclick="() => GoToSession.InvokeAsync(Position - 1)">جلسهٔ قبل</button>
+        }
+        @if (Position + 1 < Lesson.Sessions.Length)
+        {
+            <button type="button" class="primary" @onclick="() => GoToSession.InvokeAsync(Position + 1)">جلسهٔ بعد</button>
+        }
+        @if (Started || Position == Lesson.Sessions.Length - 1)
+        {
+            <button type="button" class="primary" @onclick="Start">@(Started ? "ادامه چالش‌ها" : "شروع چالش‌ها")</button>
+        }
+    </nav>
 </section>
-@code { ElementReference title;protected override async Task OnAfterRenderAsync(bool firstRender){if(firstRender)await title.FocusAsync(preventScroll:true);} [Parameter,EditorRequired] public Lesson Lesson {get;set;}=null!; [Parameter] public bool Started {get;set;} [Parameter] public EventCallback Start {get;set;} }
+
+@code {
+    ElementReference title;
+    int? selected;
+    bool checkedAnswer;
+    LessonSession Session => Lesson.Sessions[Position];
+
+    [Parameter, EditorRequired] public Lesson Lesson { get; set; } = null!;
+    [Parameter] public int Position { get; set; }
+    [Parameter] public bool Started { get; set; }
+    [Parameter] public EventCallback Start { get; set; }
+    [Parameter] public EventCallback<int> GoToSession { get; set; }
+
+    void Select(int option)
+    {
+        selected = option;
+        checkedAnswer = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await title.FocusAsync();
+    }
+}

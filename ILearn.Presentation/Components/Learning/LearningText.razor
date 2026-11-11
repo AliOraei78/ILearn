@@ -3,20 +3,103 @@
  <span class="learning-text" dir="@Direction(Text)">@Content(Text)</span>
 }else{
  <div class="learning-text" dir="@Direction(Text)">
-  @foreach(var block in Regex.Split(Text, @"(```[^\n]*\n[\s\S]*?```)").Where(part => part.Length > 0)){
-   @if(block.StartsWith("```", StringComparison.Ordinal)){
-    <pre tabindex="0" dir="ltr"><code>@block[(block.IndexOf('\n') + 1)..^3].TrimEnd()</code></pre>
-   }else{
-    <span>@Content(block)</span>
+  @{ var position = 0; }
+  @foreach (Match block in Blocks.Matches(Text))
+  {
+   if (block.Index > position)
+   {
+    <span>@Content(Text[position..block.Index])</span>
    }
+   if (block.Groups["code"].Success)
+   {
+    <figure class="learning-code">
+     @if (CodeLabel(block.Groups["language"].Value.Trim()) is { } label)
+     {
+      <figcaption class="muted">@Content(label)</figcaption>
+     }
+     <pre tabindex="0" dir="ltr"><code>@block.Groups["code"].Value.TrimEnd()</code></pre>
+    </figure>
+   }
+   else
+   {
+    var rows = block.Value.TrimEnd().Split('\n')
+        .Select(line => line.Trim()[1..^1].Split('|', StringSplitOptions.TrimEntries)).ToArray();
+    if (rows.All(row => row.Length == rows[0].Length))
+    {
+     <div class="learning-table">
+      <table>
+       <thead>
+        <tr>
+         @foreach (var cell in rows[0])
+         {
+          <th scope="col">@Content(cell)</th>
+         }
+        </tr>
+       </thead>
+       <tbody>
+        @foreach (var row in rows.Skip(2))
+        {
+         <tr>
+          @foreach (var cell in row)
+          {
+           <td>@Content(cell)</td>
+          }
+         </tr>
+        }
+       </tbody>
+      </table>
+     </div>
+    }
+    else
+    {
+     <span>@Content(block.Value)</span>
+    }
+   }
+   position = block.Index + block.Length;
+  }
+  @if (position < Text.Length)
+  {
+   <span>@Content(Text[position..])</span>
   }
  </div>
 }
 @code {
  [Parameter] public string Text { get; set; } = "";
  [Parameter] public bool Inline { get; set; }
+ static readonly Regex Blocks = new(
+  @"```(?<language>[^\r\n]*)\r?\n(?<code>[\s\S]*?)```|^\|[^\r\n]+\|\r?\n\|[ \t]*(?:-{3,}[ \t]*\|[ \t]*)+\r?\n(?:\|[^\r\n]+\|(?:\r?\n|$))+",
+  RegexOptions.Compiled | RegexOptions.Multiline);
+ static string? CodeLabel(string language) => language switch
+ {
+  "csharp" or "cs-snippet" or "file-csharp" => "C#",
+  "output" => "خروجی",
+  "shell" => "ترمینال",
+  "powershell" => "PowerShell",
+  "xml" => "XML",
+  "json" => "JSON",
+  "ini" => "INI",
+  _ when language.StartsWith("csharp-error ", StringComparison.Ordinal) => "خطای کامپایل " + language["csharp-error ".Length..],
+  _ => null
+ };
  static string Direction(string value) => value.Any(c => c is >= '\u0600' and <= '\u06ff') ? "rtl" : "ltr";
- static readonly Regex Latin = new(@"`[^`\n]+`|[0-9۰-۹]+٪|[-+.]?[A-Za-z0-9_]+(?:[.#-][A-Za-z0-9_]+|\([^\n\u0600-\u06ff]*?\)|<[^\n\u0600-\u06ff]+?>|\[[^\n\u0600-\u06ff]*?\]|[ \t]*(?:<=|>=|==|!=|=>|[<>+*/%&|^=-])[ \t]*[-+]?[A-Za-z0-9_]+|[,;:][ \t]*[A-Za-z0-9_]+|[+/#?!]|[ \t]+(?=[A-Za-z0-9_])[A-Za-z0-9_]+)*", RegexOptions.Compiled);
+ const string Word = "[A-Za-z0-9_]+";
+ const string StringLiteral = @"(?:(?:\$@|@\$|@)""(?:[^""\r\n]|"""")*""|\$?""(?:[^""\\\r\n]|\\[^\r\n])*"")";
+ const string CharacterLiteral = @"'(?:[^'\\\r\n]|\\.)+'";
+ const string Escape = @"\\(?:u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|x[0-9a-fA-F]{1,4}|[pP]\{[A-Za-z0-9_]+\}|[0-9A-Za-z\\'""?])";
+ const string Parenthesized = $@"\((?:{StringLiteral}|{CharacterLiteral}|[^()'""\r\n\u0600-\u06ff]|\([^()\r\n\u0600-\u06ff]*\))*\)";
+ const string Bracketed = @"\[[^\]\r\n\u0600-\u06ff]*\]";
+ // Match the outer closing bracket only after any nested type arguments close.
+ const string TypeArguments = @"<(?:[A-Za-z0-9_.,?()\[\] \t]|(?<typeDepth><)|(?<-typeDepth>>))*(?(typeDepth)(?!))>";
+ const string CompoundOperator = @"(?:\?\?=?|&&|\|\||<<=?|>>=?|[<>!+*/%&|^=-]=|=>)";
+ const string Operand = $@"(?:(?:\+\+|--|[-+.!~#])?{Word}|{StringLiteral}|{CharacterLiteral}|{Bracketed}|{Parenthesized}(?:{Word}|{Parenthesized})?)";
+ static readonly Regex Latin = new($@"
+  `[^`\r\n]+` | [0-9۰-۹]+٪ |
+  {Operand}(?:
+   \+\+ | -- | (?:[.#-]|\?\.){Word} | [ \t]*{Parenthesized}
+   | {TypeArguments} | {Bracketed} | [ \t]*\{{[^\r\n\u0600-\u06ff]*?\}}
+   | [ \t]*(?:{CompoundOperator}|[<>+*/%&|^=?:-])[ \t]*{Operand}
+   | [,;][ \t]*{Operand} | [+/#?!;] | [ \t]+{Word}
+  )* | {Escape} | \+\+ | -- | \?: | // | /\* | \*/ | {CompoundOperator}", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
  static RenderFragment Content(string value) => builder => {
   var position = 0;
   foreach(Match match in Latin.Matches(value)){

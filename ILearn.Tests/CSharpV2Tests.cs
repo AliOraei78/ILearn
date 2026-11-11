@@ -192,11 +192,27 @@ public class CSharpV2Tests
     [Fact]
     public void SpectrumAcceptsRangeEndpointsAfterTrialAndEnforcesStepAndQuota()
     {
-        var a=Puzzle("R010");foreach(int value in new[]{11,12,13}) {var s=new MiniGameState();Assert.True(Puzzles.Try(a,s,[value.ToString()]));Assert.True(Puzzles.Check(a,s,[value.ToString()]));}
+        var a=Puzzle("R010");
+        a.Puzzle!.Low = 11;
+        a.Puzzle.High = 13;
+        foreach(int value in new[]{11,12,13}) {var s=new MiniGameState();Assert.True(Puzzles.Try(a,s,[value.ToString()]));Assert.True(Puzzles.Check(a,s,[value.ToString()]));}
         Assert.False(Puzzles.Check(a,new(),["12"]));var state=new MiniGameState();
         foreach(int value in new[]{0,1,2,3})Assert.True(Puzzles.Try(a,state,[value.ToString()]));
         Assert.False(Puzzles.Try(a,state,["12"]));Assert.False(Puzzles.Check(a,state,["12"]));
         a.Puzzle!.Step=2;Assert.False(Puzzles.Try(a,new(),["11"]));Assert.False(Puzzles.Try(a,new(),["99"]));
+    }
+
+    [Theory]
+    [InlineData("11", false)]
+    [InlineData("12", true)]
+    [InlineData("13", false)]
+    public void ReadingEveryTableCellRequiresTheExactCount(string value, bool correct)
+    {
+        var activity = Puzzle("R010");
+        var state = new MiniGameState();
+
+        Assert.True(Puzzles.Try(activity, state, [value]));
+        Assert.Equal(correct, Puzzles.Check(activity, state, [value]));
     }
 
     [Fact]

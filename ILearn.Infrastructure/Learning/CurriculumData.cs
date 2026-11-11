@@ -96,7 +96,32 @@ public class CurriculumData : ICurriculum
                 if (activity.Puzzle is not null) Puzzles.Validate(activity);
             }
         }
-        return [.. roadmap, .. lessons];
+        List<Lesson> curriculum = [.. roadmap, .. lessons];
+        var teaching = JsonSerializer.Deserialize<Dictionary<string, LessonSession[]>>(read("teaching.json"))
+            ?? throw new InvalidDataException("Teaching content is empty.");
+        if (teaching.Count != curriculum.Count)
+            throw new InvalidDataException("Teaching content must cover every curriculum chapter.");
+        foreach (var lesson in curriculum)
+        {
+            if (!teaching.TryGetValue(lesson.Id, out var sessions) || sessions is null || sessions.Length < 2)
+                throw new InvalidDataException("Invalid teaching sessions for " + lesson.Id);
+            if (sessions.Any(s => s is null || string.IsNullOrWhiteSpace(s.Title) || string.IsNullOrWhiteSpace(s.Goal) ||
+                string.IsNullOrWhiteSpace(s.Text) || string.IsNullOrWhiteSpace(s.CommonMistake) ||
+                string.IsNullOrWhiteSpace(s.Question) || string.IsNullOrWhiteSpace(s.Feedback) || s.ActivityIds is null ||
+                s.Options is null || s.Options.Length < 2 || s.Options.Any(string.IsNullOrWhiteSpace) ||
+                s.Options.Distinct().Count() != s.Options.Length || s.CorrectOption < 0 || s.CorrectOption >= s.Options.Length))
+                throw new InvalidDataException("Incomplete teaching session in " + lesson.Id);
+            if (!sessions.SelectMany(s => s.ActivityIds).Order().SequenceEqual(lesson.Activities.Select(a => a.Id).Order()))
+                throw new InvalidDataException("Teaching sessions must cover each activity once in " + lesson.Id);
+            lesson.Sessions = sessions;
+            var resumeIndices = Enumerable.Range(0, sessions.Length).Select(lesson.GetSessionResumeIndex).ToArray();
+            if (resumeIndices.Any(index => index is < 0 or int.MaxValue) || resumeIndices.Distinct().Count() != sessions.Length)
+                throw new InvalidDataException("Teaching session resume indices must be valid and unique in " + lesson.Id);
+            if (sessions.Any(s => s.Practice is { } practice &&
+                (string.IsNullOrWhiteSpace(practice.Prompt) || string.IsNullOrWhiteSpace(practice.Criteria))))
+                throw new InvalidDataException("Incomplete independent practice in " + lesson.Id);
+        }
+        return curriculum;
     }
     public IReadOnlyList<string> Catalog { get; }
 }

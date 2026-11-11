@@ -195,12 +195,31 @@ def finish():
                             Summary=data["summary"], Example=data["example"], ExampleOutput=data["output"],
                             Activities=activities))
     assert [l["Id"] for l in lessons] == [f"R{i:03}" for i in range(1, 124)]
-    (ROOT / "ILearn/Content/csharp-v2.json").write_text(json.dumps(lessons, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    coverage=["# پوشش اجرایی مسیر C#", "", "این جدول از محتوای اجرایی تولید می‌شود؛ آزمون CSharpV2Tests ترتیب،هدف،پیش‌نیاز و ریزمباحث را با رودمپ تطبیق می‌دهد.", "", "| واحد | عنوان | فاز | بازی محوری | چالش | XP |", "|---|---|---|---|---|---|"]
-    for lesson in lessons:
-        coverage.append(f"| {lesson['Id']} | {lesson['Title']} | {lesson['Phase']} | {lesson['Activities'][1]['Kind']} | {len(lesson['Activities'])} | {sum(30 if a['Kind']=='workshop' else 10 for a in lesson['Activities'])} |")
+    draft = ROOT / "artifacts/csharp-authoring/csharp-v2-draft.json"
+    draft.parent.mkdir(parents=True, exist_ok=True)
+    draft.write_text(json.dumps(lessons, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    content = ROOT / "ILearn/Content"
+    current = json.loads((content / "csharp-v2.json").read_text(encoding="utf-8"))
+    teaching = json.loads((content / "teaching.json").read_text(encoding="utf-8"))
+    coverage = [
+        "# پوشش اجرایی مسیر C#",
+        "",
+        "این جدول از فصل‌ها، جلسه‌ها و چالش‌هایی می‌آید که برنامه بارگذاری می‌کند. آزمون CSharpV2Tests ترتیب، هدف، پیش‌نیاز و ریزمباحث فصل‌ها را با نقشهٔ راه تطبیق می‌دهد.",
+        "",
+        "| واحد | عنوان | فاز | جلسهٔ آموزشی | چالش | XP |",
+        "|---|---|---|---:|---:|---:|",
+    ]
+    for lesson in current:
+        activities = lesson["Activities"]
+        xp = sum(30 if activity["Kind"] == "workshop" else 10 for activity in activities)
+        coverage.append(
+            f"| {lesson['Id']} | {lesson['Title']} | {lesson['Phase']} | "
+            f"{len(teaching[lesson['Id']])} | {len(activities)} | {xp} |"
+        )
     (ROOT/"verification/csharp-v2-coverage.md").write_text("\n".join(coverage)+"\n",encoding="utf-8")
-    print(f"Authored {len(lessons)} units, {sum(len(l['Activities']) for l in lessons)} activities")
+    print(f"Draft: {draft.relative_to(ROOT)} ({sum(len(l['Activities']) for l in lessons)} activities)")
+    print(f"Coverage: {len(current)} live units, {sum(len(l['Activities']) for l in current)} activities")
 
 
 def solution(game):

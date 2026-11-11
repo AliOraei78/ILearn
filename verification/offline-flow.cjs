@@ -4,7 +4,8 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
 const { measure } = require('./layout-checks.cjs');
-const base = 'http://127.0.0.1:5087';
+const openChallenges = require('./teaching-navigation.cjs');
+const base = process.env.ILEARN_OFFLINE_URL || 'http://127.0.0.1:5087';
 const read = name => JSON.parse(fs.readFileSync(path.join(__dirname, '../ILearn/Content/', name), 'utf8'));
 const lessons = [...read('csharp-v2.json'), ...read('lessons.json')];
 const samples = read('code-room.json');
@@ -12,7 +13,8 @@ const exercises = [...samples, ...lessons.filter(l => l.Id.startsWith('R')).flat
 const questions = read('interviews.json')[0].Questions;
 const sizes = [[320,568],[360,640],[390,844],[412,915],[430,932],[640,360],[844,390],[768,1024]].map(([width,height]) => ({width,height}));
 const checks = [], layouts = [], errors = [], kinds = new Set();
-const flowsOnly = process.argv.includes('--flows-only');
+const curriculumOnly = process.argv.includes('--curriculum-only');
+const flowsOnly = !curriculumOnly && process.argv.includes('--flows-only');
 let mode = 'accept', requests = 0, completed = false, visited = 0;
 const record = name => { checks.push(name); console.log('PASS ' + name); };
 (async () => {
@@ -71,7 +73,7 @@ const record = name => { checks.push(name); console.log('PASS ' + name); };
         await layout('chapters');
         const first = lessons[0];
         await go('/lobby?lesson=' + first.Id);
-        await click('شروع چالش‌ها');
+        await openChallenges(page, expect);
         await click('ثبت جواب');
         await expect(page.locator('.work > div.feedback')).toContainText('ابتدا');
         await expect.poll(async () => Object.values((await stored()).Entries).some(e => e.NeedsReview)).toBe(false);
@@ -80,7 +82,7 @@ const record = name => { checks.push(name); console.log('PASS ' + name); };
             await go('/lobby?lesson=' + lesson.Id + '&view=intro');
             await expect(page.locator('#lesson-introduction-title')).toBeVisible();
             await expect(page.locator('.summary').first()).not.toBeEmpty();
-            await page.getByRole('button', {name:/^(شروع|ادامه) چالش‌ها$/}).click();
+            await openChallenges(page, expect);
             for (const [index, activity] of lesson.Activities.entries()) {
                 if (index) await page.locator('#activity-picker').selectOption(String(index));
                 await expect(page.locator('#activity-title')).toHaveText(activity.Title);
@@ -100,7 +102,16 @@ const record = name => { checks.push(name); console.log('PASS ' + name); };
             }
             if (visited % 40 < lesson.Activities.length) console.log('Rendered ' + visited + ' learning activities');
         }
-        if(!flowsOnly){assert.equal(visited, 585);record('all 585 activities and 133 introductions render; every activity template solved locally');}
+        if (!flowsOnly) {
+            const activities = lessons.flatMap(lesson => lesson.Activities);
+            assert.equal(visited, activities.length);
+            assert.deepEqual(kinds, new Set(activities.map(activity => activity.Kind)));
+            record('all ' + visited + ' activities and ' + lessons.length + ' introductions render; every activity template solved locally');
+        }
+        if (curriculumOnly) {
+            completed = true;
+            return;
+        }
         await go('/code-room');
         await expect(page.locator('#code-exercise option')).toHaveCount(exercises.filter(e=>e.Subject==='csharp').length);
         const templates = new Set();

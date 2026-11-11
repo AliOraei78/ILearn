@@ -1,5 +1,5 @@
 <section class="work">
-    <h2>مسیر C# از صفر تا پیشرفته</h2>
+    <h2>مسیر <bdi dir="ltr">C#</bdi> از صفر تا پیشرفته</h2>
     <p>۱۲۳ واحد در ۱۱ فاز؛ ترتیب پیشنهادی از R001 است. انتخاب و مرور فصل‌ها آزاد است.</p>
     <div class="chapter-filters">
         <div class="slot"><label for="phase-filter">فاز یادگیری</label><select id="phase-filter" @bind="phase"><option value="0">همهٔ فازها</option>@foreach(var group in Roadmap.GroupBy(l=>l.Phase)){<option value="@group.Key">فاز @group.Key · @group.First().PhaseTitle</option>}</select></div>
@@ -22,6 +22,18 @@
     RenderFragment ChapterButton(Lesson ready)
     {
         var completed=ready.Activities.Count(a=>Progress.Entries.GetValueOrDefault($"csharp/{ready.Id}/{a.Id}")?.Complete==true);
-        return @<button @onclick="()=>Selected.InvokeAsync(ready)"><strong><bdi>@ready.Id</bdi> · @ready.Title</strong><span class="muted">@(ready.Legacy?"مسیر قبلی":"فاز "+ready.Phase) · @(completed==ready.Activities.Count?"تکمیل‌شده":Progress.HasStarted(ready.Id)?"ادامه فصل":"شروع فصل") · @completed از @ready.Activities.Count چالش</span></button>;
+        var isComplete = completed > 0 && completed == ready.Activities.Count;
+        var status = isComplete ? "تکمیل‌شده" : Progress.HasStarted(ready.Id) ? "ادامه فصل" :
+            Progress.IntroductionSessions.ContainsKey(ready.Id) ? "ادامهٔ آموزش" : "شروع فصل";
+        return @<button @onclick="()=>Selected.InvokeAsync(ready)">
+            <strong>
+                @if (isComplete)
+                {
+                    <span class="chapter-check" aria-hidden="true">✓</span>
+                }
+                <bdi>@ready.Id</bdi> · <LearningText Text="@ready.Title" Inline="true" />
+            </strong>
+            <span class="muted">@(ready.Legacy?"مسیر قبلی":"فاز "+ready.Phase) · @status · @completed از @ready.Activities.Count چالش</span>
+        </button>;
     }
 }

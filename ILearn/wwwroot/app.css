@@ -62,6 +62,7 @@ form{display:flex;flex-direction:column;gap:12px;max-width:100%}input{min-height
 .avatar-grid button{display:grid;place-items:center;padding:8px}
 .avatar-grid button:focus-visible{outline-color:#e3b66b}
 .chapters button{display:grid;gap:8px}
+.chapters .chapter-check{display:inline-block;margin-inline-end:6px;color:#79cdb4}
 .introduction{max-width:720px}.introduction>img{display:block;image-rendering:pixelated;margin-bottom:24px}.subject-list{margin:0;padding-inline-start:24px}.subject-list li{padding-block:12px;border-bottom:1px solid #809489}.subject-list button{display:grid;gap:8px;width:100%;text-align:start;background:transparent}.subject-list li:last-child{border-bottom:0}form+form{margin-top:16px}.profile-link svg{flex-shrink:0}
 @media(max-width:900px){.player-bar-inner{grid-template-columns:64px minmax(0,1fr)}.player-bar-actions{grid-column:1/-1;grid-row:3;justify-content:flex-start}.player-bar-progress{grid-column:1/-1;grid-row:2}}
 .account-panel{width:min(520px,calc(100% - 28px));margin-block:24px;padding:28px}.account-panel h2{margin-top:0}.account-actions{display:grid;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #809489}
@@ -109,6 +110,12 @@ label.code-answer-label{margin-top:0}
 .code-editor textarea[dir=rtl]{font-family:IRANSans,Tahoma,sans-serif;white-space:pre-wrap;padding:12px}
 .code-lines{position:absolute;inset:1px auto 1px 1px;width:4em;padding:12px 6px;overflow:hidden;white-space:pre;text-align:right;color:#b3c1b7;background:#1c2723;border-right:1px solid #809489;font:1rem/1.8 Consolas,monospace;pointer-events:none}
 .code-answer-count{text-align:end}
+.learning-code{margin:12px 0 18px}
+.learning-code pre{margin:4px 0 0}
+.learning-table{margin-block:12px 18px;overflow-x:auto}
+.learning-table table{width:100%;border-collapse:collapse;white-space:normal}
+.learning-table :is(th,td){padding:6px 8px;border:1px solid #809489;text-align:start}
+.learning-table th{background:#1c2723}
 .interview-navigation{justify-content:space-between;margin-block:0 20px}.interview-sources{padding-inline-start:20px}.interview-sources li{margin-block:12px}.interview-sources small{display:block}
 @media(min-width:1101px){.game-shell .player-bar-inner{grid-template-columns:64px minmax(0,1fr) minmax(0,1.3fr) auto}.game-shell .player-bar-actions{grid-column:auto;grid-row:auto}.game-shell .player-bar-progress{grid-column:auto;grid-row:auto}}
 @media(max-width:1100px){.code-room-workspace{grid-template-columns:minmax(0,1fr)}}

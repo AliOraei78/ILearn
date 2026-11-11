@@ -6,10 +6,40 @@ namespace ILearn.Tests;
 
 public class CurriculumTests
 {
+    static string ContentRoot => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn"));
+
     static (IReadOnlyList<Lesson> Lessons, IReadOnlyList<string> Catalog) Load()
     {
-        var curriculum = new Curriculum(new Environment { ContentRootPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../ILearn")) });
+        var curriculum = new Curriculum(new Environment { ContentRootPath = ContentRoot });
         return (curriculum.Lessons.Where(lesson => lesson.Legacy).ToList(), curriculum.Catalog);
+    }
+
+    [Fact]
+    public void AChapterWithoutTeachingIsRejected()
+    {
+        string Read(string name) => File.ReadAllText(Path.Combine(ContentRoot, "Content", name));
+        var teaching = JsonSerializer.Deserialize<Dictionary<string, LessonSession[]>>(Read("teaching.json"))!;
+        Assert.True(teaching.Remove("S10"));
+        Assert.Throws<InvalidDataException>(() =>
+            new CurriculumData(name => name == "teaching.json" ? JsonSerializer.Serialize(teaching) : Read(name)));
+    }
+
+    [Fact]
+    public void ExpandedTeachingRestoresPreviouslySavedSessions()
+    {
+        var curriculum = new Curriculum(new Environment { ContentRootPath = ContentRoot });
+        var asyncProject = curriculum.Lessons.Single(lesson => lesson.Id == "R094");
+        var finalProject = curriculum.Lessons.Single(lesson => lesson.Id == "R123");
+
+        int inputDemo = asyncProject.GetSessionPosition(2);
+        int delivery = finalProject.GetSessionPosition(6);
+
+        Assert.Contains("Input failure observed", asyncProject.Sessions[inputDemo].Text);
+        Assert.Contains("README", finalProject.Sessions[delivery].Text);
+        Assert.True(inputDemo > 2);
+        Assert.True(delivery > 6);
+        Assert.Equal(2, asyncProject.GetSessionResumeIndex(inputDemo));
+        Assert.Equal(6, finalProject.GetSessionResumeIndex(delivery));
     }
 
     [Fact]
@@ -114,7 +144,20 @@ public class CurriculumTests
         Assert.Equal(4, old.Position);
         Assert.True(old.HasStarted("S08"));
         Assert.True(old.HasStarted("S05"));
+        Assert.Empty(old.IntroductionSessions);
         Assert.Equal(10, LearningService.Xp(Load().Lessons, old));
+    }
+
+    [Fact]
+    public void SavingATeachingSessionDoesNotStartTheChallenges()
+    {
+        var progress = new Progress();
+        progress.IntroductionSessions["R001"] = 2;
+
+        var restored = JsonSerializer.Deserialize<Progress>(JsonSerializer.Serialize(progress))!;
+
+        Assert.Equal(2, restored.IntroductionSessions["R001"]);
+        Assert.False(restored.HasStarted("R001"));
     }
 
     static void PrepareGame(Activity activity, Entry entry)

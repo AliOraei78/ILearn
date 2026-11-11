@@ -41,7 +41,7 @@ window.ilearnOffline = (() => {
         progress.onsuccess = () => done(JSON.stringify({
             Format: 'ILearn.Offline', Version: 1,
             Profile: profile.result ? JSON.parse(profile.result) : { Id: '11111111-1111-4111-8111-111111111111', Name: 'بازیکن', Avatar: 'avatar-01', Stamp: '' },
-            Progress: progress.result ? JSON.parse(progress.result) : { Version: 1, Revision: 0, Lesson: 'R001', Position: 0, Positions: {}, CodeRoomExercise: '', InterviewQuestion: '', Entries: {}, IntroductionsRead: [] }
+            Progress: progress.result ? JSON.parse(progress.result) : { Version: 1, Revision: 0, Lesson: 'R001', Position: 0, Positions: {}, CodeRoomExercise: '', InterviewQuestion: '', Entries: {}, IntroductionsRead: [], IntroductionSessions: {} }
         }));
     });
     function validateBackup(json) {
@@ -60,6 +60,7 @@ window.ilearnOffline = (() => {
             !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(p.Id) || !text(p.Stamp)) invalid();
         if (!object(s) || s.Version !== 1 || !integer(s.Revision) || s.Revision < 0 || !text(s.Lesson, 20) ||
             !integer(s.Position) || !map(s.Positions, integer) || !text(s.CodeRoomExercise, 300) || !text(s.InterviewQuestion, 300) || !list(s.IntroductionsRead, x => text(x, 100))) invalid();
+        if (s.IntroductionSessions !== undefined && !map(s.IntroductionSessions, value => integer(value) && value >= 0)) invalid();
         const game = g => object(g) && list(g.History, integer) && map(g.Marks, integer) && list(g.Trials, row => list(row, integer)) &&
             list(g.Undo, row => list(row, x => text(x, 300))) && list(g.PathUndo, row => list(row, integer)) && integer(g.Found) && integer(g.Removed);
         if (!map(s.Entries, e => object(e) && integer(e.Step) && game(e.GameState) && text(e.Draft, 16000) && text(e.FullAnswer) && text(e.Feedback) && text(e.Source, 300) &&

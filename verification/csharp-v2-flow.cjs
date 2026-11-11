@@ -5,6 +5,7 @@ const assert=require('node:assert/strict');
 const {execFileSync}=require('node:child_process');
 const {chromium,expect}=require(process.env.PLAYWRIGHT_MODULE||'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
 const {viewports,core,measure,enlarged}=require('./layout-checks.cjs');
+const openChallenges=require('./teaching-navigation.cjs');
 const {server:smtp,messages}=require('./test-smtp.cjs')();
 const base=process.env.ILEARN_V2_URL||'http://127.0.0.1:5086';
 const channel=process.env.ILEARN_V2_BROWSER||'chrome';
@@ -12,6 +13,7 @@ const root=path.join(__dirname,'..');
 const current=JSON.parse(fs.readFileSync(path.join(root,'ILearn/Content/csharp-v2.json'),'utf8'));
 const legacy=JSON.parse(fs.readFileSync(path.join(root,'ILearn/Content/lessons.json'),'utf8'));
 const revisions=JSON.parse(fs.readFileSync(path.join(root,'ILearn/Content/revisions.json'),'utf8'));
+const teaching=JSON.parse(fs.readFileSync(path.join(root,'ILearn/Content/teaching.json'),'utf8'));
 const checks=[],layouts=[],errors=[],visited=[];const surfaces=new Set();let modelMode='success',modelRequests=0,completed=false;
 const model=http.createServer(async(request,response)=>{
     let raw='';for await(const chunk of request)raw+=chunk;const payload=JSON.parse(raw);modelRequests++;
@@ -68,9 +70,7 @@ function missionRoute(a) {
     const patch=(segments,value)=>sql(`UPDATE progress SET data=jsonb_set(data,ARRAY[${segments.map(s=>"'"+s.replaceAll("'","''")+"'").join(',')}],'${JSON.stringify(value).replaceAll("'","''")}'::jsonb,true),revision=revision+1 WHERE profile_id=(SELECT id FROM profiles WHERE email='${email}')`);
     async function open(lesson,index=0,introduction=false) {
         await page.goto(base+`/lobby?lesson=${lesson.Id}&activity=${index}`+(introduction?'&view=intro':''));
-        const start=page.getByRole('button',{name:'شروع چالش‌ها',exact:true});
-        if(await start.count())await start.click();
-        if(introduction&&await page.getByRole('button',{name:'ادامه چالش‌ها',exact:true}).count())await click('ادامه چالش‌ها');
+        await openChallenges(page,expect);
         await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[index].Title);
     }
     async function reorder(a,desired) {
@@ -127,23 +127,22 @@ function missionRoute(a) {
         await page.locator('main details summary').click();await expect(page.locator('.archive-chapters>li')).toHaveCount(10);await measure(page,'legacy archive',layouts);record('11 phase filters, cross-phase search, empty results and separate legacy archive');
         for(const original of [...current,...legacy]) {
             const lesson={...original,Activities:original.Activities.map(a=>({...a,...(revisions[original.Id+'/'+a.Id]||{})}))};
-            await page.goto(base+`/lobby?lesson=${lesson.Id}&activity=0&view=intro`);await expect(page.locator('.summary')).not.toBeEmpty();
+            await page.goto(base+`/lobby?lesson=${lesson.Id}&activity=0&view=intro&session=1`);await expect(page.locator('.summary')).not.toBeEmpty();
             await expect(page.locator('#lesson-introduction-title')).toBeFocused();
             await expect(page.locator('h1')).toHaveCount(1);await expect(page.locator('#lesson-introduction-title')).toHaveText('پیش از شروع چالش‌ها');
             assert.equal(await page.locator('#lesson-introduction-title').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
             await measure(page,lesson.Id+' introduction',layouts,viewports);await enlarged(page,lesson.Id+' introduction',layouts);
-            if(lesson.Example) {
-                const result=page.getByText('نتیجهٔ مثال',{exact:true});
-                await expect(result.locator('..')).not.toHaveAttribute('open','');
-                await result.click();await expect(result.locator('..').locator('pre')).toHaveText(lesson.ExampleOutput);
-                await page.getByText('مباحث این واحد',{exact:true}).click();
-                await measure(page,lesson.Id+' expanded teaching example and topics',layouts);
-                await result.click();await page.getByText('مباحث این واحد',{exact:true}).click();
+            await expect(page.locator('#teaching-session-count')).toHaveText('جلسه 1 از '+teaching[lesson.Id].length);
+            if(lesson.Topics) {
+                const topics=page.getByText('مباحث این فصل',{exact:true});
+                await topics.click();
+                await measure(page,lesson.Id+' expanded teaching topics',layouts);
+                await topics.click();
             }
             if(lesson.Id==='R001') {
                 for(const width of [390,1366]){await page.setViewportSize({width,height:900});await page.screenshot({path:path.join(__dirname,`full-audit-${channel}-introduction-${width}.png`),fullPage:true});}
             }
-            await page.getByRole('button',{name:/^(شروع|ادامه) چالش‌ها$/}).click();
+            await openChallenges(page,expect);
             for(const [index,a]of lesson.Activities.entries()) {
                 await page.locator('nav button').nth(index).click();await expect(page.locator('#activity-title')).toHaveText(a.Title);await measure(page,lesson.Id+'/'+a.Id+' ready',layouts);
                 const first=!surfaces.has(a.Kind);if(first){await measure(page,a.Kind+' full viewport matrix',layouts,viewports);await enlarged(page,a.Kind,layouts);}
@@ -172,7 +171,7 @@ function missionRoute(a) {
         }
         const expected=[...current,...legacy].flatMap(l=>l.Activities).reduce((sum,a)=>sum+(a.Kind==='workshop'?30:10),0);
         assert.equal(visited.length,current.reduce((n,l)=>n+l.Activities.length,0)+legacy.reduce((n,l)=>n+l.Activities.length,0));
-        await expect(page.locator('.player-bar-progress')).toContainText(String(expected)+' امتیاز تجربه');await page.reload();await expect(page.locator('.player-bar-progress')).toContainText(String(expected)+' امتیاز تجربه');record('all 585 activities completed; '+expected+' XP survives reload without duplication');
+        await expect(page.locator('.player-bar-progress')).toContainText(String(expected)+' امتیاز تجربه');await page.reload();await expect(page.locator('.player-bar-progress')).toContainText(String(expected)+' امتیاز تجربه');record('all '+visited.length+' activities completed; '+expected+' XP survives reload without duplication');
         const unit=current.find(l=>l.Id==='R003'),game=unit.Activities.find(a=>a.Kind==='simulation');await open(unit,unit.Activities.indexOf(game));await click('شروع مجدد دور');await click(game.Options[1]);await click('برگشت آخرین حرکت');assert.deepEqual(stored().Entries['csharp/R003/simulation'].GameState.History,[]);await click(game.Options[1]);await page.reload();await expect(page.getByText('وضعیت فعلی: n=2')).toBeVisible();await solveAfterPrefix();
         async function solveAfterPrefix(){await click(game.Options[1]);await click('ثبت جواب');await expect(feedback()).toContainText('درست بود.');}
         record('simulation undo and partial-round persistence');

@@ -52,7 +52,7 @@
      @if(!string.IsNullOrWhiteSpace(exercise.Activity.Code)){<pre class="code-room-source" tabindex="0"><code>@exercise.Activity.Code</code></pre>}
      @if(!string.IsNullOrWhiteSpace(exercise.Activity.Hint)){<details><summary>راهنمایی</summary><p><LearningText Text="@exercise.Activity.Hint" Inline="true" /></p></details>}
      @if(Experience.LocalProfile){<details><summary>پاسخ مرجع</summary><p class="summary"><LearningText Text="@exercise.Activity.Solution" Inline="true" /></p>@if(exercise.Activity.SolutionCode.Length>0){<pre tabindex="0"><code>@exercise.Activity.SolutionCode</code></pre>}@foreach(var file in exercise.Activity.ReferenceFiles){<h3><bdi>@file.Key</bdi></h3><pre tabindex="0"><code>@file.Value</code></pre>}</details>}
-     <details><summary>معیار بررسی این تمرین</summary><p class="summary">@(entry!.Feedback.Length>0 ? exercise.Activity.Explanation : "پاسخ باید نیازمندی‌ها و حالت‌های مرزی صورت مسئله را رعایت کند. معیار دقیق، چون شامل پاسخ است، پس از ثبت برای بررسی نمایش داده می‌شود.")</p></details>
+     <details><summary>معیار بررسی این تمرین</summary><p class="summary"><LearningText Text="@(entry!.Feedback.Length>0 ? exercise.Activity.Explanation : "پاسخ باید نیازمندی‌ها و حالت‌های مرزی صورت مسئله را رعایت کند. معیار دقیق، چون شامل پاسخ است، پس از ثبت برای بررسی نمایش داده می‌شود.")" Inline="true" /></p></details>
      @if(exercise.Subject=="csharp"){<a class="button-link" href="@("/lobby?lesson="+Uri.EscapeDataString(exercise.LessonId))">آموزش این فصل</a>}
     </section>
     <section class="work" aria-labelledby="code-answer-title" aria-busy="@(busy ? "true" : "false")">

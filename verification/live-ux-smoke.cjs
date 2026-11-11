@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
 const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Products/RightPixel/src/rightpixel-web/node_modules/@playwright/test');
+const openChallenges = require('./teaching-navigation.cjs');
 
 (async () => {
     const account = JSON.parse(fs.readFileSync('ILearn/App_Data/test-account.json', 'utf8'));
@@ -42,8 +43,7 @@ const { chromium, expect } = require(process.env.PLAYWRIGHT_MODULE || 'E:/Produc
         checks.push('rejected profile form keeps HTTP 400 and renders Persian recovery');
         await page.setViewportSize({ width: 1440, height: 900 });
         await page.goto(base + '/lobby?lesson=S05&activity=0');
-        await expect(page.locator('#activity-title').or(page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }))).toBeVisible();
-        if (await page.getByRole('button', { name: 'شروع چالش‌ها', exact: true }).count()) await click('شروع چالش‌ها');
+        await openChallenges(page, expect);
         await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[0].Title);
         await click('چالش بعد'); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[1].Title); await expect(page.locator('#activity-title')).toBeFocused();
         await click('چالش قبل'); await expect(page.locator('#activity-title')).toHaveText(lesson.Activities[0].Title);

@@ -1,4 +1,5 @@
 """Compile and execute repository-authored C# 14 examples, never learner code."""
+import argparse
 import concurrent.futures
 import json
 import os
@@ -39,9 +40,9 @@ REFERENCE_OUTPUTS = {
 }
 
 
-def compile_and_run(lesson, reference=False):
+def compile_and_run(lesson, reference=False, expected_error=None, *, case_name=None):
     number = int(lesson["Id"][1:])
-    name = lesson["Id"] + ("-reference" if reference else "-example")
+    name = case_name or lesson["Id"] + ("-reference" if reference else "-example")
     source = lesson["Activities"][-1]["SolutionCode"] if reference else lesson["Example"]
     case = OUTPUT / name
     case.mkdir(exist_ok=True)
@@ -74,6 +75,10 @@ Console.WriteLine(rejected.Any(d=>d.Id=="IL001"&&d.Severity==DiagnosticSeverity.
         analyzers = [f"/analyzer:{CORE / 'analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll'}"]
     command = [DOTNET, str(SDK / "Roslyn/bincore/csc.dll"), "/nologo", "/noconfig", "/langversion:14", "/nullable:enable", "/unsafe", "/target:exe", f"/out:{assembly}", "@" + str(RSP), *extra_references, *analyzers, str(program)]
     built = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=45)
+    if expected_error:
+        assert built.returncode != 0 and re.search(r"\berror " + re.escape(expected_error) + r"\b", built.stdout + built.stderr), (
+            name, "expected compiler error", expected_error, built.stdout, built.stderr)
+        return dict(name=name, diagnostic=expected_error)
     assert built.returncode == 0, (name, built.stdout, built.stderr)
     (case / "Example.runtimeconfig.json").write_text(json.dumps({"runtimeOptions":{"tfm":"net10.0","frameworks":[{"name":"Microsoft.NETCore.App","version":"10.0.0"},{"name":"Microsoft.AspNetCore.App","version":"10.0.0"}]}}), encoding="utf-8")
     arguments = ["--count", "3"] if reference and number == 78 else []
@@ -89,10 +94,27 @@ Console.WriteLine(rejected.Any(d=>d.Id=="IL001"&&d.Severity==DiagnosticSeverity.
     return dict(name=name, warnings=built.stdout.strip())
 
 
+def compile_observation(lesson):
+    activity = next(a for a in lesson["Activities"] if a["Id"] == "observe")
+    answer, = activity["Answers"]
+    example = {
+        "Id": lesson["Id"],
+        "Example": activity["Code"],
+        "ExampleOutput": activity["Options"][int(answer)],
+    }
+    return compile_and_run(example, case_name=lesson["Id"] + "-observation")
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--observations", action="store_true", help="Verify each playable prediction question against its keyed output.")
+    observations = parser.parse_args().observations
     results, errors = [], []
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-        futures = {pool.submit(compile_and_run, lesson, reference): (lesson["Id"], reference) for lesson in LESSONS for reference in (False, True)}
+        if observations:
+            futures = [pool.submit(compile_observation, lesson) for lesson in LESSONS]
+        else:
+            futures = [pool.submit(compile_and_run, lesson, reference) for lesson in LESSONS for reference in (False, True)]
         for future in concurrent.futures.as_completed(futures):
             try:
                 results.append(future.result())
@@ -100,8 +122,10 @@ if __name__ == "__main__":
                 errors.append(str(error))
                 print("FAIL " + str(error), flush=True)
             if (len(results) + len(errors)) % 25 == 0:
-                print(f"Checked {len(results)+len(errors)}/246; passed {len(results)}", flush=True)
+                print(f"Checked {len(results)+len(errors)}/{len(futures)}; passed {len(results)}", flush=True)
     report = dict(sdk=VERSION, languageVersion="14", passed=len(results), errors=errors, checks=results)
-    (ROOT / "verification/csharp-v2-examples.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    output = ROOT / ("artifacts/teaching-audit/observation-results.json" if observations else "verification/csharp-v2-examples.json")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(dict(passed=len(results), failed=len(errors))))
     raise SystemExit(bool(errors))

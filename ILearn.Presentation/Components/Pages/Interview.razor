@@ -58,7 +58,7 @@
      <p class="code-room-question"><LearningText Text="@question.Activity.Prompt" Inline="true" /></p>
      @if(question.Activity.Code.Length>0){<pre tabindex="0"><code>@question.Activity.Code</code></pre>}
      <details><summary>راهنمای پاسخ</summary><p><LearningText Text="@question.Activity.Hint" Inline="true" /></p></details>
-     <details><summary>معیار ارزیابی پاسخ</summary><p class="summary">@(entry!.Feedback.Length>0 ? question.Activity.Explanation : "پاسخ باید مفهوم خواسته‌شده، دلیل و مثال مرتبط را پوشش بدهد. معیار دقیق، چون شامل پاسخ است، پس از ثبت برای بررسی نمایش داده می‌شود.")</p></details>
+     <details><summary>معیار ارزیابی پاسخ</summary><p class="summary"><LearningText Text="@(entry!.Feedback.Length>0 ? question.Activity.Explanation : "پاسخ باید مفهوم خواسته‌شده، دلیل و مثال مرتبط را پوشش بدهد. معیار دقیق، چون شامل پاسخ است، پس از ثبت برای بررسی نمایش داده می‌شود.")" Inline="true" /></p></details>
      <details><summary>پاسخ مرجع</summary><p class="summary"><LearningText Text="@question.Activity.Solution" Inline="true" /></p>@if(question.Activity.SolutionCode.Length>0){<pre tabindex="0"><code>@question.Activity.SolutionCode</code></pre>}</details>
      <details><summary>منابع این سؤال</summary>@if(Experience.LocalProfile){<p class="muted">متن درس و پاسخ مرجع داخل برنامه است؛ باز کردن پیوندهای منابع در مرورگر به اینترنت نیاز دارد.</p>}<ul class="interview-sources">
       @foreach(var source in subject.Sources.Where(item=>question.SourceIds.Contains(item.Id))){<li><a href="@source.Url" target="_blank" rel="noopener noreferrer">@source.Title</a><small class="muted"> @(source.Role=="selection" ? "مبنای انتخاب موضوع" : "مرجع صحت فنی")</small></li>}

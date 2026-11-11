@@ -66,6 +66,8 @@ python verification/check-csharp-v2.py
 python verification/check-workshop-projects.py
 ```
 
+مولد، پیش‌نویس الگوهای اولیه را در `artifacts/csharp-authoring/csharp-v2-draft.json` می‌سازد. جدول پوشش از فایل‌های اجرایی `ILearn/Content/csharp-v2.json` و `ILearn/Content/teaching.json` خوانده می‌شود.
+
 تست مرورگر از دیتابیس جداگانهٔ `ilearn_csharp_v2` و SMTP/model محلی استفاده می‌کند. `Start-CSharpV2.ps1` سرور Production روی 5086 را با SMTP روی 2531 و fixture مدل روی 11436 تنظیم می‌کند. `csharp-v2-flow.cjs` fixtureها را اجرا و فقط حساب آزمایشی خودش را تغییر می‌دهد. حساب‌های آزمایش در `App_Data` نادیده‌گرفته‌شده نگهداری می‌شوند؛ دادهٔ حساب اصلی reset نمی‌شود.
 
 پس از publish برنامه در `ILearn/bin/CSharpV2Audit` و آماده‌شدن سرور آزمایش:

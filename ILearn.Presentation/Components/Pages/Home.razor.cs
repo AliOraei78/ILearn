@@ -9,7 +9,10 @@ public partial class Home
     [SupplyParameterFromQuery(Name="view")] public string? View { get; set; }
     [SupplyParameterFromQuery(Name="lesson")] public string? Chapter { get; set; }
     [SupplyParameterFromQuery(Name="activity")] public string? Challenge { get; set; }
-    string LessonUrl(Lesson value, int? index = null, bool intro = false) => "/lobby?lesson=" + Uri.EscapeDataString(value.Id) + (index is not null ? "&activity=" + index : "") + (intro ? "&view=intro" : "");
+    [SupplyParameterFromQuery(Name="session")] public string? TeachingSession { get; set; }
+    string LessonUrl(Lesson value, int? index = null, bool intro = false, int? session = null) =>
+        "/lobby?lesson=" + Uri.EscapeDataString(value.Id) + (index is not null ? "&activity=" + index : "") +
+        (intro ? "&view=intro" : "") + (session is not null ? "&session=" + session : "");
     async Task Lobby(int target) { CancelReview(); await Save(false); if(error is not null)return; Navigation.NavigateTo(target == 1 ? "/lobby?view=chapters" : "/lobby"); }
     async Task SelectLesson(Lesson selected) { CancelReview(); await Save(false); if(error is not null)return; Navigation.NavigateTo(LessonUrl(selected)); }
     void FullAnswer() { if(answerOpen && explaining) CancelReview(); answerOpen = !answerOpen; answerText = entry.FullAnswer; }
@@ -24,10 +27,11 @@ public partial class Home
     long draftVersion, savedDraftVersion;
     int Xp => progress is null ? 0 : LearningService.Xp(Content.Lessons, progress, Content.CodeExercises);
     int Completed => lesson.Activities.Count(a => GetEntry(a).Complete);
-    Lesson? NextLesson => lesson.Legacy ? null : Content.Lessons.Where(l=>!l.Legacy).SkipWhile(l=>l.Id!=lesson.Id).Skip(1).FirstOrDefault();
+    Lesson? NextLesson => Content.Lessons.Where(l => l.Legacy == lesson.Legacy).SkipWhile(l => l.Id != lesson.Id).Skip(1).FirstOrDefault();
     int ReviewCount => progress!.Entries.Count(pair => pair.Key.StartsWith("csharp/", StringComparison.Ordinal) && pair.Value.NeedsReview);
     Entry GetEntry(Activity a) { var key = $"csharp/{lesson.Id}/{a.Id}"; if (!progress!.Entries.TryGetValue(key, out var value)) progress.Entries[key] = value = new(); return value; }
     bool showIntro;
+    int sessionPosition;
     protected override async Task OnInitializedAsync() { try { player = await Store.Profile(); progress = await Store.Load(); lesson = Content.Lessons.FirstOrDefault(l => l.Id == progress.Lesson) ?? Content.Lessons[0]; position = Math.Clamp(progress.Position, 0, lesson.Activities.Count-1); showIntro = !progress.HasStarted(lesson.Id); Reset(); } catch(UnauthorizedAccessException) {RequireLogin();progress=null;} catch { error = !Experience.LocalProfile?"سیوت باز نشد؛ اتصال دیتابیس رو بررسی کن و صفحه رو دوباره باز کن.":"سیو محلی باز نشد؛ صفحه را دوباره باز کن یا از پروفایل پشتیبان را بازیابی کن. دادهٔ قبلی محفوظ است."; progress = null; } }
     protected override async Task OnParametersSetAsync()
     {
@@ -39,17 +43,37 @@ public partial class Home
         screen = requested is not null ? 2 : View == "chapters" ? 1 : 0;
         showIntro = View == "intro" || !progress.HasStarted(lesson.Id);
         var remember = screen == 2 && (progress.Lesson != lesson.Id || progress.Position != position);
+        sessionPosition = 0;
+        if (screen == 2 && showIntro)
+        {
+            var known = progress.IntroductionSessions.TryGetValue(lesson.Id, out var savedSession);
+            var selected = int.TryParse(TeachingSession, out var number) && number > 0 ? number - 1 : savedSession;
+            sessionPosition = lesson.GetSessionPosition(selected);
+            var resumeIndex = lesson.GetSessionResumeIndex(sessionPosition);
+            if (!known || savedSession != resumeIndex)
+            {
+                progress.IntroductionSessions[lesson.Id] = resumeIndex;
+                remember = true;
+            }
+        }
         Reset(); if (remember) await Save(false);
         if(Chapter is not null && requested is null) saveStatus = "فصل درخواستی پیدا نشد؛ یکی از فصل‌های آماده را انتخاب کن.";
     }
     async Task StartChallenges() { LearningService.Start(progress!, lesson.Id); await Save(); if(error is not null)return; showIntro = false; Navigation.NavigateTo(LessonUrl(lesson, position)); }
-    async Task ShowIntroduction() { CancelReview(); await Save(); if(error is not null)return; Navigation.NavigateTo(LessonUrl(lesson, intro:true)); }
+    async Task ShowIntroduction()
+    {
+        CancelReview();
+        await Save();
+        if (error is not null) return;
+        var related = Array.FindIndex(lesson.Sessions, session => session.ActivityIds.Contains(activity.Id));
+        GoToSession(related);
+    }
+    void GoToSession(int index) => Navigation.NavigateTo(LessonUrl(lesson, intro: true, session: lesson.GetSessionResumeIndex(index) + 1));
     void Reset() { answerOpen = false; answerText = ""; hint = false; step = Math.Clamp(entry.Step, 0, Math.Max(0,activity.Rows.Length-1)); clues = activity.Kind == "detective" ? entry.GameState.History.Where(i => i >= 0 && i < activity.Clues.Length).Take(2).ToHashSet() : []; order = Enumerable.Range(0, activity.Options.Length).Reverse().ToList(); if (activity.Kind == "order" && entry.Answers.Count == order.Count) { var saved = entry.Answers.Select(x => int.TryParse(x, out var value) ? value : -1).ToList(); if (saved.Order().SequenceEqual(order.Order())) order = saved; } }
     async Task Save(bool announce = true) { if (progress is null) return; var savingDraftVersion=draftVersion; saveStatus = ""; try { progress.Lesson = lesson.Id; progress.Position = position; progress.Positions[lesson.Id] = position; await Store.Save(progress);savedDraftVersion=Math.Max(savedDraftVersion,savingDraftVersion); error = null;sessionExpired=false; saveStatus = announce && screen == 2 ? "ذخیره شد" : ""; } catch(UnauthorizedAccessException) {RequireLogin();} catch (Exception ex) { error = "ذخیره نشد؛ این صفحه رو نبند: " + ex.Message; } }
     async Task Navigate(int n) { CancelReview(); await Save(); if(error is not null)return; Navigation.NavigateTo(LessonUrl(lesson, Math.Clamp(n, 0, lesson.Activities.Count-1))); }
     async Task StepChanged(int n) { step = entry.Step = Math.Clamp(n, 0, activity.Rows.Length-1); await Save(); }
     async Task OpenClue(int n) { if(clues.Count >= 2 || n < 0 || n >= activity.Clues.Length) return; clues.Add(n); entry.GameState.History = clues.Order().ToList(); entry.Feedback = ""; await Save(); }
-    async Task ChangeLesson(ChangeEventArgs e) { CancelReview(); await Save(); lesson = Content.Lessons.First(l => l.Id == e.Value?.ToString()); position = 0; showIntro = !progress!.HasStarted(lesson.Id); Reset(); await Save(); }
     string SlotValue(int row) { var prefix = row + ":"; return entry.Answers.FirstOrDefault(x => x.StartsWith(prefix))?.Split(':')[1] ?? ""; }
     async Task SetSlot(int row, string value) { entry.Feedback = ""; entry.Answers.RemoveAll(x => x.StartsWith(row + ":")); if (value != "") entry.Answers.Add(row + ":" + value); await Save(); }
     async Task Toggle(int i) { entry.Feedback = ""; var value = i.ToString(); if (!activity.Multiple) entry.Answers.Clear(); if (!entry.Answers.Remove(value)) entry.Answers.Add(value); await Save(); }
